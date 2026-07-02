@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&family=Hanken+Grotesque:wght@400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F1E8DA; }
+  ::selection { background: #FBE7DC; color: #A23A20; }
+</style>
+</helmet>
+<div style="background: linear-gradient(180deg, #F5EDE0 0%, #F1E8DA 100%); min-height: 100vh; padding: 0 0 120px 0; font-family: 'Hanken Grotesque', system-ui, sans-serif; color: #2F2A25; -webkit-font-smoothing: antialiased;">
+
+  <!-- ============ BOARD HEADER ============ -->
+  <div style="max-width: 1560px; margin: 0 auto; padding: 64px 48px 20px 48px;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 30px;">
+      <div style="display: flex; gap: 6px;">
+        <div style="width: 12px; height: 12px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background: #FF6F4D;"></div>
+        <div style="width: 12px; height: 12px; border-radius: 54% 46% 40% 60% / 44% 56% 48% 52%; background: #D62F6B;"></div>
+        <div style="width: 12px; height: 12px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background: #E7B22E;"></div>
+      </div>
+      <span style="font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 600;">Screens v9 · fünf Hauptscreens + Zustände · Palette v5-abgeglichen</span>
+    </div>
+    <div style="display:inline-block; position:relative;">
+      <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 64px; line-height: 1.02; letter-spacing: -0.01em;">Die App am Stück</div>
+      <svg width="280" height="14" viewBox="0 0 280 14" fill="none" style="display:block; margin-top:4px;"><path d="M4 9 C36 4 62 11 100 8 C138 5 164 11 202 8 C234 5 258 10 276 7" stroke="#FF6F4D" stroke-width="5" stroke-linecap="round"></path></svg>
+    </div>
+    <p style="max-width: 760px; margin: 22px 0 0 0; font-size: 18px; line-height: 1.6; color: #5c4d43;">Mobile hochkant, konsequent auf den v5/v6-Tokens: Creme-Grund, warme Tinte, Koralle als einzige Aktionsfarbe, Beere &amp; Bernstein als Akzente, gerissene Kanten &amp; Blobs. Komponentennamen stehen unter jedem Screen — sie bleiben beim Handoff erhalten.</p>
+  </div>
+
+  <!-- ════════════ 01 · ONBOARDING ════════════ -->
+  <div style="max-width: 1560px; margin: 0 auto; padding: 48px 48px 0 48px;">
+    <div style="display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">01</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 34px; margin: 0;">Onboarding · Anonymitäts-Stufe</h2>
+    </div>
+    <p style="max-width: 680px; margin: 0 0 26px 0; font-size: 15px; line-height: 1.6; color: #6E6358;">Ohne E-Mail-Pflicht. Die Stufenwahl ist das Kernstück — drei gleichwertige Karten in Alltagssprache. Sofortiges Signal: <strong style="color:#2F2A25;">„Du musst dich hier nicht darstellen."</strong></p>
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap; align-items: flex-start;">
+      <div data-screen-label="01 Onboarding">
+        <div style="width: 340px; background: #FCF8F2; border-radius: 44px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 24px 50px rgba(74,50,34,0.14); border: 1px solid #EEE4D6;">
+          <div style="border-radius: 32px; overflow: hidden; background: #FCF8F2; display: flex; flex-direction: column;">
+            <!-- AppHeader -->
+            <div style="background: #EFE6D8; padding: 24px 20px 4px 20px; position: relative;">
+              <div style="position:absolute; top:-26px; right:-24px; width:110px; height:110px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background: #F6D3C7; opacity: 0.8;"></div>
+              <div style="position:relative; display:flex; justify-content:center;">
+                <div style="font-family:'Luckiest Guy',cursive; font-size:29px; line-height:1.1; color:#FF6F4D; text-shadow: 0 3px 0 rgba(42,30,26,0.85); display:flex; align-items:baseline;">
+                  <span style="display:inline-block; transform: rotate(-3deg) translateY(1px);">B</span><span style="display:inline-block; transform: rotate(2deg) translateY(-1px); margin-left:1px;">E</span><span style="display:inline-block; transform: rotate(-2deg); margin-left:1px;">L</span><span style="display:inline-block; transform: rotate(3deg) translateY(-1px); margin-left:1px;">O</span><span style="display:inline-block; transform: rotate(-2deg) translateY(1px); margin-left:1px;">N</span><span style="display:inline-block; transform: rotate(3deg) translateY(-1px); margin-left:1px;">G</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D62F6B" stroke-width="2.6" stroke-linecap="round" style="transform: rotate(14deg) translateY(-12px); margin-left:5px; flex-shrink:0;"><path d="M11.2 3.8 C11.9 5.3 12.6 6.6 12.3 8.7"></path><path d="M13.1 15.4 C12.3 16.7 12.7 18.5 11.5 20.2"></path><path d="M3.9 13.2 C5.7 12.4 7.3 12.8 9 12.1"></path><path d="M15.2 11.5 C16.7 11.8 18.3 10.9 20 11.3"></path></svg>
+                </div>
+              </div>
+              <div style="font-family:'Hedvig Letters Serif',serif; font-size:23px; color:#2F2A25; text-align:center; margin:14px 0 4px 0; position:relative;">Schön, dass du da bist.</div>
+              <div style="font-size:13px; color:#6E6358; text-align:center; margin-bottom:12px; position:relative; font-weight:500;">Kein Profil, kein Druck — du entscheidest, wie sichtbar du bist.</div>
+            </div>
+            <div style="background:#EFE6D8; line-height:0;"><svg viewBox="0 0 320 20" preserveAspectRatio="none" style="display:block; width:100%; height:16px;"><path d="M0,12 C26,3 54,17 88,9 C120,2 146,16 184,9 C218,3 250,15 285,8 C300,5 310,9 320,7 L320,20 L0,20 Z" fill="#FCF8F2"></path></svg></div>
+
+            <!-- AnonymityLevelCard ×3 -->
+            <div style="padding: 10px 16px 0 16px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="background:#FFFFFF; border: 2px solid #F25A43; border-radius: 22px; padding: 16px; display:flex; gap: 13px; align-items:flex-start; box-shadow: 0 8px 20px rgba(242,90,67,0.12);">
+                <div style="width:44px; height:44px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background:#F1E6D5; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:'Hedvig Letters Serif',serif; font-size:19px; color:#6E6358;">?</div>
+                <div style="flex:1; min-width:0;">
+                  <div style="display:flex; align-items:center; gap:7px; flex-wrap:wrap;">
+                    <div style="font-weight:700; font-size:15px;">Ganz anonym</div>
+                    <span style="background:#F4E6CC; color:#8A5A22; font-size:10px; font-weight:700; padding:3px 8px; border-radius:999px; letter-spacing:0.03em;">GUT ZUM STARTEN</span>
+                  </div>
+                  <p style="margin:4px 0 0 0; font-size:13px; line-height:1.45; color:#6E6358;">Wir schlagen dir einen Spitznamen vor — z. B. „stiller-fuchs". Kein Bild, keine Angaben.</p>
+                </div>
+                <div style="width:22px; height:22px; border-radius:50%; border:2px solid #F25A43; flex-shrink:0; display:flex; align-items:center; justify-content:center; margin-top:2px;"><div style="width:11px; height:11px; border-radius:50%; background:#F25A43;"></div></div>
+              </div>
+              <div style="background:#FFFFFF; border: 1px solid #EBDECB; border-radius: 22px; padding: 16px; display:flex; gap: 13px; align-items:flex-start;">
+                <div style="width:44px; height:44px; border-radius: 54% 46% 40% 60% / 44% 56% 48% 52%; background:#F8DCE7; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:'Hedvig Letters Serif',serif; font-size:19px; color:#A81552;">m</div>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-weight:700; font-size:15px;">Spitzname</div>
+                  <p style="margin:4px 0 0 0; font-size:13px; line-height:1.45; color:#6E6358;">Du wählst selbst einen Namen — sonst nichts.</p>
+                </div>
+                <div style="width:22px; height:22px; border-radius:50%; border:2px solid #DFD2BB; flex-shrink:0; margin-top:2px;"></div>
+              </div>
+              <div style="background:#FFFFFF; border: 1px solid #EBDECB; border-radius: 22px; padding: 16px; display:flex; gap: 13px; align-items:flex-start;">
+                <div style="width:44px; height:44px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background:#FBE7DC; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A23A20" stroke-width="2.4" stroke-linecap="round"><path d="M12 3.5 C12.2 6 12 7.4 11.8 9.6"/><path d="M12.2 14.4 C12 16.6 12.2 18.4 12 20.5"/><path d="M3.8 12.2 C6.2 12 7.6 12.2 9.6 12"/><path d="M14.4 11.8 C16.6 12 18.4 11.8 20.3 12"/></svg>
+                </div>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-weight:700; font-size:15px;">Spitzname + Interessen</div>
+                  <p style="margin:4px 0 0 0; font-size:13px; line-height:1.45; color:#6E6358;">Zeig, worauf du Lust hast — hilft beim Finden. Immer noch ohne Foto.</p>
+                </div>
+                <div style="width:22px; height:22px; border-radius:50%; border:2px solid #DFD2BB; flex-shrink:0; margin-top:2px;"></div>
+              </div>
+            </div>
+
+            <!-- TrustNote + Buttons -->
+            <div style="padding: 14px 16px 20px 16px;">
+              <div style="display:flex; align-items:center; justify-content:center; gap:7px; margin-bottom: 12px;">
+                <div style="width:5px; height:5px; border-radius:50%; background:#F25A43;"></div>
+                <span style="font-size:12px; color:#6E6358; font-weight:600;">Ohne E-Mail · jederzeit änderbar · nichts wird bewertet</span>
+              </div>
+              <button style="border:none; background:#F25A43; color:#FFFFFF; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:16px; padding:15px; border-radius:999px; width:100%; box-shadow:0 10px 24px rgba(242,90,67,0.3); cursor:pointer;">Los geht's</button>
+              <button style="border:none; background:transparent; color:#6E6358; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:14px; padding:12px; border-radius:999px; width:100%; margin-top:4px; cursor:pointer;">Was passiert mit meinen Daten?</button>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px; margin-top:14px;">
+          <div style="font-size:13px; font-weight:700; text-align:center;">Onboarding · Stufenwahl</div>
+          <div style="font-family:ui-monospace,monospace; font-size:11px; color:#6E6358; text-align:center; margin-top:4px; line-height:1.6;">AppHeader · AnonymityLevelCard · RadioDot<br>TrustNote · PrimaryButton · GhostButton</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ 02 · FEED ════════════ -->
+  <div style="max-width: 1560px; margin: 0 auto; padding: 64px 48px 0 48px;">
+    <div style="display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">02</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 34px; margin: 0;">Aktivitäten-Feed</h2>
+    </div>
+    <p style="max-width: 680px; margin: 0 0 26px 0; font-size: 15px; line-height: 1.6; color: #6E6358;">Reale Kasseler Aktivitäten, Filter nach Ort &amp; Interesse. Fokus aufs Tun: keine Gesichter, keine Profile — nur Aktivität, Ort, Zeit, Plätze. Rechts die drei Zustände.</p>
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap; align-items: flex-start;">
+
+      <!-- Feed default -->
+      <div data-screen-label="02 Feed">
+        <div style="width: 340px; background: #FCF8F2; border-radius: 44px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 24px 50px rgba(74,50,34,0.14); border: 1px solid #EEE4D6;">
+          <div style="border-radius: 32px; overflow: hidden; background: #FCF8F2; display: flex; flex-direction: column;">
+            <!-- AppHeader -->
+            <div style="background: #EFE6D8; padding: 20px 18px 12px 18px; position: relative;">
+              <div style="position:absolute; top:-24px; right:-22px; width:100px; height:100px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background: #F6D3C7; opacity: 0.8;"></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; position:relative;">
+                <div style="font-family:'Luckiest Guy',cursive; font-size:23px; line-height:1.1; color:#FF6F4D; text-shadow: 0 2px 0 rgba(42,30,26,0.85); display:flex;">
+                  <span style="display:inline-block; transform: rotate(-3deg) translateY(1px);">B</span><span style="display:inline-block; transform: rotate(2deg) translateY(-1px); margin-left:1px;">E</span><span style="display:inline-block; transform: rotate(-2deg); margin-left:1px;">L</span><span style="display:inline-block; transform: rotate(3deg) translateY(-1px); margin-left:1px;">O</span><span style="display:inline-block; transform: rotate(-2deg) translateY(1px); margin-left:1px;">N</span><span style="display:inline-block; transform: rotate(3deg) translateY(-1px); margin-left:1px;">G</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D62F6B" stroke-width="2.6" stroke-linecap="round" style="transform: rotate(14deg) translateY(-12px); margin-left:5px; flex-shrink:0;"><path d="M11.2 3.8 C11.9 5.3 12.6 6.6 12.3 8.7"></path><path d="M13.1 15.4 C12.3 16.7 12.7 18.5 11.5 20.2"></path><path d="M3.9 13.2 C5.7 12.4 7.3 12.8 9 12.1"></path><path d="M15.2 11.5 C16.7 11.8 18.3 10.9 20 11.3"></path></svg>
+                </div>
+                <span style="background: #FFFFFF; color:#A23A20; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px;">Kassel</span>
+              </div>
+            </div>
+            <div style="background:#EFE6D8; line-height:0;"><svg viewBox="0 0 320 20" preserveAspectRatio="none" style="display:block; width:100%; height:16px;"><path d="M0,12 C26,3 54,17 88,9 C120,2 146,16 184,9 C218,3 250,15 285,8 C300,5 310,9 320,7 L320,20 L0,20 Z" fill="#FCF8F2"></path></svg></div>
+
+            <!-- FilterBar -->
+            <div style="padding: 8px 16px 4px 16px;">
+              <div style="display:flex; gap:8px; margin-bottom:8px;">
+                <span style="display:flex; align-items:center; gap:5px; background:#F1E6D5; color:#4a423b; font-size:13px; font-weight:600; padding:8px 14px; border-radius:999px;">Vorderer Westen <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9 L12 15 L18 9"/></svg></span>
+                <span style="display:flex; align-items:center; gap:5px; background:#F1E6D5; color:#4a423b; font-size:13px; font-weight:600; padding:8px 14px; border-radius:999px;">Diese Woche <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9 L12 15 L18 9"/></svg></span>
+              </div>
+              <div style="display:flex; gap:7px; flex-wrap:wrap;">
+                <span style="background:#F25A43; color:#FFFFFF; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Alle</span>
+                <span style="background:#F8DCE7; color:#A81552; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Tanzen</span>
+                <span style="background:#F4E6CC; color:#8A5A22; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Draußen</span>
+                <span style="background:#FBE7DC; color:#A23A20; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Spiele</span>
+              </div>
+            </div>
+
+            <!-- ActivityCard featured -->
+            <div style="padding: 12px 16px 0 16px;">
+              <div style="border-radius: 24px; overflow:hidden; background:#FFFFFF; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 28px rgba(74,50,34,0.09); border:1px solid #EEE4D6;">
+                <div style="position:relative;">
+                  <image-slot id="v7-feed-lauftreff" style="width:100%; height:132px; display:block;" shape="rect" placeholder="Foto: Laufgruppe von hinten, Karlsaue"></image-slot>
+                  <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(160deg, rgba(242,90,67,0.10), rgba(255,111,77,0.04) 55%, rgba(47,42,37,0.16));"></div>
+                  <div style="position:absolute; top:10px; right:10px; transform: rotate(3deg);"><span style="display:inline-block; background:#E7B22E; color:#22401E; font-size:11px; font-weight:700; padding:6px 12px; border-radius:999px; box-shadow: 0 4px 12px rgba(138,90,34,0.3);">Heute · 18:00</span></div>
+                  <div style="position:absolute; left:0; right:0; bottom:-1px; line-height:0;"><svg viewBox="0 0 340 18" preserveAspectRatio="none" style="display:block; width:100%; height:13px;"><path d="M0,11 C30,3 62,16 100,9 C136,3 164,15 205,9 C240,4 272,14 310,8 C322,6 332,9 340,7 L340,18 L0,18 Z" fill="#FFFFFF"></path></svg></div>
+                </div>
+                <div style="padding: 4px 16px 16px 16px;">
+                  <span style="display:inline-block; background:#F4E6CC; color:#8A5A22; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; margin-bottom:8px;">Draußen</span>
+                  <div style="font-family:'Hedvig Letters Serif',serif; font-size:21px; line-height:1.15;">Lauftreff Karlsaue</div>
+                  <div style="font-size:12px; color:#6E6358; margin-top:4px;">Orangerie, Karlsaue · 5 km, lockeres Tempo</div>
+                  <div style="display:flex; align-items:center; justify-content:space-between; margin-top:12px;">
+                    <span style="font-size:13px; color:#6E6358; font-weight:600;">12 dabei</span>
+                    <span style="background:#F4E6CC; color:#8A5A22; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px;">offen für alle</span>
+                  </div>
+                  <button style="border:none; background:#F25A43; color:#FFFFFF; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:15px; padding:13px; border-radius:999px; width:100%; margin-top:12px; box-shadow:0 8px 20px rgba(242,90,67,0.28); cursor:pointer;">Ich bin dabei</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ActivityRow ×3 -->
+            <div style="padding: 12px 16px 8px 16px; display:flex; flex-direction:column; gap:9px;">
+              <div style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border-radius:20px; padding:11px; border:1px solid #EEE4D6;">
+                <image-slot id="v7-row-salsa" style="width:56px; height:56px; display:block; flex-shrink:0;" shape="rounded" radius="16" placeholder="Foto"></image-slot>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-weight:700; font-size:14px;">Salsa-Schnupperkurs</div>
+                  <div style="font-size:12px; color:#6E6358; margin-top:2px;">Tanzschule La Vida · Mi 19:00</div>
+                </div>
+                <div style="text-align:right; flex-shrink:0;">
+                  <span style="background:#F8DCE7; color:#A81552; font-size:10px; font-weight:700; padding:3px 8px; border-radius:999px;">Tanzen</span>
+                  <div style="font-size:11px; color:#6E6358; font-weight:600; margin-top:5px;">8 dabei · 4 frei</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border-radius:20px; padding:11px; border:1px solid #EEE4D6;">
+                <image-slot id="v7-row-kanu" style="width:56px; height:56px; display:block; flex-shrink:0;" shape="rounded" radius="16" placeholder="Foto"></image-slot>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-weight:700; font-size:14px;">Kanutour auf der Fulda</div>
+                  <div style="font-size:12px; color:#6E6358; margin-top:2px;">Bootsverleih Ahoi · Sa 10:00</div>
+                </div>
+                <div style="text-align:right; flex-shrink:0;">
+                  <span style="background:#F4E6CC; color:#8A5A22; font-size:10px; font-weight:700; padding:3px 8px; border-radius:999px;">Draußen</span>
+                  <div style="font-size:11px; color:#6E6358; font-weight:600; margin-top:5px;">6 dabei · 2 frei</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border-radius:20px; padding:11px; border:1px solid #EEE4D6;">
+                <image-slot id="v7-row-spiele" style="width:56px; height:56px; display:block; flex-shrink:0;" shape="rounded" radius="16" placeholder="Foto"></image-slot>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-weight:700; font-size:14px;">Spieleabend</div>
+                  <div style="font-size:12px; color:#6E6358; margin-top:2px;">Café Buntes Haus · Fr 19:30</div>
+                </div>
+                <div style="text-align:right; flex-shrink:0;">
+                  <span style="background:#FBE7DC; color:#A23A20; font-size:10px; font-weight:700; padding:3px 8px; border-radius:999px;">Spiele</span>
+                  <div style="font-size:11px; color:#6E6358; font-weight:600; margin-top:5px;">5 dabei</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border-radius:20px; padding:11px; border:1px solid #EEE4D6;">
+                <image-slot id="v7-row-chor" style="width:56px; height:56px; display:block; flex-shrink:0;" shape="rounded" radius="16" placeholder="Foto"></image-slot>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-weight:700; font-size:14px;">Offener Chorabend</div>
+                  <div style="font-size:12px; color:#6E6358; margin-top:2px;">Kulturhaus Dock 4 · Do 18:30</div>
+                </div>
+                <div style="text-align:right; flex-shrink:0;">
+                  <span style="background:#F8DCE7; color:#A81552; font-size:10px; font-weight:700; padding:3px 8px; border-radius:999px;">Musik</span>
+                  <div style="font-size:11px; color:#6E6358; font-weight:600; margin-top:5px;">9 dabei</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TabBar -->
+            <div style="background:#FFFFFF; border-top:1px solid #EBDECB; display:grid; grid-template-columns:repeat(4,1fr); padding:8px 6px 14px 6px;">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding-top:5px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A23A20" stroke-width="2.2"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2" fill="#A23A20" stroke="none"/></svg><span style="font-size:10px; font-weight:700; color:#A23A20;">Entdecken</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding-top:5px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:10px; font-weight:600; color:#6E6358;">Starten</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding-top:5px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="12" rx="5"/><path d="M9 17 L9 20 L13 17"/></svg><span style="font-size:10px; font-weight:600; color:#6E6358;">Chats</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding-top:5px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 19 C7 15.5 9 14.5 12 14.5 C15 14.5 17 15.5 18.5 19"/></svg><span style="font-size:10px; font-weight:600; color:#6E6358;">Du</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px; margin-top:14px;">
+          <div style="font-size:13px; font-weight:700; text-align:center;">Feed · Standard</div>
+          <div style="font-family:ui-monospace,monospace; font-size:11px; color:#6E6358; text-align:center; margin-top:4px; line-height:1.6;">AppHeader · LocationPill · FilterBar · FilterChip<br>ActivityCard · ActivityRow · JoinButton · TabBar</div>
+        </div>
+      </div>
+
+      <!-- Feed loading -->
+      <div data-screen-label="02 Feed · Laden">
+        <div style="width: 340px; background: #FCF8F2; border-radius: 44px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 24px 50px rgba(74,50,34,0.14); border: 1px solid #EEE4D6;">
+          <div style="border-radius: 32px; overflow: hidden; background: #FCF8F2; display: flex; flex-direction: column; min-height: 640px;">
+            <div style="background: #EFE6D8; padding: 20px 18px 12px 18px;">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div style="font-family:'Luckiest Guy',cursive; font-size:23px; line-height:1.1; color:#FF6F4D; text-shadow: 0 2px 0 rgba(42,30,26,0.85); display:flex; align-items:baseline;">BELONG<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D62F6B" stroke-width="2.6" stroke-linecap="round" style="transform: rotate(14deg) translateY(-10px); margin-left:4px; flex-shrink:0;"><path d="M11.2 3.8 C11.9 5.3 12.6 6.6 12.3 8.7"></path><path d="M13.1 15.4 C12.3 16.7 12.7 18.5 11.5 20.2"></path><path d="M3.9 13.2 C5.7 12.4 7.3 12.8 9 12.1"></path><path d="M15.2 11.5 C16.7 11.8 18.3 10.9 20 11.3"></path></svg></div>
+                <span style="background: #FFFFFF; color:#A23A20; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px;">Kassel</span>
+              </div>
+            </div>
+            <div style="background:#EFE6D8; line-height:0;"><svg viewBox="0 0 320 20" preserveAspectRatio="none" style="display:block; width:100%; height:16px;"><path d="M0,12 C26,3 54,17 88,9 C120,2 146,16 184,9 C218,3 250,15 285,8 C300,5 310,9 320,7 L320,20 L0,20 Z" fill="#FCF8F2"></path></svg></div>
+            <div style="padding: 10px 16px; display:flex; gap:7px;">
+              <div style="width:110px; height:32px; border-radius:999px; background:#F1E6D5;"></div>
+              <div style="width:88px; height:32px; border-radius:999px; background:#F1E6D5;"></div>
+              <div style="width:64px; height:32px; border-radius:999px; background:#F1E6D5;"></div>
+            </div>
+            <div style="padding: 4px 16px; display:flex; flex-direction:column; gap:12px;">
+              <div style="background:#FFFFFF; border-radius:24px; padding:12px; border:1px solid #EEE4D6;">
+                <div style="height:120px; border-radius:16px; background:#F1E6D5;"></div>
+                <div style="height:14px; width:70%; border-radius:999px; background:#F1E6D5; margin-top:12px;"></div>
+                <div style="height:11px; width:45%; border-radius:999px; background:#F1E8DA; margin-top:8px;"></div>
+              </div>
+              <div style="background:#FFFFFF; border-radius:20px; padding:12px; border:1px solid #EEE4D6; display:flex; gap:12px; align-items:center;">
+                <div style="width:56px; height:56px; border-radius:16px; background:#F1E6D5; flex-shrink:0;"></div>
+                <div style="flex:1;"><div style="height:13px; width:65%; border-radius:999px; background:#F1E6D5;"></div><div style="height:10px; width:45%; border-radius:999px; background:#F1E8DA; margin-top:7px;"></div></div>
+              </div>
+              <div style="background:#FFFFFF; border-radius:20px; padding:12px; border:1px solid #EEE4D6; display:flex; gap:12px; align-items:center;">
+                <div style="width:56px; height:56px; border-radius:16px; background:#F1E6D5; flex-shrink:0;"></div>
+                <div style="flex:1;"><div style="height:13px; width:55%; border-radius:999px; background:#F1E6D5;"></div><div style="height:10px; width:40%; border-radius:999px; background:#F1E8DA; margin-top:7px;"></div></div>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:center; gap:7px; padding:8px 0;">
+                <div style="width:7px; height:7px; border-radius:50%; background:#FF6F4D;"></div>
+                <div style="width:7px; height:7px; border-radius:50%; background:#D62F6B;"></div>
+                <div style="width:7px; height:7px; border-radius:50%; background:#E7B22E;"></div>
+                <span style="font-size:12px; color:#6E6358; font-weight:600; margin-left:4px;">Wir schauen, was heute geht …</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px; margin-top:14px;">
+          <div style="font-size:13px; font-weight:700; text-align:center;">Feed · Laden</div>
+          <div style="font-family:ui-monospace,monospace; font-size:11px; color:#6E6358; text-align:center; margin-top:4px; line-height:1.6;">SkeletonCard · SkeletonRow · LoadingNote</div>
+        </div>
+      </div>
+
+      <!-- Feed empty -->
+      <div data-screen-label="02 Feed · Leer">
+        <div style="width: 340px; background: #FCF8F2; border-radius: 44px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 24px 50px rgba(74,50,34,0.14); border: 1px solid #EEE4D6;">
+          <div style="border-radius: 32px; overflow: hidden; background: #FCF8F2; display: flex; flex-direction: column; min-height: 640px;">
+            <div style="background: #EFE6D8; padding: 20px 18px 12px 18px;">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div style="font-family:'Luckiest Guy',cursive; font-size:23px; line-height:1.1; color:#FF6F4D; text-shadow: 0 2px 0 rgba(42,30,26,0.85); display:flex; align-items:baseline;">BELONG<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D62F6B" stroke-width="2.6" stroke-linecap="round" style="transform: rotate(14deg) translateY(-10px); margin-left:4px; flex-shrink:0;"><path d="M11.2 3.8 C11.9 5.3 12.6 6.6 12.3 8.7"></path><path d="M13.1 15.4 C12.3 16.7 12.7 18.5 11.5 20.2"></path><path d="M3.9 13.2 C5.7 12.4 7.3 12.8 9 12.1"></path><path d="M15.2 11.5 C16.7 11.8 18.3 10.9 20 11.3"></path></svg></div>
+                <span style="background: #FFFFFF; color:#A23A20; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px;">Kassel</span>
+              </div>
+            </div>
+            <div style="background:#EFE6D8; line-height:0;"><svg viewBox="0 0 320 20" preserveAspectRatio="none" style="display:block; width:100%; height:16px;"><path d="M0,12 C26,3 54,17 88,9 C120,2 146,16 184,9 C218,3 250,15 285,8 C300,5 310,9 320,7 L320,20 L0,20 Z" fill="#FCF8F2"></path></svg></div>
+            <div style="padding: 8px 16px; display:flex; gap:7px;">
+              <span style="display:flex; align-items:center; gap:5px; background:#F1E6D5; color:#4a423b; font-size:13px; font-weight:600; padding:8px 14px; border-radius:999px;">Rothenditmold <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9 L12 15 L18 9"/></svg></span>
+              <span style="background:#F8DCE7; color:#A81552; font-size:13px; font-weight:600; padding:8px 14px; border-radius:999px;">Tanzen</span>
+            </div>
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; padding: 20px 28px;">
+              <div style="text-align:center; position:relative;">
+                <div style="width: 96px; height: 96px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background: #F4E6CC; margin: 0 auto 18px auto; display:flex; align-items:center; justify-content:center;">
+                  <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#8A5A22" stroke-width="2.4" stroke-linecap="round" style="transform: rotate(16deg);"><path d="M12 3.5 C12.2 6 12 7.4 11.8 9.6"/><path d="M12.2 14.4 C12 16.6 12.2 18.4 12 20.5"/><path d="M3.8 12.2 C6.2 12 7.6 12.2 9.6 12"/><path d="M14.4 11.8 C16.6 12 18.4 11.8 20.3 12"/></svg>
+                </div>
+                <div style="font-family:'Hedvig Letters Serif',serif; font-size:24px; line-height:1.2;">Gerade noch ruhig hier.</div>
+                <p style="margin:10px 0 0 0; font-size:14px; line-height:1.55; color:#6E6358;">Für diese Filter ist noch nichts geplant. Starte selbst was Kleines — ein Kaffee reicht schon.</p>
+                <svg width="52" height="34" viewBox="0 0 60 40" fill="none" stroke="#A81552" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="margin: 10px auto 2px auto; display:block; transform: rotate(58deg);"><path d="M6 8 C22 26 34 30 50 26"></path><path d="M42 20 L51 26 L43 32"></path></svg>
+                <button style="border:none; background:#F25A43; color:#FFFFFF; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:15px; padding:14px 26px; border-radius:999px; box-shadow:0 10px 24px rgba(242,90,67,0.3); cursor:pointer;">Aktivität starten</button>
+                <div style="margin-top:12px;"><button style="border:none; background:transparent; color:#6E6358; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:13px; padding:8px 16px; border-radius:999px; cursor:pointer;">Filter zurücksetzen</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px; margin-top:14px;">
+          <div style="font-size:13px; font-weight:700; text-align:center;">Feed · Leer</div>
+          <div style="font-family:ui-monospace,monospace; font-size:11px; color:#6E6358; text-align:center; margin-top:4px; line-height:1.6;">EmptyState · DoodleArrow · PrimaryButton</div>
+        </div>
+      </div>
+
+      <!-- Feed error -->
+      <div data-screen-label="02 Feed · Fehler">
+        <div style="width: 340px; background: #FCF8F2; border-radius: 44px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 24px 50px rgba(74,50,34,0.14); border: 1px solid #EEE4D6;">
+          <div style="border-radius: 32px; overflow: hidden; background: #FCF8F2; display: flex; flex-direction: column; min-height: 640px;">
+            <div style="background: #EFE6D8; padding: 20px 18px 12px 18px;">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div style="font-family:'Luckiest Guy',cursive; font-size:23px; line-height:1.1; color:#FF6F4D; text-shadow: 0 2px 0 rgba(42,30,26,0.85); display:flex; align-items:baseline;">BELONG<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D62F6B" stroke-width="2.6" stroke-linecap="round" style="transform: rotate(14deg) translateY(-10px); margin-left:4px; flex-shrink:0;"><path d="M11.2 3.8 C11.9 5.3 12.6 6.6 12.3 8.7"></path><path d="M13.1 15.4 C12.3 16.7 12.7 18.5 11.5 20.2"></path><path d="M3.9 13.2 C5.7 12.4 7.3 12.8 9 12.1"></path><path d="M15.2 11.5 C16.7 11.8 18.3 10.9 20 11.3"></path></svg></div>
+                <span style="background: #FFFFFF; color:#A23A20; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px;">Kassel</span>
+              </div>
+            </div>
+            <div style="background:#EFE6D8; line-height:0;"><svg viewBox="0 0 320 20" preserveAspectRatio="none" style="display:block; width:100%; height:16px;"><path d="M0,12 C26,3 54,17 88,9 C120,2 146,16 184,9 C218,3 250,15 285,8 C300,5 310,9 320,7 L320,20 L0,20 Z" fill="#FCF8F2"></path></svg></div>
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; padding: 20px 28px;">
+              <div style="text-align:center;">
+                <div style="width: 96px; height: 96px; border-radius: 54% 46% 40% 60% / 44% 56% 48% 52%; background: #F8DCE7; margin: 0 auto 18px auto; display:flex; align-items:center; justify-content:center;">
+                  <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#A81552" stroke-width="2.8" stroke-linecap="round"><path d="M12 4.5 C12.2 8.5 12 11 11.9 14"/><circle cx="12" cy="19" r="0.6" fill="#A81552"/></svg>
+                </div>
+                <div style="font-family:'Hedvig Letters Serif',serif; font-size:24px; line-height:1.2;">Hat gerade nicht geklappt.</div>
+                <p style="margin:10px 0 20px 0; font-size:14px; line-height:1.55; color:#6E6358;">Wir konnten den Feed nicht laden — vielleicht hakt die Verbindung. Kein Problem.</p>
+                <button style="border:none; background:#F25A43; color:#FFFFFF; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:15px; padding:14px 26px; border-radius:999px; box-shadow:0 10px 24px rgba(242,90,67,0.3); cursor:pointer;">Noch mal versuchen</button>
+                <div style="margin-top:12px;"><button style="border:none; background:transparent; color:#6E6358; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:13px; padding:8px 16px; border-radius:999px; cursor:pointer;">Zuletzt geladene anzeigen</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px; margin-top:14px;">
+          <div style="font-size:13px; font-weight:700; text-align:center;">Feed · Fehler</div>
+          <div style="font-family:ui-monospace,monospace; font-size:11px; color:#6E6358; text-align:center; margin-top:4px; line-height:1.6;">ErrorState · RetryButton</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ 03 · AKTIVITÄT ERSTELLEN ════════════ -->
+  <div style="max-width: 1560px; margin: 0 auto; padding: 64px 48px 0 48px;">
+    <div style="display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">03</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 34px; margin: 0;">Aktivität erstellen</h2>
+    </div>
+    <p style="max-width: 680px; margin: 0 0 26px 0; font-size: 15px; line-height: 1.6; color: #6E6358;">Für Leute wie Jan: sechs Felder, fertig. Freundliche Validierung statt roter Alarm, und ein Funke-Moment nach dem Teilen.</p>
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap; align-items: flex-start;">
+
+      <!-- Create default -->
+      <div data-screen-label="03 Erstellen">
+        <div style="width: 340px; background: #FCF8F2; border-radius: 44px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 24px 50px rgba(74,50,34,0.14); border: 1px solid #EEE4D6;">
+          <div style="border-radius: 32px; overflow: hidden; background: #FCF8F2;">
+            <!-- SheetHeader -->
+            <div style="padding: 18px 18px 0 18px;">
+              <div style="width:40px; height:5px; border-radius:999px; background:#EBDECB; margin:0 auto 14px auto;"></div>
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div>
+                  <div style="font-family:'Hedvig Letters Serif',serif; font-size:23px;">Starte was Kleines</div>
+                  <div style="font-size:13px; color:#6E6358; margin-top:3px;">Ein Kaffee reicht schon.</div>
+                </div>
+                <button style="border:none; width:36px; height:36px; border-radius:50%; background:#F1E6D5; cursor:pointer; display:flex; align-items:center; justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2.8" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button>
+              </div>
+            </div>
+            <!-- Form -->
+            <div style="padding: 16px 18px 20px 18px; display:flex; flex-direction:column; gap:13px;">
+              <div>
+                <div style="font-size:12px; font-weight:700; color:#4a423b; margin-bottom:6px;">Titel</div>
+                <div style="background:#FFFFFF; border:1px solid #EBDECB; border-radius:16px; padding:13px 15px; font-size:14px;">Feierabend-Grillen am Bugasee</div>
+              </div>
+              <div>
+                <div style="font-size:12px; font-weight:700; color:#4a423b; margin-bottom:6px;">Kategorie</div>
+                <div style="display:flex; gap:7px; flex-wrap:wrap;">
+                  <span style="background:#F25A43; color:#FFFFFF; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Draußen</span>
+                  <span style="background:#FFFFFF; border:1px solid #EBDECB; color:#6E6358; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Essen</span>
+                  <span style="background:#FFFFFF; border:1px solid #EBDECB; color:#6E6358; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Spiele</span>
+                  <span style="background:#FFFFFF; border:1px solid #EBDECB; color:#6E6358; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Musik</span>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:12px; font-weight:700; color:#4a423b; margin-bottom:6px;">Ort</div>
+                <div style="background:#FFFFFF; border:1px solid #EBDECB; border-radius:16px; padding:13px 15px; font-size:14px; display:flex; align-items:center; gap:9px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A23A20" stroke-width="2.2"><path d="M12 21 C12 21 5.5 14.8 5.5 10 A6.5 6.5 0 0 1 18.5 10 C18.5 14.8 12 21 12 21 Z"/><circle cx="12" cy="10" r="2.2"/></svg>
+                  Bugasee, Nordufer
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:9px;">
+                <div>
+                  <div style="font-size:12px; font-weight:700; color:#4a423b; margin-bottom:6px;">Tag</div>
+                  <div style="background:#FFFFFF; border:1px solid #EBDECB; border-radius:16px; padding:13px 15px; font-size:14px;">Fr, 4. Juli</div>
+                </div>
+                <div>
+                  <div style="font-size:12px; font-weight:700; color:#4a423b; margin-bottom:6px;">Uhrzeit</div>
+                  <div style="background:#FFFFFF; border:1px solid #EBDECB; border-radius:16px; padding:13px 15px; font-size:14px;">18:30</div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:12px; font-weight:700; color:#4a423b; margin-bottom:6px;">Kurzbeschreibung <span style="color:#6E6358; font-weight:600;">· optional</span></div>
+                <div style="background:#FFFFFF; border:1px solid #EBDECB; border-radius:16px; padding:13px 15px; font-size:14px; line-height:1.5; min-height:64px; color:#4a423b;">Bring was für den Grill mit — Kohle haben wir. Einfach vorbeikommen.</div>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div style="font-size:12px; font-weight:700; color:#4a423b;">Max. Teilnehmer:innen</div>
+                <div style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #EBDECB; border-radius:999px; padding:5px;">
+                  <button style="border:none; width:34px; height:34px; border-radius:50%; background:#F1E6D5; cursor:pointer; display:flex; align-items:center; justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4a423b" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+                  <span style="font-size:16px; font-weight:700; min-width:22px; text-align:center;">8</span>
+                  <button style="border:none; width:34px; height:34px; border-radius:50%; background:#F1E6D5; cursor:pointer; display:flex; align-items:center; justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4a423b" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+                </div>
+              </div>
+              <button style="border:none; background:#F25A43; color:#FFFFFF; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:16px; padding:15px; border-radius:999px; width:100%; margin-top:4px; box-shadow:0 10px 24px rgba(242,90,67,0.3); cursor:pointer;">Aktivität teilen</button>
+              <div style="font-size:12px; color:#6E6358; text-align:center;">Sichtbar für alle in Kassel · du bleibst so anonym wie eingestellt</div>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px; margin-top:14px;">
+          <div style="font-size:13px; font-weight:700; text-align:center;">Erstellen · Standard</div>
+          <div style="font-family:ui-monospace,monospace; font-size:11px; color:#6E6358; text-align:center; margin-top:4px; line-height:1.6;">SheetHeader · TextField · CategoryPicker · LocationField<br>DateTimeRow · TextArea · CapacityStepper · PrimaryButton</div>
+        </div>
+      </div>
+
+      <!-- Create validation error -->
+      <div data-screen-label="03 Erstellen · Fehler">
+        <div style="width: 340px; background: #FCF8F2; border-radius: 44px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 24px 50px rgba(74,50,34,0.14); border: 1px solid #EEE4D6;">
+          <div style="border-radius: 32px; overflow: hidden; background: #FCF8F2;">
+            <div style="padding: 18px 18px 0 18px;">
+              <div style="width:40px; height:5px; border-radius:999px; background:#EBDECB; margin:0 auto 14px auto;"></div>
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div>
+                  <div style="font-family:'Hedvig Letters Serif',serif; font-size:23px;">Starte was Kleines</div>
+                  <div style="font-size:13px; color:#6E6358; margin-top:3px;">Ein Kaffee reicht schon.</div>
+                </div>
+                <button style="border:none; width:36px; height:36px; border-radius:50%; background:#F1E6D5; cursor:pointer; display:flex; align-items:center; justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2.8" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button>
+              </div>
+            </div>
+            <div style="padding: 14px 18px 20px 18px; display:flex; flex-direction:column; gap:13px;">
+              <!-- FormBanner -->
+              <div style="background:#F8DCE7; border-radius:16px; padding:12px 15px; display:flex; gap:10px; align-items:flex-start;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#A81552" stroke-width="2.6" stroke-linecap="round" style="flex-shrink:0; margin-top:1px;"><path d="M12 4.5 C12.2 8.5 12 11 11.9 14"/><circle cx="12" cy="19" r="0.6" fill="#A81552"/></svg>
+                <div style="font-size:13px; line-height:1.45; color:#A81552; font-weight:600;">Fast geschafft — ein Feld fehlt noch.</div>
+              </div>
+              <div>
+                <div style="font-size:12px; font-weight:700; color:#4a423b; margin-bottom:6px;">Titel</div>
+                <div style="background:#FFFFFF; border:2px solid #D62F6B; border-radius:16px; padding:12px 15px; font-size:14px; color:#B9A08D;">Wie heißt deine Aktivität?</div>
+                <div style="font-size:12px; color:#A81552; font-weight:600; margin-top:6px;">Gib deiner Aktivität einen kurzen Titel.</div>
+              </div>
+              <div>
+                <div style="font-size:12px; font-weight:700; color:#4a423b; margin-bottom:6px;">Kategorie</div>
+                <div style="display:flex; gap:7px; flex-wrap:wrap;">
+                  <span style="background:#F25A43; color:#FFFFFF; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Draußen</span>
+                  <span style="background:#FFFFFF; border:1px solid #EBDECB; color:#6E6358; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Essen</span>
+                  <span style="background:#FFFFFF; border:1px solid #EBDECB; color:#6E6358; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Spiele</span>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:12px; font-weight:700; color:#4a423b; margin-bottom:6px;">Ort</div>
+                <div style="background:#FFFFFF; border:1px solid #EBDECB; border-radius:16px; padding:13px 15px; font-size:14px; display:flex; align-items:center; gap:9px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A23A20" stroke-width="2.2"><path d="M12 21 C12 21 5.5 14.8 5.5 10 A6.5 6.5 0 0 1 18.5 10 C18.5 14.8 12 21 12 21 Z"/><circle cx="12" cy="10" r="2.2"/></svg>
+                  Bugasee, Nordufer
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:9px;">
+                <div><div style="font-size:12px; font-weight:700; color:#4a423b; margin-bottom:6px;">Tag</div><div style="background:#FFFFFF; border:1px solid #EBDECB; border-radius:16px; padding:13px 15px; font-size:14px;">Fr, 4. Juli</div></div>
+                <div><div style="font-size:12px; font-weight:700; color:#4a423b; margin-bottom:6px;">Uhrzeit</div><div style="background:#FFFFFF; border:1px solid #EBDECB; border-radius:16px; padding:13px 15px; font-size:14px;">18:30</div></div>
+              </div>
+              <button style="border:none; background:#F25A43; color:#FFFFFF; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:16px; padding:15px; border-radius:999px; width:100%; box-shadow:0 10px 24px rgba(242,90,67,0.3); cursor:pointer;">Aktivität teilen</button>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px; margin-top:14px;">
+          <div style="font-size:13px; font-weight:700; text-align:center;">Erstellen · Validierung</div>
+          <div style="font-family:ui-monospace,monospace; font-size:11px; color:#6E6358; text-align:center; margin-top:4px; line-height:1.6;">FormBanner · TextField[error] · InlineError</div>
+        </div>
+      </div>
+
+      <!-- Create success -->
+      <div data-screen-label="03 Erstellen · Erfolg">
+        <div style="width: 340px; background: #FCF8F2; border-radius: 44px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 24px 50px rgba(74,50,34,0.14); border: 1px solid #EEE4D6;">
+          <div style="border-radius: 32px; overflow: hidden; background: #FCF8F2; min-height: 620px; display:flex; align-items:center; justify-content:center; position:relative;">
+            <div style="position:absolute; top:-56px; left:-48px; width:180px; height:180px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background: #FBE7DC;"></div>
+            <div style="position:absolute; bottom:-62px; right:-46px; width:190px; height:190px; border-radius: 54% 46% 40% 60% / 44% 56% 48% 52%; background: #F8DCE7;"></div>
+            <div style="position:relative; text-align:center; padding: 0 30px;">
+              <div style="width: 96px; height: 96px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background: #E7B22E; margin: 0 auto 4px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(138,90,34,0.25);">
+                <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#22401E" stroke-width="2.6" stroke-linecap="round" style="transform: rotate(16deg);"><path d="M12 3.5 C12.2 6 12 7.4 11.8 9.6"/><path d="M12.2 14.4 C12 16.6 12.2 18.4 12 20.5"/><path d="M3.8 12.2 C6.2 12 7.6 12.2 9.6 12"/><path d="M14.4 11.8 C16.6 12 18.4 11.8 20.3 12"/></svg>
+              </div>
+              <div style="display:inline-block; margin-top:10px;">
+                <div style="font-family:'Hedvig Letters Serif',serif; font-size:32px; line-height:1.1;">Steht!</div>
+                <svg width="92" height="12" viewBox="0 0 92 12" fill="none" style="display:block; margin: 5px auto 0 auto;"><path d="M4 8 C16 3 26 10 40 7 C54 4 64 10 78 7 C84 5.5 88 7 89 6.5" stroke="#FF6F4D" stroke-width="4" stroke-linecap="round"></path></svg>
+              </div>
+              <p style="margin: 14px 0 0 0; font-size: 15px; line-height: 1.55; color: #6E6358;">„Feierabend-Grillen am Bugasee" ist jetzt für alle in Kassel sichtbar. Wir sagen dir, sobald jemand dabei ist.</p>
+              <button style="border:none; background:#F25A43; color:#FFFFFF; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:15px; padding:14px 28px; border-radius:999px; margin-top:22px; box-shadow:0 10px 24px rgba(242,90,67,0.3); cursor:pointer;">Zur Aktivität</button>
+              <div style="margin-top:8px;"><button style="border:none; background:transparent; color:#6E6358; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:14px; padding:10px 18px; border-radius:999px; cursor:pointer;">Zurück zum Feed</button></div>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px; margin-top:14px;">
+          <div style="font-size:13px; font-weight:700; text-align:center;">Erstellen · Erfolg</div>
+          <div style="font-family:ui-monospace,monospace; font-size:11px; color:#6E6358; text-align:center; margin-top:4px; line-height:1.6;">SuccessMoment · SparkBlob · SquiggleUnderline</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ 04 · PROFIL ════════════ -->
+  <div style="max-width: 1560px; margin: 0 auto; padding: 64px 48px 0 48px;">
+    <div style="display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">04</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 34px; margin: 0;">Profil · minimal &amp; anonym</h2>
+    </div>
+    <p style="max-width: 680px; margin: 0 0 26px 0; font-size: 15px; line-height: 1.6; color: #6E6358;">Die Anti-These zu Social Media: kein Foto-Zwang, keine Follower, kein Score. Nur Anonymitätsstufe, Interessen und das, was du vorhast.</p>
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap; align-items: flex-start;">
+      <div data-screen-label="04 Profil">
+        <div style="width: 340px; background: #FCF8F2; border-radius: 44px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 24px 50px rgba(74,50,34,0.14); border: 1px solid #EEE4D6;">
+          <div style="border-radius: 32px; overflow: hidden; background: #FCF8F2; display:flex; flex-direction:column;">
+            <!-- ProfileIdentityCard on amber -->
+            <div style="background: #E7B22E; padding: 26px 20px 10px 20px; position:relative; text-align:center;">
+              <div style="position:absolute; top:-30px; left:-26px; width:120px; height:120px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background: #F6D3C7; opacity: 0.8;"></div>
+              <div style="position:relative;">
+                <div style="width:76px; height:76px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background:#FFFFFF; margin:0 auto; display:flex; align-items:center; justify-content:center; font-family:'Hedvig Letters Serif',serif; font-size:30px; color:#6E6358; box-shadow: 0 8px 18px rgba(138,90,34,0.25);">?</div>
+                <div style="font-family:'Hedvig Letters Serif',serif; font-size:24px; margin-top:12px; color:#2F2A25;">stiller-fuchs</div>
+                <div style="display:flex; justify-content:center; gap:7px; margin-top:9px; margin-bottom:8px;">
+                  <span style="background:rgba(255,251,245,0.9); color:#A23A20; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px;">Ganz anonym</span>
+                  <span style="background:rgba(42,30,26,0.14); color:#2F2A25; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px;">ändern</span>
+                </div>
+              </div>
+            </div>
+            <div style="background:#E7B22E; line-height:0;"><svg viewBox="0 0 320 20" preserveAspectRatio="none" style="display:block; width:100%; height:16px;"><path d="M0,12 C26,3 54,17 88,9 C120,2 146,16 184,9 C218,3 250,15 285,8 C300,5 310,9 320,7 L320,20 L0,20 Z" fill="#FCF8F2"></path></svg></div>
+
+            <!-- AntiSocialNote -->
+            <div style="padding: 8px 16px 0 16px;">
+              <div style="display:flex; align-items:center; justify-content:center; gap:7px;">
+                <div style="width:5px; height:5px; border-radius:50%; background:#F25A43;"></div>
+                <span style="font-size:12px; color:#6E6358; font-weight:600;">Kein Foto nötig · keine Follower · nichts zu polieren</span>
+              </div>
+            </div>
+
+            <!-- InterestChips -->
+            <div style="padding: 14px 16px 0 16px;">
+              <div style="font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#6E6358; font-weight:700; margin-bottom:9px;">Deine Interessen</div>
+              <div style="display:flex; gap:7px; flex-wrap:wrap;">
+                <span style="background:#F4E6CC; color:#8A5A22; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Draußen</span>
+                <span style="background:#FBE7DC; color:#A23A20; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Spiele</span>
+                <span style="background:#F8DCE7; color:#A81552; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">Kaffee</span>
+                <span style="background:#FFFFFF; border:1px solid #EBDECB; color:#6E6358; font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px;">+ bearbeiten</span>
+              </div>
+            </div>
+
+            <!-- JoinedActivityRow -->
+            <div style="padding: 18px 16px 4px 16px;">
+              <div style="font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#6E6358; font-weight:700; margin-bottom:9px;">Du bist dabei</div>
+              <div style="display:flex; flex-direction:column; gap:9px;">
+                <div style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border-radius:20px; padding:12px; border:1px solid #EEE4D6;">
+                  <div style="width:44px; height:44px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background:#F4E6CC; flex-shrink:0; display:flex; align-items:center; justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A5A22" stroke-width="2.2"><path d="M12 21 C12 21 5.5 14.8 5.5 10 A6.5 6.5 0 0 1 18.5 10 C18.5 14.8 12 21 12 21 Z"/><circle cx="12" cy="10" r="2.2"/></svg></div>
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-weight:700; font-size:14px;">Kanutour auf der Fulda</div>
+                    <div style="font-size:12px; color:#6E6358; margin-top:2px;">Sa 10:00 · Bootsverleih Ahoi</div>
+                  </div>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M10 5 L16.5 12 L10 19"/></svg>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border-radius:20px; padding:12px; border:1px solid #EEE4D6;">
+                  <div style="width:44px; height:44px; border-radius: 54% 46% 40% 60% / 44% 56% 48% 52%; background:#FBE7DC; flex-shrink:0; display:flex; align-items:center; justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A23A20" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="5" width="14" height="14" rx="4"/><path d="M9 9h.01M15 9h.01M9 15h.01M15 15h.01"/></svg></div>
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-weight:700; font-size:14px;">Spieleabend</div>
+                    <div style="font-size:12px; color:#6E6358; margin-top:2px;">Fr 19:30 · Café Buntes Haus</div>
+                  </div>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M10 5 L16.5 12 L10 19"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- VisibilityRow -->
+            <div style="padding: 14px 16px 16px 16px;">
+              <div style="background:#FBE7DC; border-radius:20px; padding:15px 16px; display:flex; align-items:center; gap:12px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A23A20" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M12 3 L19 6 V11 C19 16 15.5 19.5 12 21 C8.5 19.5 5 16 5 11 V6 Z"/></svg>
+                <div style="flex:1; font-size:13px; line-height:1.45; color:#A23A20; font-weight:600;">Du entscheidest, was sichtbar ist — Stufe jederzeit wechselbar.</div>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A23A20" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M10 5 L16.5 12 L10 19"/></svg>
+              </div>
+            </div>
+
+            <!-- TabBar -->
+            <div style="background:#FFFFFF; border-top:1px solid #EBDECB; display:grid; grid-template-columns:repeat(4,1fr); padding:8px 6px 14px 6px;">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding-top:5px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2.2"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2" fill="#6E6358" stroke="none"/></svg><span style="font-size:10px; font-weight:600; color:#6E6358;">Entdecken</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding-top:5px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:10px; font-weight:600; color:#6E6358;">Starten</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding-top:5px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="12" rx="5"/><path d="M9 17 L9 20 L13 17"/></svg><span style="font-size:10px; font-weight:600; color:#6E6358;">Chats</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding-top:5px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A23A20" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 19 C7 15.5 9 14.5 12 14.5 C15 14.5 17 15.5 18.5 19"/></svg><span style="font-size:10px; font-weight:700; color:#A23A20;">Du</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px; margin-top:14px;">
+          <div style="font-size:13px; font-weight:700; text-align:center;">Profil · anonym</div>
+          <div style="font-family:ui-monospace,monospace; font-size:11px; color:#6E6358; text-align:center; margin-top:4px; line-height:1.6;">ProfileIdentityCard · AnonymityBadge · InterestChip<br>JoinedActivityRow · VisibilityRow · TabBar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ 05 · GRUPPENCHAT ════════════ -->
+  <div style="max-width: 1560px; margin: 0 auto; padding: 64px 48px 0 48px;">
+    <div style="display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">05</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 34px; margin: 0;">Gruppenchat</h2>
+    </div>
+    <p style="max-width: 680px; margin: 0 0 26px 0; font-size: 15px; line-height: 1.6; color: #6E6358;">Koordination pro Aktivität — nur Spitznamen gemäß Stufe. Der Schutz-Button sitzt sichtbar im Header; Melden/Blockieren zusätzlich per Long-Press auf jeder Nachricht (rechts).</p>
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap; align-items: flex-start;">
+
+      <!-- Chat default -->
+      <div data-screen-label="05 Chat">
+        <div style="width: 340px; background: #FCF8F2; border-radius: 44px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 24px 50px rgba(74,50,34,0.14); border: 1px solid #EEE4D6;">
+          <div style="border-radius: 32px; overflow: hidden; background: #FCF8F2; display:flex; flex-direction:column; min-height: 660px;">
+            <!-- ChatHeader -->
+            <div style="background:#FFFFFF; border-bottom:1px solid #EBDECB; padding:16px 14px; display:flex; align-items:center; gap:11px;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2F2A25" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 5 L7.5 12 L14 19"/></svg>
+              <div style="flex:1; min-width:0;">
+                <div style="font-weight:700; font-size:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Kanutour auf der Fulda</div>
+                <div style="font-size:12px; color:#6E6358; margin-top:1px;">6 dabei · Sa 10:00</div>
+              </div>
+              <!-- SafetyButton -->
+              <span style="display:flex; align-items:center; gap:6px; background:#FBE7DC; color:#A23A20; font-size:12px; font-weight:700; padding:8px 13px; border-radius:999px; flex-shrink:0;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A23A20" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L19 6 V11 C19 16 15.5 19.5 12 21 C8.5 19.5 5 16 5 11 V6 Z"/></svg>
+                Schutz
+              </span>
+            </div>
+
+            <!-- Messages -->
+            <div style="flex:1; padding: 16px 14px; display:flex; flex-direction:column; gap:12px;">
+              <div style="text-align:center;"><span style="background:#F1E6D5; color:#6E6358; font-size:11px; font-weight:600; padding:5px 12px; border-radius:999px;">Alle sehen nur Spitznamen — so wie du es eingestellt hast</span></div>
+
+              <div style="max-width: 78%;">
+                <div style="font-size:11px; font-weight:700; color:#A81552; margin: 0 0 3px 12px;">flinke-otter</div>
+                <div style="background:#FFFFFF; border:1px solid #EEE4D6; border-radius: 18px 18px 18px 6px; padding:11px 14px; font-size:14px; line-height:1.45;">Nimmt jemand ein zweites Paddel mit?</div>
+              </div>
+
+              <div style="max-width: 82%;">
+                <div style="display:flex; align-items:center; gap:6px; margin: 0 0 3px 12px;">
+                  <span style="font-size:11px; font-weight:700; color:#8A5A22;">jan_orga</span>
+                  <span style="background:#F4E6CC; color:#8A5A22; font-size:9px; font-weight:700; padding:2px 7px; border-radius:999px; letter-spacing:0.04em;">ORGA</span>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid #EEE4D6; border-radius: 18px 18px 18px 6px; padding:11px 14px; font-size:14px; line-height:1.45;">Klar, hab zwei. Treffpunkt ist hier:</div>
+                <!-- MeetupPinCard -->
+                <div style="background:#FFFFFF; border:1px solid #EEE4D6; border-radius:18px; overflow:hidden; margin-top:7px; box-shadow: 0 6px 16px rgba(74,50,34,0.07);">
+                  <div style="height:86px; background: repeating-linear-gradient(45deg, #F1E6D5 0 10px, #F7EFE3 10px 20px); position:relative; display:flex; align-items:center; justify-content:center;">
+                    <code style="font-family:ui-monospace,monospace; font-size:10px; color:#6E6358; background:rgba(255,255,255,0.8); padding:3px 8px; border-radius:6px;">Kartenausschnitt</code>
+                    <div style="position:absolute; left:50%; top:50%; transform:translate(-50%, -90%);"><svg width="26" height="26" viewBox="0 0 24 24" fill="#F25A43" stroke="#FFFFFF" stroke-width="1.6"><path d="M12 21 C12 21 5.5 14.8 5.5 10 A6.5 6.5 0 0 1 18.5 10 C18.5 14.8 12 21 12 21 Z"/><circle cx="12" cy="10" r="2.4" fill="#FFFFFF" stroke="none"/></svg></div>
+                  </div>
+                  <div style="padding: 11px 14px; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                    <div>
+                      <div style="font-weight:700; font-size:13px;">Bootsverleih Ahoi</div>
+                      <div style="font-size:12px; color:#6E6358; margin-top:1px;">Auedamm 27b · Sa 10:00</div>
+                    </div>
+                    <span style="background:#F1E6D5; color:#4a423b; font-size:11px; font-weight:700; padding:6px 12px; border-radius:999px; flex-shrink:0;">Route</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="max-width: 78%; align-self:flex-end; text-align:right;">
+                <div style="background:#F25A43; color:#FFFFFF; border-radius: 18px 18px 6px 18px; padding:11px 14px; font-size:14px; line-height:1.45; text-align:left;">Super — ich bin kurz vor 10 da.</div>
+              </div>
+
+              <div style="text-align:center;"><span style="background:#F4E6CC; color:#8A5A22; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px;">leise-lerche ist jetzt dabei</span></div>
+            </div>
+
+            <!-- ChatComposer -->
+            <div style="background:#FFFFFF; border-top:1px solid #EBDECB; padding:12px 14px; display:flex; align-items:center; gap:9px;">
+              <span style="width:40px; height:40px; border-radius:50%; background:#F1E6D5; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4a423b" stroke-width="2.2"><path d="M12 21 C12 21 5.5 14.8 5.5 10 A6.5 6.5 0 0 1 18.5 10 C18.5 14.8 12 21 12 21 Z"/><circle cx="12" cy="10" r="2.2"/></svg></span>
+              <div style="flex:1; background:#FCF8F2; border:1px solid #EBDECB; border-radius:999px; padding:11px 16px; font-size:14px; color:#B9A08D;">Schreib was Kurzes …</div>
+              <span style="width:44px; height:44px; border-radius:50%; background:#F25A43; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 8px 18px rgba(242,90,67,0.3);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 H18 M13 6 L19 12 L13 18"/></svg></span>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px; margin-top:14px;">
+          <div style="font-size:13px; font-weight:700; text-align:center;">Chat · Koordination</div>
+          <div style="font-family:ui-monospace,monospace; font-size:11px; color:#6E6358; text-align:center; margin-top:4px; line-height:1.6;">ChatHeader · SafetyButton · ChatBubble[own/other]<br>OrganizerBadge · MeetupPinCard · SystemNote · ChatComposer</div>
+        </div>
+      </div>
+
+      <!-- Safety sheet -->
+      <div data-screen-label="05 Chat · Schutz">
+        <div style="width: 340px; background: #FCF8F2; border-radius: 44px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 24px 50px rgba(74,50,34,0.14); border: 1px solid #EEE4D6;">
+          <div style="border-radius: 32px; overflow: hidden; background: #FCF8F2; display:flex; flex-direction:column; min-height: 660px; position:relative;">
+            <!-- dimmed chat behind -->
+            <div style="background:#FFFFFF; border-bottom:1px solid #EBDECB; padding:16px 14px; display:flex; align-items:center; gap:11px; opacity:0.5;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2F2A25" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 5 L7.5 12 L14 19"/></svg>
+              <div style="flex:1;">
+                <div style="font-weight:700; font-size:15px;">Kanutour auf der Fulda</div>
+                <div style="font-size:12px; color:#6E6358; margin-top:1px;">6 dabei · Sa 10:00</div>
+              </div>
+            </div>
+            <div style="flex:1; padding: 16px 14px; display:flex; flex-direction:column; gap:12px; opacity:0.5;">
+              <div style="max-width: 78%;">
+                <div style="font-size:11px; font-weight:700; color:#A81552; margin: 0 0 3px 12px;">flinke-otter</div>
+                <div style="background:#FFFFFF; border:2px solid #D62F6B; border-radius: 18px 18px 18px 6px; padding:11px 14px; font-size:14px; line-height:1.45;">Nimmt jemand ein zweites Paddel mit?</div>
+              </div>
+              <div style="max-width: 78%; align-self:flex-end;">
+                <div style="background:#F25A43; color:#FFFFFF; border-radius: 18px 18px 6px 18px; padding:11px 14px; font-size:14px; line-height:1.45;">Super — ich bin kurz vor 10 da.</div>
+              </div>
+            </div>
+            <!-- scrim -->
+            <div style="position:absolute; inset:0; background:rgba(42,30,26,0.32);"></div>
+            <!-- SafetySheet -->
+            <div style="position:absolute; left:0; right:0; bottom:0; background:#FFFFFF; border-radius: 34px 34px 0 0; padding: 14px 18px 22px 18px; box-shadow: 0 -12px 40px rgba(42,30,26,0.22);">
+              <div style="width:40px; height:5px; border-radius:999px; background:#EBDECB; margin:0 auto 16px auto;"></div>
+              <div style="display:flex; align-items:center; gap:11px; margin-bottom:14px;">
+                <div style="width:42px; height:42px; border-radius: 54% 46% 40% 60% / 44% 56% 48% 52%; background:#F8DCE7; display:flex; align-items:center; justify-content:center; font-family:'Hedvig Letters Serif',serif; font-size:17px; color:#A81552;">f</div>
+                <div>
+                  <div style="font-weight:700; font-size:15px;">flinke-otter</div>
+                  <div style="font-size:12px; color:#6E6358;">Nachricht von heute, 09:12</div>
+                </div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div style="display:flex; align-items:center; gap:12px; background:#FCF8F2; border-radius:16px; padding:14px 15px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A81552" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M6 21 V4"/><path d="M6 4 C9 2.5 12 5.5 18 4 V13 C12 14.5 9 11.5 6 13"/></svg>
+                  <div style="flex:1;">
+                    <div style="font-weight:700; font-size:14px; color:#A81552;">Nachricht melden</div>
+                    <div style="font-size:12px; color:#6E6358; margin-top:1px;">Unser Team schaut innerhalb von 24 h drauf.</div>
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px; background:#FCF8F2; border-radius:16px; padding:14px 15px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A81552" stroke-width="2.2" stroke-linecap="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="8.5"/><path d="M6.5 6.5 L17.5 17.5"/></svg>
+                  <div style="flex:1;">
+                    <div style="font-weight:700; font-size:14px; color:#A81552;">Person blockieren</div>
+                    <div style="font-size:12px; color:#6E6358; margin-top:1px;">Ihr seht euch gegenseitig nicht mehr — ohne Ankündigung.</div>
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px; background:#FCF8F2; border-radius:16px; padding:14px 15px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4a423b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M8 12 C8 8 8.5 5 12 5 C15.5 5 16 8 16 12 L17.5 15 H6.5 Z"/><path d="M10.5 18 C10.8 19 11.3 19.5 12 19.5 C12.7 19.5 13.2 19 13.5 18"/></svg>
+                  <div style="flex:1;">
+                    <div style="font-weight:700; font-size:14px;">Nur stummschalten</div>
+                    <div style="font-size:12px; color:#6E6358; margin-top:1px;">Du bleibst dabei, bekommst aber keine Pings mehr.</div>
+                  </div>
+                </div>
+              </div>
+              <button style="border:none; background:transparent; color:#6E6358; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:14px; padding:13px; border-radius:999px; width:100%; margin-top:8px; cursor:pointer;">Abbrechen</button>
+            </div>
+          </div>
+        </div>
+        <div style="width:340px; margin-top:14px;">
+          <div style="font-size:13px; font-weight:700; text-align:center;">Chat · Melden &amp; Blockieren</div>
+          <div style="font-family:ui-monospace,monospace; font-size:11px; color:#6E6358; text-align:center; margin-top:4px; line-height:1.6;">SafetySheet · ReportRow · BlockRow · MuteRow</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ 06 · KOMPONENTEN-INVENTAR ════════════ -->
+  <div style="max-width: 1560px; margin: 0 auto; padding: 72px 48px 0 48px;">
+    <div style="display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">06</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 34px; margin: 0;">Komponenten-Inventar · für den Handoff</h2>
+    </div>
+    <div style="background: #FFFFFF; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 14px 32px rgba(74,50,34,0.08); max-width: 1060px;">
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+        <div>
+          <div style="font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#A23A20; font-weight:700; margin-bottom:10px;">Gerüst</div>
+          <div style="font-family:ui-monospace,monospace; font-size:12px; line-height:2; color:#4a423b;">AppHeader<br>TornEdge<br>TabBar · TabItem<br>SheetHeader<br>LocationPill</div>
+        </div>
+        <div>
+          <div style="font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#A81552; font-weight:700; margin-bottom:10px;">Inhalt</div>
+          <div style="font-family:ui-monospace,monospace; font-size:12px; line-height:2; color:#4a423b;">ActivityCard<br>ActivityRow<br>FilterBar · FilterChip<br>AnonymityLevelCard<br>ProfileIdentityCard<br>JoinedActivityRow</div>
+        </div>
+        <div>
+          <div style="font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#8A5A22; font-weight:700; margin-bottom:10px;">Eingabe &amp; Aktion</div>
+          <div style="font-family:ui-monospace,monospace; font-size:12px; line-height:2; color:#4a423b;">PrimaryButton / JoinButton<br>GhostButton<br>TextField · TextArea<br>CategoryPicker<br>CapacityStepper<br>ChatComposer</div>
+        </div>
+        <div>
+          <div style="font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#6E6358; font-weight:700; margin-bottom:10px;">Zustände &amp; Schutz</div>
+          <div style="font-family:ui-monospace,monospace; font-size:12px; line-height:2; color:#4a423b;">SkeletonCard · SkeletonRow<br>EmptyState · ErrorState<br>FormBanner · InlineError<br>SuccessMoment<br>SafetyButton · SafetySheet<br>SystemNote</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <div style="max-width: 1560px; margin: 70px auto 0 auto; padding: 0 48px;">
+    <div style="border-top: 1px solid #EBDECB; padding-top: 26px; display: flex; justify-content: space-between; align-items: center;">
+      <div style="font-family:'Luckiest Guy', cursive; font-size: 22px; color:#FF6F4D; text-shadow: 0 2px 0 rgba(42,30,26,0.85); display:flex; align-items:baseline;">BELONG<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D62F6B" stroke-width="2.6" stroke-linecap="round" style="transform: rotate(14deg) translateY(-9px); margin-left:4px; flex-shrink:0;"><path d="M11.2 3.8 C11.9 5.3 12.6 6.6 12.3 8.7"></path><path d="M13.1 15.4 C12.3 16.7 12.7 18.5 11.5 20.2"></path><path d="M3.9 13.2 C5.7 12.4 7.3 12.8 9 12.1"></path><path d="M15.2 11.5 C16.7 11.8 18.3 10.9 20 11.3"></path></svg></div>
+      <div style="font-size: 14px; color: #6E6358;">Screens v9 · einheitliche Palette (Quelle: Design Direction v5, abgestimmt) — bereit für Handoff.</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

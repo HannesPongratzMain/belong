@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&family=Hanken+Grotesque:wght@400;500;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  ::selection { background: #FBE7DC; color: #A23A20; }
+</style>
+</helmet>
+<div style="background: radial-gradient(150% 460px at 50% -90px, #FCEBDE 0%, rgba(252,235,222,0) 66%), linear-gradient(180deg, #F5EDE0 0%, #EEE4D3 560px, #EBE1CF 100%); min-height: 100vh; padding: 0 0 100px 0; font-family: 'Hanken Grotesque', system-ui, sans-serif; color: #2B2622; -webkit-font-smoothing: antialiased;">
+
+  <!-- ============ COVER ============ -->
+  <div style="max-width: 1080px; margin: 0 auto; padding: 76px 32px 44px 32px;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 60px;">
+      <div style="width: 12px; height: 12px; border-radius: 50%; background: #BC4529; box-shadow: 0 0 0 5px #FBE7DC;"></div>
+      <span style="font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 600;">Design Direction · v5 · Wortmarke 2b · Fotografie & BOND-Energie</span>
+    </div>
+
+    <div style="display: flex; align-items: baseline;">
+      <div style="font-family: 'Luckiest Guy', cursive; font-size: 92px; line-height: 1; color: #FF6F4D; text-shadow: 0 7px 0 rgba(42,30,26,0.85); display: flex; align-items: baseline;">
+        <span style="display:inline-block; transform: rotate(-3deg) translateY(3px);">B</span><span style="display:inline-block; transform: rotate(2deg) translateY(-3px); margin-left:2px;">E</span><span style="display:inline-block; transform: rotate(-2deg) translateY(2px); margin-left:2px;">L</span><span style="display:inline-block; transform: rotate(3deg) translateY(-2px); margin-left:2px;">O</span><span style="display:inline-block; transform: rotate(-2deg) translateY(3px); margin-left:2px;">N</span><span style="display:inline-block; transform: rotate(3deg) translateY(-3px); margin-left:2px;">G</span>
+      </div>
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#D62F6B" stroke-width="2.6" stroke-linecap="round" style="transform: rotate(14deg) translateY(-52px); margin-left: -6px; flex-shrink: 0;"><path d="M11.2 3.8 C11.9 5.3 12.6 6.6 12.3 8.7"></path><path d="M13.1 15.4 C12.3 16.7 12.7 18.5 11.5 20.2"></path><path d="M3.9 13.2 C5.7 12.4 7.3 12.8 9 12.1"></path><path d="M15.2 11.5 C16.7 11.8 18.3 10.9 20 11.3"></path></svg>
+    </div>
+    <div style="display: flex; align-items: center; gap: 14px; margin-top: 22px;">
+      <div style="width: 46px; height: 3px; background: #BC4529; border-radius: 999px;"></div>
+      <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 27px; color: #A23A20;">Real Time statt Screen Time</div>
+    </div>
+    <p style="max-width: 650px; margin: 30px 0 0 0; font-size: 20px; line-height: 1.6; color: #5a4f45;">Echte Freundschaften entstehen offline. Eine anonyme, aktivitätsbasierte App, die junge Erwachsene in Kassel niedrigschwellig zusammenbringt — ohne Profilzwang, ohne Selbstdarstellungsdruck.</p>
+
+    <!-- Zielgefühl -->
+    <div style="margin-top: 40px; background: linear-gradient(135deg, #FDF0E6 0%, #FBE7DC 100%); border-radius: 30px; padding: 32px 36px; max-width: 780px; display: flex; align-items: flex-start; gap: 20px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 14px 34px rgba(74,50,34,0.08);">
+      <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 56px; line-height: 0.7; color: #BC4529;">„</div>
+      <div>
+        <div style="font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #A23A20; font-weight: 700; margin-bottom: 10px;">Zielgefühl</div>
+        <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 28px; line-height: 1.32; color: #7a2f1c;">So ruhig und aufgeräumt wie eine gute, moderne Wellness-App — aber wärmer, geselliger und einladend statt therapeutisch.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PRINZIPIEN ============ -->
+  <div style="max-width: 1080px; margin: 0 auto; padding: 24px 32px 0 32px;">
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;">
+      <div style="background: #FCF8F2; border-radius: 26px; padding: 26px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="width: 46px; height: 46px; border-radius: 15px 17px 13px 19px; background: #FBE7DC; display: flex; align-items: center; justify-content: center; margin-bottom: 18px;"><div style="width: 15px; height: 15px; border-radius: 50%; background: #BC4529;"></div></div>
+        <div style="font-weight: 700; font-size: 16px; margin-bottom: 6px;">Eine Signalfarbe</div>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6E6358;">Koralle steht konsequent für Aktion. Bernstein & Grün stützen nur.</p>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 26px; padding: 26px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="width: 46px; height: 46px; border-radius: 17px 13px 19px 15px; background: #FBE7DC; display: flex; align-items: center; justify-content: center; margin-bottom: 18px;"><div style="width: 17px; height: 17px; border: 2.5px solid #BC4529; border-radius: 50%;"></div></div>
+        <div style="font-weight: 700; font-size: 16px; margin-bottom: 6px;">Eine Aktion pro Screen</div>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6E6358;">Genau ein Primär-Button, leicht erhaben. Rest bleibt ruhig.</p>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 26px; padding: 26px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="width: 46px; height: 46px; border-radius: 19px 15px 17px 13px; background: #F4E6CC; display: flex; align-items: center; justify-content: center; margin-bottom: 18px;"><div style="width: 19px; height: 6px; border-radius: 999px; background: #B7793A;"></div></div>
+        <div style="font-weight: 700; font-size: 16px; margin-bottom: 6px;">Tiefe statt Dichte</div>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6E6358;">Wärme aus Elevation, Farbe & Bild — nicht aus mehr Elementen.</p>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 26px; padding: 26px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="width: 46px; height: 46px; border-radius: 46% 54% 60% 40% / 50% 44% 56% 50%; background: #E2ECE4; display: flex; align-items: center; justify-content: center; margin-bottom: 18px;"><div style="width: 17px; height: 17px; border-radius: 46% 54% 60% 40% / 50% 44% 56% 50%; background: #2C6E4C;"></div></div>
+        <div style="font-weight: 700; font-size: 16px; margin-bottom: 6px;">Weiche, organische Form</div>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6E6358;">Runde, leicht organische Kanten — geborgen statt technisch.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FARBPALETTE ============ -->
+  <div style="max-width: 1080px; margin: 0 auto; padding: 72px 32px 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">01</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 44px; margin: 0; letter-spacing: -0.01em;">Farbpalette</h2>
+    </div>
+    <p style="max-width: 680px; margin: 0 0 32px 0; font-size: 17px; line-height: 1.6; color: #6E6358;">Abgestuft und warm. <strong style="color: #2B2622; font-weight: 600;">Koralle bleibt die einzige Aktionsfarbe</strong> — jetzt mit Tints & Shades. <strong style="color: #2B2622; font-weight: 600;">Bernstein</strong> ist der warme Zweitton für Flächen, Kategorien und Illustration; Grün bleibt ruhiger Erfolgs-/Naturton. Neutraltöne durchweg warm, nie kühles Grau.</p>
+
+    <!-- Koralle scale -->
+    <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07); margin-bottom: 18px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px;">
+        <div style="font-weight: 700; font-size: 17px;">Koralle · die Aktionsfarbe</div>
+        <div style="font-size: 13px; color: #6E6358;">Aktion &amp; aktive Zustände</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+        <div><div style="height: 82px; border-radius: 16px; background: #A23A20; display: flex; align-items: flex-end; padding: 12px;"><span style="color: #fff; font-size: 13px; font-weight: 600;">Deep · Text</span></div><div style="display:flex; justify-content: space-between; margin-top: 8px;"><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#A23A20</code><span style="font-size: 12px; color: #6E6358;">5,47:1</span></div></div>
+        <div><div style="height: 82px; border-radius: 16px; background: #BC4529; display: flex; align-items: flex-end; padding: 12px;"><span style="color: #fff; font-size: 13px; font-weight: 600;">Base · Fill</span></div><div style="display:flex; justify-content: space-between; margin-top: 8px;"><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#BC4529</code><span style="font-size: 12px; color: #6E6358;">5,22:1</span></div></div>
+        <div><div style="height: 82px; border-radius: 16px; background: #FBE7DC; display: flex; align-items: flex-end; padding: 12px; border: 1px solid #F2D9C9;"><span style="color: #A23A20; font-size: 13px; font-weight: 600;">Tint</span></div><div style="display:flex; justify-content: space-between; margin-top: 8px;"><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#FBE7DC</code><span style="font-size: 12px; color: #6E6358;">Fläche</span></div></div>
+        <div><div style="height: 82px; border-radius: 16px; background: #FDF2EB; display: flex; align-items: flex-end; padding: 12px; border: 1px solid #F5E4D9;"><span style="color: #A23A20; font-size: 13px; font-weight: 600;">Soft</span></div><div style="display:flex; justify-content: space-between; margin-top: 8px;"><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#FDF2EB</code><span style="font-size: 12px; color: #6E6358;">Wash</span></div></div>
+      </div>
+    </div>
+
+    <!-- Bernstein + Grün -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px;">
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-weight: 700; font-size: 17px; margin-bottom: 6px;">Bernstein · warmer Zweitton</div>
+        <div style="font-size: 13px; color: #6E6358; margin-bottom: 18px;">Stützt, signalisiert nicht — Kategorien, Illustration, Flächen</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+          <div><div style="height: 68px; border-radius: 14px; background: #8A5A22;"></div><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">Deep #8A5A22</code><div style="font-size: 12px; color: #6E6358;">Text 4,85:1</div></div>
+          <div><div style="height: 68px; border-radius: 14px; background: #C68A3E;"></div><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">Base #C68A3E</code><div style="font-size: 12px; color: #6E6358;">Fläche</div></div>
+          <div><div style="height: 68px; border-radius: 14px; background: #F4E6CC; border: 1px solid #EAD8B6;"></div><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">Tint #F4E6CC</code><div style="font-size: 12px; color: #6E6358;">Fläche</div></div>
+        </div>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-weight: 700; font-size: 17px; margin-bottom: 6px;">Salbeigrün · Erfolg & Natur</div>
+        <div style="font-size: 13px; color: #6E6358; margin-bottom: 18px;">Semantisch & ruhig — kein zweiter Signalgeber</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+          <div><div style="height: 68px; border-radius: 14px; background: #2C6E4C;"></div><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">Base #2C6E4C</code><div style="font-size: 12px; color: #6E6358;">Weiß 6,10:1</div></div>
+          <div><div style="height: 68px; border-radius: 14px; background: #E2ECE4; border: 1px solid #D2E0D6;"></div><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">Tint #E2ECE4</code><div style="font-size: 12px; color: #6E6358;">Fläche</div></div>
+          <div><div style="height: 68px; border-radius: 14px; background: #9C2A22;"></div><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">Fehler #9C2A22</code><div style="font-size: 12px; color: #6E6358;">Weiß 7,59:1</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Warme Neutraltöne -->
+    <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+      <div style="font-weight: 700; font-size: 17px; margin-bottom: 6px;">Warme Neutraltöne</div>
+      <div style="font-size: 13px; color: #6E6358; margin-bottom: 18px;">Cremiges Fundament statt Grau — Sättigung niedrig, Ton warm</div>
+      <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;">
+        <div><div style="height: 60px; border-radius: 12px; background: #2B2622;"></div><code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358;">Tinte #2B2622</code></div>
+        <div><div style="height: 60px; border-radius: 12px; background: #6E6358;"></div><code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358;">Gedämpft #6E6358</code></div>
+        <div><div style="height: 60px; border-radius: 12px; background: #E9DECB; border: 1px solid #DFD2BB;"></div><code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358;">Sand #E9DECB</code></div>
+        <div><div style="height: 60px; border-radius: 12px; background: #EBDECB; border: 1px solid #E1D2BB;"></div><code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358;">Hairline #EBDECB</code></div>
+        <div><div style="height: 60px; border-radius: 12px; background: #F1E8DA; border: 1px solid #E4D8C4;"></div><code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358;">Creme #F1E8DA</code></div>
+        <div><div style="height: 60px; border-radius: 12px; background: #FCF8F2; border: 1px solid #EEE4D6;"></div><code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358;">Fläche #FCF8F2</code></div>
+      </div>
+    </div>
+
+    <!-- Zwei Ebenen: ruhige UI vs. lebendige Fotos -->
+    <div style="margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+      <!-- UI-Palette -->
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+          <div style="font-weight: 700; font-size: 17px;">UI-Palette</div>
+          <span style="background: #E2ECE4; color: #2C6E4C; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; letter-spacing: 0.04em;">RUHIG</span>
+        </div>
+        <div style="font-size: 13px; color: #6E6358; margin-bottom: 18px;">Die Bedienoberfläche bleibt klar: cremige Flächen, warme Tinte, <strong style="color:#2B2622;">eine</strong> führende Aktionsfarbe. Waldgrün trägt satte Flächen (Header, Leisten), Sonnenblume ist der warme Akzent.</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;"><div style="width: 44px; height: 44px; border-radius: 12px; background: #BC4529; flex-shrink: 0; box-shadow: 0 6px 14px rgba(188,69,41,0.28);"></div><div><div style="font-weight: 600; font-size: 14px;">Koralle · die einzige Aktion</div><code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358;">#BC4529 · Buttons, aktive Zustände</code></div></div>
+          <div style="display: flex; align-items: center; gap: 12px;"><div style="width: 44px; height: 44px; border-radius: 12px; background: #22401E; flex-shrink: 0;"></div><div><div style="font-weight: 600; font-size: 14px;">Waldgrün · satte Flächen</div><code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358;">#22401E · Header, Leisten, Footer</code></div></div>
+          <div style="display: flex; align-items: center; gap: 12px;"><div style="width: 44px; height: 44px; border-radius: 12px; background: #E7B22E; flex-shrink: 0;"></div><div><div style="font-weight: 600; font-size: 14px;">Sonnenblume · warmer Akzent</div><code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358;">#E7B22E · Badges, Highlights (auf Grün/Tinte)</code></div></div>
+          <div style="display: flex; align-items: center; gap: 12px;"><div style="width: 44px; height: 44px; border-radius: 12px; background: #FCF8F2; border: 1px solid #EBDECB; flex-shrink: 0;"></div><div><div style="font-weight: 600; font-size: 14px;">Creme &amp; Tinte · Fläche &amp; Text</div><code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358;">#FCF8F2 / #F1E8DA · #2B2622 / #6E6358</code></div></div>
+        </div>
+      </div>
+      <!-- Foto & Energie -->
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+          <div style="font-weight: 700; font-size: 17px;">Foto &amp; Energie</div>
+          <span style="background: #FBE7DC; color: #A23A20; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; letter-spacing: 0.04em;">LEBENDIG</span>
+        </div>
+        <div style="font-size: 13px; color: #6E6358; margin-bottom: 18px;">Der Farbreichtum kommt jetzt aus <strong style="color:#2B2622;">echten Fotos</strong> — nicht aus der UI. Ein warmer Grünstich in der Bildbehandlung hält alles zusammen; Akzente bleiben sparsam.</div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+          <div style="height: 78px; border-radius: 14px; background: linear-gradient(150deg,#3E6B44,#7A9E44); position: relative; overflow: hidden;"><span style="position:absolute; left:10px; bottom:8px; color:#F4ECDE; font-size:11px; font-weight:600;">Foto-Grünstich</span></div>
+          <div style="height: 78px; border-radius: 14px; background: linear-gradient(150deg,#C6402F,#E8883A); position: relative; overflow: hidden;"><span style="position:absolute; left:10px; bottom:8px; color:#FFF; font-size:11px; font-weight:600;">warme Töne</span></div>
+        </div>
+        <div style="margin-top: 12px; font-size: 13px; color: #6E6358; font-weight: 600;">Akzente auf Fotos &amp; Badges</div>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <span style="background: #E7B22E; color: #22401E; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px;">Heute!</span>
+          <span style="background: #22401E; color: #E7B22E; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px;">Teilnehmen</span>
+          <span style="background: #FBE7DC; color: #A23A20; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px;">noch 3 frei</span>
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: flex-start; gap: 10px; margin-top: 16px; max-width: 780px;">
+      <div style="width: 6px; height: 6px; border-radius: 50%; background: #BC4529; margin-top: 8px; flex-shrink: 0;"></div>
+      <p style="margin: 0; font-size: 14px; line-height: 1.55; color: #6E6358;">Das Prinzip bleibt: <strong style="color:#2B2622;">Farbe lebt in den Fotos</strong>, die UI bleibt leise. Neu ist die geerdete BOND-Energie — tiefes Waldgrün als satter Flächenton und Sonnenblumen-Gelb als fröhlicher Akzent — kombiniert mit belongs warmer Coral-Creme-Basis. Coral bleibt die <strong style="color:#2B2622;">einzige</strong> Aktionsfarbe.</p>
+    </div>
+  </div>
+
+  <!-- ============ TYPOGRAFIE ============ -->
+  <div style="max-width: 1080px; margin: 0 auto; padding: 72px 32px 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">02</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 44px; margin: 0; letter-spacing: -0.01em;">Typografie</h2>
+    </div>
+    <p style="max-width: 680px; margin: 0 0 32px 0; font-size: 17px; line-height: 1.6; color: #6E6358;">Eine charaktervolle Display-Serife bringt Wärme und Wertigkeit — im Kontrast zu einem ruhigen Sans. <strong style="color: #2B2622; font-weight: 600;">Deutliche Größensprünge</strong> schaffen klare Hierarchie mit wenigen Stufen pro Screen.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 30px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #A23A20; font-weight: 700; margin-bottom: 14px;">Display · Headlines</div>
+        <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 66px; line-height: 0.98; margin-bottom: 6px;">Hedvig</div>
+        <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 23px; color: #6E6358;">warm · charaktervoll · hochwertig</div>
+        <p style="margin: 18px 0 0 0; font-size: 14px; line-height: 1.55; color: #6E6358;">Weiche, humanistische Serifen mit Persönlichkeit — für Hero &amp; Sektionstitel ab ca. 26px.</p>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 30px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #2C6E4C; font-weight: 700; margin-bottom: 14px;">Body & UI</div>
+        <div style="font-family: 'Hanken Grotesque', sans-serif; font-weight: 600; font-size: 66px; line-height: 0.98; margin-bottom: 6px;">Hanken</div>
+        <div style="font-family: 'Hanken Grotesque', sans-serif; font-size: 23px; color: #6E6358;">klar · freundlich · rund</div>
+        <p style="margin: 18px 0 0 0; font-size: 14px; line-height: 1.55; color: #6E6358;">Ruhiger humanistischer Grotesk — Fließtext, Labels, Buttons. Gewichte 400–700.</p>
+      </div>
+    </div>
+
+    <div style="background: #FCF8F2; border-radius: 28px; padding: 14px 30px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 22px 0; border-bottom: 1px solid #F0E7D8;">
+        <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 52px; line-height: 1;">Schön, dass du da bist</div>
+        <code style="font-family: ui-monospace, monospace; font-size: 13px; color: #6E6358; white-space: nowrap;">Display XL · Hedvig 52</code>
+      </div>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 22px 0; border-bottom: 1px solid #F0E7D8;">
+        <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 34px; line-height: 1;">Was möchtest du heute machen?</div>
+        <code style="font-family: ui-monospace, monospace; font-size: 13px; color: #6E6358; white-space: nowrap;">Display L · Hedvig 34</code>
+      </div>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 22px 0; border-bottom: 1px solid #F0E7D8;">
+        <div style="font-family: 'Hanken Grotesque', sans-serif; font-size: 22px; font-weight: 600;">Diese Woche in deiner Nähe</div>
+        <code style="font-family: ui-monospace, monospace; font-size: 13px; color: #6E6358; white-space: nowrap;">Subhead · Hanken 22 · 600</code>
+      </div>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 22px 0; border-bottom: 1px solid #F0E7D8;">
+        <div style="font-family: 'Hanken Grotesque', sans-serif; font-size: 17px; font-weight: 400; line-height: 1.55; max-width: 560px;">Kein Profil, kein Druck. Du siehst nur, was gerade passiert — und entscheidest selbst, ob du dabei bist.</div>
+        <code style="font-family: ui-monospace, monospace; font-size: 13px; color: #6E6358; white-space: nowrap;">Body · Hanken 16–17 · 400</code>
+      </div>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 22px 0;">
+        <div style="font-family: 'Hanken Grotesque', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.03em; color: #6E6358;">NOCH 3 PLÄTZE FREI · HEUTE 18:00</div>
+        <code style="font-family: ui-monospace, monospace; font-size: 13px; color: #6E6358; white-space: nowrap;">Caption · Hanken 13 · 600</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TIEFE & FORM ============ -->
+  <div style="max-width: 1080px; margin: 0 auto; padding: 72px 32px 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">03</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 44px; margin: 0; letter-spacing: -0.01em;">Tiefe & Form</h2>
+    </div>
+    <p style="max-width: 700px; margin: 0 0 32px 0; font-size: 17px; line-height: 1.6; color: #6E6358;">Sanfte, warme Elevation hebt Karten und Aktionen leicht vom cremigen Grund ab — Schatten immer warmtonig (<code style="font-family: ui-monospace, monospace; font-size: 13px;">rgba(74,50,34,…)</code>), nie kaltes Grau. Dazu weiche, leicht organische Rundungen und großzügiger Weißraum.</p>
+
+    <!-- Elevation -->
+    <div style="background: #F1E8DA; border-radius: 28px; padding: 36px; margin-bottom: 18px;">
+      <div style="font-weight: 700; font-size: 15px; margin-bottom: 24px; color: #4a423b;">Elevation · drei Stufen auf Creme</div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;">
+        <div style="background: #FCF8F2; border-radius: 22px; padding: 22px; height: 140px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 6px 16px rgba(74,50,34,0.05);">
+          <div style="font-weight: 700; font-size: 15px;">E1 · Ruhe</div>
+          <code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358; line-height: 1.4;">0 1px 2px / 0 6px 16px<br>Listen, ruhige Karten</code>
+        </div>
+        <div style="background: #FCF8F2; border-radius: 22px; padding: 22px; height: 140px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.08);">
+          <div style="font-weight: 700; font-size: 15px;">E2 · Karte</div>
+          <code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358; line-height: 1.4;">0 1px 2px / 0 12px 30px<br>Aktivitäts-Cards</code>
+        </div>
+        <div style="background: #FCF8F2; border-radius: 22px; padding: 22px; height: 140px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 20px 44px rgba(74,50,34,0.12);">
+          <div style="font-weight: 700; font-size: 15px;">E3 · Schwebend</div>
+          <code style="font-family: ui-monospace, monospace; font-size: 11px; color: #6E6358; line-height: 1.4;">0 2px 6px / 0 20px 44px<br>Sheets, Dialoge</code>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+      <!-- Radius -->
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-weight: 700; font-size: 17px; margin-bottom: 20px;">Rundungen · weich → organisch</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 18px;">
+          <div style="text-align: center;"><div style="width: 64px; height: 52px; background: #FBE7DC; border: 1.5px solid #BC4529; border-radius: 12px;"></div><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">12 · Input</code></div>
+          <div style="text-align: center;"><div style="width: 64px; height: 52px; background: #FBE7DC; border: 1.5px solid #BC4529; border-radius: 28px;"></div><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">28 · Card</code></div>
+          <div style="text-align: center;"><div style="width: 64px; height: 52px; background: #FBE7DC; border: 1.5px solid #BC4529; border-radius: 999px;"></div><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">Pill · Button</code></div>
+          <div style="text-align: center;"><div style="width: 64px; height: 52px; background: #FBE7DC; border: 1.5px solid #BC4529; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%;"></div><code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">Blob · Bild</code></div>
+        </div>
+        <p style="margin: 20px 0 0 0; font-size: 14px; line-height: 1.55; color: #6E6358;">Input 12 · Chip/Button Pill · Card 28 · Sheet 36 · Illustrationen als leicht asymmetrische Blobs.</p>
+      </div>
+      <!-- Whitespace -->
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-weight: 700; font-size: 17px; margin-bottom: 20px;">Weißraum · Basis 4, großzügig</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 16px;"><div style="width: 8px; height: 18px; background: #C68A3E; border-radius: 2px;"></div><code style="font-family: ui-monospace, monospace; font-size: 13px; color: #6E6358; width: 96px;">8 · in Chips</code></div>
+          <div style="display: flex; align-items: center; gap: 16px;"><div style="width: 16px; height: 18px; background: #C68A3E; border-radius: 2px;"></div><code style="font-family: ui-monospace, monospace; font-size: 13px; color: #6E6358; width: 96px;">16 · Elemente</code></div>
+          <div style="display: flex; align-items: center; gap: 16px;"><div style="width: 24px; height: 18px; background: #C68A3E; border-radius: 2px;"></div><code style="font-family: ui-monospace, monospace; font-size: 13px; color: #6E6358; width: 96px;">24 · in Cards</code></div>
+          <div style="display: flex; align-items: center; gap: 16px;"><div style="width: 40px; height: 18px; background: #C68A3E; border-radius: 2px;"></div><code style="font-family: ui-monospace, monospace; font-size: 13px; color: #6E6358; width: 96px;">40 · Screen-Rand</code></div>
+          <div style="display: flex; align-items: center; gap: 16px;"><div style="width: 64px; height: 18px; background: #C68A3E; border-radius: 2px;"></div><code style="font-family: ui-monospace, monospace; font-size: 13px; color: #6E6358; width: 96px;">64 · Sektionen</code></div>
+        </div>
+        <p style="margin: 20px 0 0 0; font-size: 14px; line-height: 1.55; color: #6E6358;">Tokens 4 · 8 · 12 · 16 · 24 · 32 · 40 · 64. Luft senkt den gefühlten Druck.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ BUTTONS & KOMPONENTEN ============ -->
+  <div style="max-width: 1080px; margin: 0 auto; padding: 72px 32px 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">04</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 44px; margin: 0; letter-spacing: -0.01em;">Buttons & Komponenten</h2>
+    </div>
+    <p style="max-width: 680px; margin: 0 0 32px 0; font-size: 17px; line-height: 1.6; color: #6E6358;">Eine warme, erhabene Haupt­aktion pro Screen — mit weichem Korall-Glow. Sekundär und Ghost bleiben ruhig und flacher.</p>
+
+    <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 20px;">
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 34px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07); display: flex; flex-direction: column; gap: 26px;">
+        <div>
+          <button style="border: none; background: #BC4529; color: #FFFFFF; font-family: 'Hanken Grotesque', sans-serif; font-weight: 600; font-size: 16px; padding: 16px 28px; border-radius: 999px; cursor: pointer; width: 100%; box-shadow: 0 10px 24px rgba(188,69,41,0.28);">Ich bin dabei</button>
+          <div style="display: flex; justify-content: space-between; margin-top: 12px;"><span style="font-size: 14px; font-weight: 600;">Primär · Koralle</span><span style="font-size: 13px; color: #6E6358;">Pill + Glow · Weiß 5,22:1 · 1× pro Screen</span></div>
+        </div>
+        <div>
+          <button style="border: 1px solid #E6D8C2; background: #FCF8F2; color: #4a423b; font-family: 'Hanken Grotesque', sans-serif; font-weight: 600; font-size: 16px; padding: 15px 28px; border-radius: 999px; cursor: pointer; width: 100%; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 6px 16px rgba(74,50,34,0.05);">Erst mal umschauen</button>
+          <div style="display: flex; justify-content: space-between; margin-top: 12px;"><span style="font-size: 14px; font-weight: 600;">Sekundär · erhaben-neutral</span><span style="font-size: 13px; color: #6E6358;">Sanfte Elevation, kein Farbdruck</span></div>
+        </div>
+        <div>
+          <button style="border: none; background: transparent; color: #6E6358; font-family: 'Hanken Grotesque', sans-serif; font-weight: 600; font-size: 16px; padding: 16px 28px; border-radius: 999px; cursor: pointer; width: 100%;">Vielleicht später</button>
+          <div style="display: flex; justify-content: space-between; margin-top: 12px;"><span style="font-size: 14px; font-weight: 600;">Ghost</span><span style="font-size: 13px; color: #6E6358;">Nur Text · gedämpft 4,82:1</span></div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+          <div style="font-weight: 700; font-size: 15px; margin-bottom: 16px;">Chips · Kategorien &amp; aktiv</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <span style="background: #BC4529; color: #FFFFFF; font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 999px;">Heute Abend</span>
+            <span style="background: #E2ECE4; color: #2C6E4C; font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 999px;">Kaffee</span>
+            <span style="background: #F4E6CC; color: #8A5A22; font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 999px;">Kreativ</span>
+            <span style="background: #F1E6D5; color: #6E6358; font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 999px;">Ganz spontan</span>
+          </div>
+        </div>
+
+        <div style="background: #FCF8F2; border-radius: 28px; padding: 26px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 20px 44px rgba(74,50,34,0.12);">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <span style="background: #E2ECE4; color: #2C6E4C; font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 999px;">Kaffee</span>
+            <span style="font-size: 13px; font-weight: 500; color: #6E6358;">Heute 18:00 · Vorderer Westen</span>
+          </div>
+          <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 25px; line-height: 1.25; margin-bottom: 16px;">Jemand trinkt einen Kaffee — kommst du dazu?</div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 22px;">
+            <div style="display: flex;">
+              <div style="width: 28px; height: 28px; border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%; background: #BC4529; border: 2px solid #FCF8F2;"></div>
+              <div style="width: 28px; height: 28px; border-radius: 54% 46% 40% 60% / 44% 56% 48% 52%; background: #C68A3E; border: 2px solid #FCF8F2; margin-left: -9px;"></div>
+            </div>
+            <span style="font-size: 14px; color: #6E6358;">2 dabei · noch 3 Plätze frei</span>
+          </div>
+          <button style="border: none; background: #BC4529; color: #FFFFFF; font-family: 'Hanken Grotesque', sans-serif; font-weight: 600; font-size: 15px; padding: 14px 24px; border-radius: 999px; cursor: pointer; width: 100%; box-shadow: 0 10px 24px rgba(188,69,41,0.28);">Ich bin dabei</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FOTOGRAFIE ============ -->
+  <div style="max-width: 1080px; margin: 0 auto; padding: 72px 32px 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">05</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 44px; margin: 0; letter-spacing: -0.01em;">Fotografie</h2>
+    </div>
+    <p style="max-width: 780px; margin: 0 0 32px 0; font-size: 17px; line-height: 1.6; color: #6E6358;">Statt Illustration tragen jetzt <strong style="color:#2B2622;">echte, warme Fotos</strong> die App — Menschen mitten in der Aktivität. Anonymität heißt hier <strong style="color:#2B2622;">niedrigschwellig, nicht gesichtslos</strong>: kein Profilzwang, keine Selbstdarstellung. Die Fotos zeigen das <em>gemeinsame Tun</em> — oft von hinten, von oben oder als Detail — so entsteht Nähe ohne Bloßstellung.</p>
+
+    <!-- Hero: green panel + photo -->
+    <div style="display: grid; grid-template-columns: 0.92fr 1.08fr; border-radius: 28px; overflow: hidden; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 20px 44px rgba(74,50,34,0.14); margin-bottom: 20px;">
+      <div style="background: #22401E; padding: 36px 34px; display: flex; flex-direction: column; justify-content: space-between; gap: 26px; min-height: 320px;">
+        <div style="display:flex; gap:8px;"><span style="background:#E7B22E; color:#22401E; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px; letter-spacing:0.02em;">Heute in Kassel</span></div>
+        <div>
+          <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 34px; line-height: 1.12; color: #F6EFE0;">Echte Freundschaften entstehen offline.</div>
+          <p style="margin: 12px 0 22px 0; font-size: 15px; line-height: 1.55; color: #C7D2BE;">Echte Fotos, echte Treffen — kein Profil nötig. Du siehst, was gerade passiert, und bist mit einem Tippen dabei.</p>
+          <span style="display:inline-block; background: #BC4529; color:#fff; font-weight:600; font-size:15px; padding:14px 26px; border-radius:999px; box-shadow: 0 10px 24px rgba(188,69,41,0.3);">Ich bin dabei</span>
+        </div>
+      </div>
+      <div style="position: relative; background:#EDE4D3; min-height: 320px;">
+        <image-slot id="foto-hero" style="width:100%; height:100%; display:block;" shape="rect" placeholder="Hero-Foto ablegen — Aktivität, von hinten/oben"></image-slot>
+        <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(150deg, rgba(34,64,30,.14), rgba(122,158,68,.05)); mix-blend-mode:multiply;"></div>
+      </div>
+    </div>
+
+    <!-- 3 photo framing examples -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 16px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="position: relative; border-radius: 20px; overflow: hidden;">
+          <image-slot id="foto-runclub" style="width:100%; height:190px; display:block;" shape="rect" placeholder="Foto: Gruppe von hinten"></image-slot>
+          <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(150deg, rgba(34,64,30,.14), rgba(122,158,68,.05)); mix-blend-mode:multiply;"></div>
+          <div style="position:absolute; top:12px; right:12px;"><span style="background:#E7B22E; color:#22401E; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px; letter-spacing:0.02em;">Heute!</span></div>
+        </div>
+        <div style="font-weight: 600; font-size: 14px; margin-top: 14px;">Von hinten · in Bewegung</div>
+        <p style="margin: 4px 0 0 0; font-size: 13px; line-height: 1.5; color: #6E6358;">Laufen, spazieren, unterwegs — die Gruppe von hinten. Aktivität statt Gesicht.</p>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 16px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="position: relative; border-radius: 20px; overflow: hidden;">
+          <image-slot id="foto-spiele" style="width:100%; height:190px; display:block;" shape="rect" placeholder="Foto: Tisch von oben"></image-slot>
+          <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(150deg, rgba(34,64,30,.14), rgba(122,158,68,.05)); mix-blend-mode:multiply;"></div>
+          <div style="position:absolute; top:12px; right:12px;"><span style="background:#22401E; color:#E7B22E; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px;">in 3 T.</span></div>
+        </div>
+        <div style="font-weight: 600; font-size: 14px; margin-top: 14px;">Von oben · die Szene</div>
+        <p style="margin: 4px 0 0 0; font-size: 13px; line-height: 1.5; color: #6E6358;">Spieleabend, Essen, Basteln — der Blick von oben auf Hände und Tisch.</p>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 16px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="position: relative; border-radius: 20px; overflow: hidden;">
+          <image-slot id="foto-kaffee" style="width:100%; height:190px; display:block;" shape="rect" placeholder="Foto: Detail / Hände"></image-slot>
+          <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(150deg, rgba(34,64,30,.14), rgba(122,158,68,.05)); mix-blend-mode:multiply;"></div>
+          <div style="position:absolute; top:12px; right:12px;"><span style="background:#FCF8F2; color:#A23A20; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px;">noch 3 frei</span></div>
+        </div>
+        <div style="font-weight: 600; font-size: 14px; margin-top: 14px;">Detail · Hände &amp; Dinge</div>
+        <p style="margin: 4px 0 0 0; font-size: 13px; line-height: 1.5; color: #6E6358;">Kaffeetassen, Hände, ein Moment — nah dran, aber nie ein Porträt.</p>
+      </div>
+    </div>
+
+    <!-- Prinzipien + Do/Don't -->
+    <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; margin-top: 20px;">
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-weight: 700; font-size: 17px; margin-bottom: 16px;">So fotografieren wir</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div style="display:flex; gap:10px;"><div style="width:30px;height:30px;border-radius:999px;background:#FBE7DC;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><div style="width:12px;height:12px;border:2.5px solid #BC4529;border-radius:3px;"></div></div><div style="font-size:14px;line-height:1.45;color:#4a423b;"><strong>Aktivität im Fokus</strong><br><span style="color:#6E6358;">Das Tun ist der Held, nicht die Person</span></div></div>
+          <div style="display:flex; gap:10px;"><div style="width:30px;height:30px;border-radius:999px;background:#E2ECE4;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><div style="width:13px;height:13px;border-radius:50%;background:#22401E;"></div></div><div style="font-size:14px;line-height:1.45;color:#4a423b;"><strong>Von hinten, oben, Detail</strong><br><span style="color:#6E6358;">Perspektiven, die Gesichter schützen</span></div></div>
+          <div style="display:flex; gap:10px;"><div style="width:30px;height:30px;border-radius:999px;background:#F4E6CC;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><div style="width:13px;height:5px;border-radius:999px;background:#E7B22E;"></div></div><div style="font-size:14px;line-height:1.45;color:#4a423b;"><strong>Candid statt posiert</strong><br><span style="color:#6E6358;">Echte Momente, kein Kamera-Lächeln</span></div></div>
+          <div style="display:flex; gap:10px;"><div style="width:30px;height:30px;border-radius:999px;background:#E2ECE4;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><div style="display:flex;gap:2px;"><div style="width:5px;height:12px;background:#22401E;border-radius:2px;"></div><div style="width:5px;height:12px;background:#E7B22E;border-radius:2px;"></div><div style="width:5px;height:12px;background:#BC4529;border-radius:2px;"></div></div></div><div style="font-size:14px;line-height:1.45;color:#4a423b;"><strong>Warmer Grünstich</strong><br><span style="color:#6E6358;">Leichte Tönung eint alle Bilder</span></div></div>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-rows: 1fr 1fr; gap: 18px;">
+        <div style="background: #E2ECE4; border-radius: 24px; padding: 22px 24px;">
+          <div style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #2C6E4C; font-weight: 700; margin-bottom: 8px;">Immer</div>
+          <div style="font-size: 14px; line-height: 1.6; color: #2f5641;">Das gemeinsame Tun · echte, candid Momente · aus Distanz / von oben · Gruppen in Aktion</div>
+        </div>
+        <div style="background: #F6E1DD; border-radius: 24px; padding: 22px 24px;">
+          <div style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #9C2A22; font-weight: 700; margin-bottom: 8px;">Nie</div>
+          <div style="font-size: 14px; line-height: 1.6; color: #7c261f;">Posierte Porträts in die Kamera · Selfie-/Profilzwang · Stockfoto-Lächeln · Gesicht als Pflicht</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ IDENTITÄT ============ -->
+  <div style="max-width: 1080px; margin: 0 auto; padding: 72px 32px 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">06</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 44px; margin: 0; letter-spacing: -0.01em;">Identität</h2>
+    </div>
+    <p style="max-width: 780px; margin: 0 0 32px 0; font-size: 17px; line-height: 1.6; color: #6E6358;">Anonymität bei belong meint <strong style="color:#2B2622;">niedrige Schwelle, keine Pflicht zur Selbstdarstellung</strong> — kein erzwungenes Profil. Du zeigst so viel oder wenig, wie du willst. Drei gleichwertige Wege, jederzeit änderbar:</p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
+      <!-- Anonym -->
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div style="width:56px;height:56px;border-radius:18px;background:#EDE3D2;display:flex;align-items:center;justify-content:center;font-family:'Hedvig Letters Serif',serif;font-size:24px;color:#6E6358;">M</div>
+          <div><div style="font-weight:700;font-size:15px;">stiller-fuchs</div><div style="font-size:13px;color:#6E6358;">anonym · kein Bild</div></div>
+        </div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px;">Ganz anonym</div>
+        <p style="margin:0;font-size:13px;line-height:1.5;color:#6E6358;">Nur ein freundlicher Name-Vorschlag, kein Bild. Perfekt für den ersten, leisen Schritt.</p>
+      </div>
+      <!-- Avatar -->
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div style="width:56px;height:56px;border-radius:18px;background:#22401E;display:flex;align-items:center;justify-content:center;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E7B22E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h2.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3v2M12 2v3"/></svg>
+          </div>
+          <div><div style="font-weight:700;font-size:15px;">koffein-kollektiv</div><div style="font-size:13px;color:#6E6358;">Avatar · Farbe + Symbol</div></div>
+        </div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:8px;">Avatar bauen</div>
+        <div style="font-size:13px;color:#6E6358;margin-bottom:8px;">Farbe wählen</div>
+        <div style="display:flex; gap:8px; margin-bottom:12px;">
+          <div style="width:26px;height:26px;border-radius:8px;background:#22401E;"></div>
+          <div style="width:26px;height:26px;border-radius:8px;background:#BC4529;"></div>
+          <div style="width:26px;height:26px;border-radius:8px;background:#E7B22E;"></div>
+          <div style="width:26px;height:26px;border-radius:8px;background:#2C6E4C;"></div>
+          <div style="width:26px;height:26px;border-radius:8px;background:#8A5230;"></div>
+        </div>
+        <div style="font-size:13px;color:#6E6358;margin-bottom:8px;">Symbol wählen</div>
+        <div style="display:flex; gap:8px;">
+          <div style="width:30px;height:30px;border-radius:9px;background:#EDE3D2;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h2.5a2.5 2.5 0 0 1 0 5H17"/></svg></div>
+          <div style="width:30px;height:30px;border-radius:9px;background:#EDE3D2;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13c0-5 7-9 7-9s7 4 7 9a7 7 0 0 1-7 7z"/></svg></div>
+          <div style="width:30px;height:30px;border-radius:9px;background:#EDE3D2;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div>
+          <div style="width:30px;height:30px;border-radius:9px;background:#EDE3D2;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6E6358" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18M3 12h18"/></svg></div>
+        </div>
+      </div>
+      <!-- Foto -->
+      <div style="background: #FCF8F2; border-radius: 28px; padding: 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div style="position:relative; width:56px; height:56px; flex-shrink:0;">
+            <image-slot id="id-foto" style="width:56px; height:56px; display:block;" shape="circle" placeholder="Foto"></image-slot>
+          </div>
+          <div><div style="font-weight:700;font-size:15px;">mara_k</div><div style="font-size:13px;color:#6E6358;">echtes Foto · optional</div></div>
+        </div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:4px;">Echtes Foto</div>
+        <p style="margin:0;font-size:13px;line-height:1.5;color:#6E6358;">Wer offener ist, zeigt ein Foto — freiwillig, jederzeit wieder entfernbar. Nie Voraussetzung fürs Mitmachen.</p>
+      </div>
+    </div>
+    <div style="display: flex; align-items: flex-start; gap: 10px; margin-top: 16px; max-width: 780px;">
+      <div style="width: 6px; height: 6px; border-radius: 50%; background: #BC4529; margin-top: 8px; flex-shrink: 0;"></div>
+      <p style="margin: 0; font-size: 14px; line-height: 1.55; color: #6E6358;">Der Kern: <strong style="color:#2B2622;">niemand muss sich zeigen, um dabei zu sein</strong>. Anonym, Avatar oder Foto sind gleichwertig — die Schwelle bleibt niedrig, nichts wird bewertet. Das ist Anonymität als Schutz <em>und</em> als Einladung.</p>
+    </div>
+  </div>
+
+  <!-- ============ BEISPIELKOMPONENTEN ============ -->
+  <div style="max-width: 1080px; margin: 0 auto; padding: 72px 32px 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">07</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 44px; margin: 0; letter-spacing: -0.01em;">Am Bauteil</h2>
+    </div>
+    <p style="max-width: 780px; margin: 0 0 32px 0; font-size: 17px; line-height: 1.6; color: #6E6358;">Das Prinzip am Screen: <strong style="color:#2B2622;">Fotos und satte Grünflächen bringen Energie</strong>, die Bedienung bleibt ruhig — eine Kategorie-Leiste, klare Karten, genau eine Korall-Aktion pro Screen.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; justify-items: center; align-items: start;">
+      <!-- Phone 1: Event-Feed -->
+      <div style="width: 320px;">
+        <div style="background: #FCF8F2; border-radius: 40px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 20px 44px rgba(74,50,34,0.14); border: 1px solid #EFE5D5;">
+          <div style="border-radius: 30px; overflow: hidden; background: #FCF8F2;">
+            <!-- green header -->
+            <div style="background: #D62F6B; padding: 20px 20px 16px 20px;">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div style="font-family:'Luckiest Guy',cursive; font-size:19px; color:#FFFFFF; text-shadow: 0 2px 0 rgba(42,30,26,0.85); display:flex; align-items:baseline; transform: translateY(2px);">BELONG<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" style="transform: rotate(14deg) translateY(-8px); margin-left:4px; flex-shrink:0;"><path d="M11.2 3.8 C11.9 5.3 12.6 6.6 12.3 8.7"></path><path d="M13.1 15.4 C12.3 16.7 12.7 18.5 11.5 20.2"></path><path d="M3.9 13.2 C5.7 12.4 7.3 12.8 9 12.1"></path><path d="M15.2 11.5 C16.7 11.8 18.3 10.9 20 11.3"></path></svg></div>
+                <div style="display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.12); padding:5px 12px; border-radius:999px;"><div style="width:6px;height:6px;border-radius:50%;background:#E7B22E;"></div><span style="color:#E9E1CE; font-size:12px; font-weight:600;">Kassel</span></div>
+              </div>
+              <!-- category ribbon -->
+              <div style="display:flex; align-items:center; gap:10px; margin-top:14px; overflow:hidden;">
+                <span style="color:#FFFFFF; font-size:13px; font-weight:600; white-space:nowrap;">Run Club</span><div style="width:5px;height:5px;border-radius:50%;background:#E7B22E;flex-shrink:0;"></div>
+                <span style="color:#F5C2D6; font-size:13px; font-weight:600; white-space:nowrap;">Kaffee</span><div style="width:5px;height:5px;border-radius:50%;background:#E7B22E;flex-shrink:0;"></div>
+                <span style="color:#F5C2D6; font-size:13px; font-weight:600; white-space:nowrap;">Yoga</span><div style="width:5px;height:5px;border-radius:50%;background:#E7B22E;flex-shrink:0;"></div>
+                <span style="color:#F5C2D6; font-size:13px; font-weight:600; white-space:nowrap;">Spiele</span>
+              </div>
+            </div>
+            <!-- feed -->
+            <div style="padding: 16px;">
+              <div style="font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#6E6358; font-weight:700; margin-bottom:10px;">Aktuelle Events</div>
+              <div style="border-radius:22px; overflow:hidden; background:#FCF8F2; box-shadow:0 1px 2px rgba(74,50,34,0.06), 0 8px 20px rgba(74,50,34,0.08);">
+                <div style="position:relative;">
+                  <image-slot id="feed-photo" style="width:100%; height:158px; display:block;" shape="rect" placeholder="Event-Foto"></image-slot>
+                  <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(150deg, rgba(34,64,30,.14), rgba(122,158,68,.05)); mix-blend-mode:multiply;"></div>
+                  <div style="position:absolute; top:12px; right:12px;"><span style="background:#E7B22E; color:#22401E; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px; letter-spacing:0.02em;">Heute!</span></div>
+                </div>
+                <div style="padding:16px;">
+                  <span style="display:inline-block; background:#E2ECE4; color:#2C6E4C; font-size:12px; font-weight:600; padding:5px 12px; border-radius:999px; margin-bottom:10px;">Run Club</span>
+                  <div style="font-family:'Hedvig Letters Serif',serif; font-size:22px; color:#2B2622; line-height:1.1;">Gemeinsam laufen</div>
+                  <div style="font-size:13px; color:#6E6358; margin-top:6px;">jeden Mi · 18:00 · Aue</div>
+                  <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <div style="display:flex;">
+                        <div style="width:26px;height:26px;border-radius:8px;background:#22401E;border:2px solid #FCF8F2;"></div>
+                        <div style="width:26px;height:26px;border-radius:8px;background:#BC4529;border:2px solid #FCF8F2;margin-left:-8px;"></div>
+                        <div style="width:26px;height:26px;border-radius:8px;background:#E7B22E;border:2px solid #FCF8F2;margin-left:-8px;"></div>
+                      </div>
+                      <span style="font-size:13px; color:#6E6358; font-weight:600;">14 dabei</span>
+                    </div>
+                  </div>
+                  <button style="border:none; background:#BC4529; color:#fff; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:15px; padding:14px; border-radius:999px; width:100%; margin-top:16px; box-shadow:0 10px 24px rgba(188,69,41,0.28); cursor:pointer;">Ich bin dabei</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; font-size:13px; color:#6E6358; font-weight:600; margin-top:14px;">Event-Feed · Foto + Grün geben Energie, eine Aktion</div>
+      </div>
+
+      <!-- Phone 2: Empty state -->
+      <div style="width: 320px;">
+        <div style="background: #FCF8F2; border-radius: 40px; padding: 12px; box-shadow: 0 2px 6px rgba(74,50,34,0.06), 0 20px 44px rgba(74,50,34,0.14); border: 1px solid #EFE5D5;">
+          <div style="border-radius: 30px; overflow: hidden; background: #FCF8F2; min-height: 520px;">
+            <div style="padding: 20px 20px 8px 20px; display:flex; align-items:center; justify-content:space-between;">
+              <div style="font-family:'Hedvig Letters Serif',serif; font-size:22px; color:#2B2622;">In deiner Nähe</div>
+              <div style="width:34px;height:34px;border-radius:11px;background:#22401E;display:flex;align-items:center;justify-content:center;"><div style="width:12px;height:12px;border-radius:4px;background:#E7B22E;"></div></div>
+            </div>
+            <div style="padding: 18px;">
+              <div style="border-radius:26px; background:#22401E; padding:32px 26px; text-align:center; position:relative; overflow:hidden;">
+                <div style="position:absolute; top:-30px; right:-30px; width:110px; height:110px; border-radius:50%; background:rgba(231,178,46,0.16);"></div>
+                <div style="position:absolute; bottom:-40px; left:-24px; width:90px; height:90px; border-radius:50%; background:rgba(188,69,41,0.14);"></div>
+                <div style="position:relative;">
+                  <div style="width:56px;height:56px;border-radius:18px;background:#E7B22E;margin:0 auto 18px auto;display:flex;align-items:center;justify-content:center;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#22401E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></div>
+                  <div style="font-family:'Hedvig Letters Serif',serif; font-size:24px; color:#F6EFE0; line-height:1.15;">Gerade noch ruhig hier</div>
+                  <p style="margin:10px 0 22px 0; font-size:14px; line-height:1.55; color:#C7D2BE;">Starte selbst was Kleines — ein Kaffee reicht schon. Andere sehen es sofort.</p>
+                  <button style="border:none; background:#BC4529; color:#fff; font-family:'Hanken Grotesque',sans-serif; font-weight:600; font-size:15px; padding:14px 20px; border-radius:999px; width:100%; box-shadow:0 10px 24px rgba(0,0,0,0.2); cursor:pointer;">Etwas vorschlagen</button>
+                </div>
+              </div>
+              <div style="text-align:center; font-size:13px; color:#6E6358; margin-top:16px;">Später: hier erscheinen echte Foto-Events</div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; font-size:13px; color:#6E6358; font-weight:600; margin-top:14px;">Leerzustand · warm &amp; einladend statt leer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TONALITÄT ============ -->
+  <div style="max-width: 1080px; margin: 0 auto; padding: 72px 32px 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">08</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 44px; margin: 0; letter-spacing: -0.01em;">Tonalität der UI-Sprache</h2>
+    </div>
+    <p style="max-width: 680px; margin: 0 0 32px 0; font-size: 17px; line-height: 1.6; color: #6E6358;">Freundlich, ermutigend, unaufdringlich. Immer per „du", nie fordernd. Wir laden ein statt zu verlangen — kein Leistungs- oder Gamification-Druck.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
+      <div style="background: #FCF8F2; border-radius: 24px; padding: 26px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #A23A20; font-weight: 700; margin-bottom: 12px;">Begrüßung</div>
+        <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 23px; line-height: 1.3; margin-bottom: 10px;">„Schön, dass du da bist."</div>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6E6358;">„Kein Profil, kein Druck. Nur echte Treffen in deiner Nähe."</p>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 24px; padding: 26px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #A23A20; font-weight: 700; margin-bottom: 12px;">Buttons</div>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 15px;">
+          <div><span style="color: #A23A20; font-weight: 600;">Primär</span> — „Ich bin dabei" · „Los geht's"</div>
+          <div><span style="color: #4a423b; font-weight: 600;">Sekundär</span> — „Erst mal umschauen"</div>
+          <div><span style="color: #6E6358; font-weight: 600;">Ghost</span> — „Vielleicht später"</div>
+        </div>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 24px; padding: 26px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #2C6E4C; font-weight: 700; margin-bottom: 12px;">Erfolg</div>
+        <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 23px; line-height: 1.3; margin-bottom: 10px;">„Du bist dabei."</div>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6E6358;">„Wir sagen dir kurz vorher Bescheid. Bis gleich!"</p>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 24px; padding: 26px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #9C2A22; font-weight: 700; margin-bottom: 12px;">Fehler</div>
+        <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 23px; line-height: 1.3; margin-bottom: 10px;">„Hat gerade nicht geklappt."</div>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6E6358;">„Kein Problem — probier's gleich noch mal." Nie schuldzuweisend.</p>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 24px; padding: 26px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A5A22; font-weight: 700; margin-bottom: 12px;">Leerer Zustand</div>
+        <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 23px; line-height: 1.3; margin-bottom: 10px;">„Gerade noch ruhig hier."</div>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6E6358;">„Starte selbst was Kleines — ein Kaffee reicht schon."</p>
+      </div>
+      <div style="background: #FCF8F2; border-radius: 24px; padding: 26px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07);">
+        <div style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #6E6358; font-weight: 700; margin-bottom: 12px;">Anonymität</div>
+        <div style="font-family: 'Hedvig Letters Serif', serif; font-size: 23px; line-height: 1.3; margin-bottom: 10px;">„Du bleibst anonym."</div>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6E6358;">„…bis du selbst mehr zeigen willst. Nichts wird bewertet."</p>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 20px;">
+      <div style="background: #E2ECE4; border-radius: 24px; padding: 26px;">
+        <div style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #2C6E4C; font-weight: 700; margin-bottom: 12px;">So klingen wir</div>
+        <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.7; color: #2f5641;">
+          <li>Einladend: „Kommst du dazu?"</li>
+          <li>Beiläufig & klein: „ein Kaffee reicht schon"</li>
+          <li>Entlastend: „kein Druck", „ganz spontan"</li>
+        </ul>
+      </div>
+      <div style="background: #F6E1DD; border-radius: 24px; padding: 26px;">
+        <div style="font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #9C2A22; font-weight: 700; margin-bottom: 12px;">So nicht</div>
+        <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.7; color: #7c261f;">
+          <li>Fordernd: „Jetzt anmelden!"</li>
+          <li>Leistung/Streak: „Halte deine Serie!"</li>
+          <li>Bewertend: „Bewerte dein Treffen"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ KONTRAST-DOKUMENTATION ============ -->
+  <div style="max-width: 1080px; margin: 0 auto; padding: 72px 32px 0 32px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;">
+      <div style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #6E6358; font-weight: 700;">09</div>
+      <h2 style="font-family: 'Hedvig Letters Serif', serif; font-weight: 400; font-size: 44px; margin: 0; letter-spacing: -0.01em;">Kontrast-Dokumentation · WCAG AA</h2>
+    </div>
+    <p style="max-width: 680px; margin: 0 0 24px 0; font-size: 17px; line-height: 1.6; color: #6E6358;">Alle Textkombinationen erfüllen mindestens 4,5:1 (Normaltext AA) — Basis ist der Creme-Grund <code style="font-family: ui-monospace, monospace; font-size: 13px;">#F1E8DA</code>. Werte zum direkten Dokumentieren:</p>
+
+    <div style="background: #FCF8F2; border-radius: 28px; padding: 8px 28px; box-shadow: 0 1px 2px rgba(74,50,34,0.05), 0 12px 30px rgba(74,50,34,0.07); font-size: 15px;">
+      <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.8fr; gap: 12px; padding: 16px 0; border-bottom: 2px solid #F0E7D8; font-weight: 700; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #6E6358;">
+        <div>Vordergrund</div><div>Hintergrund</div><div>Ratio</div><div>Status</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.8fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #F0E7D8; align-items: center;"><div>Tinte <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#2B2622</code></div><div>Creme <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#F1E8DA</code></div><div style="font-weight: 700;">12,32:1</div><div><span style="background: #E2ECE4; color: #2C6E4C; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">AAA</span></div></div>
+      <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.8fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #F0E7D8; align-items: center;"><div>Tinte gedämpft <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#6E6358</code></div><div>Creme <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#F1E8DA</code></div><div style="font-weight: 700;">4,82:1</div><div><span style="background: #E2ECE4; color: #2C6E4C; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">AA</span></div></div>
+      <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.8fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #F0E7D8; align-items: center;"><div>Weiß <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#FFFFFF</code></div><div>Koralle <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#BC4529</code></div><div style="font-weight: 700;">5,22:1</div><div><span style="background: #E2ECE4; color: #2C6E4C; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">AA</span></div></div>
+      <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.8fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #F0E7D8; align-items: center;"><div>Koralle Deep <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#A23A20</code></div><div>Creme <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#F1E8DA</code></div><div style="font-weight: 700;">5,47:1</div><div><span style="background: #E2ECE4; color: #2C6E4C; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">AA</span></div></div>
+      <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.8fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #F0E7D8; align-items: center;"><div>Bernstein Deep <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#8A5A22</code></div><div>Creme <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#F1E8DA</code></div><div style="font-weight: 700;">4,85:1</div><div><span style="background: #E2ECE4; color: #2C6E4C; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">AA</span></div></div>
+      <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.8fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #F0E7D8; align-items: center;"><div>Weiß <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#FFFFFF</code></div><div>Salbeigrün <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#2C6E4C</code></div><div style="font-weight: 700;">6,10:1</div><div><span style="background: #E2ECE4; color: #2C6E4C; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">AA</span></div></div>
+      <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.8fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #F0E7D8; align-items: center;"><div>Weiß <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#FFFFFF</code></div><div>Waldgrün <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#22401E</code></div><div style="font-weight: 700;">11,5:1</div><div><span style="background: #E2ECE4; color: #2C6E4C; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">AAA</span></div></div>
+      <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.8fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #F0E7D8; align-items: center;"><div>Waldgrün <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#22401E</code></div><div>Creme <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#F1E8DA</code></div><div style="font-weight: 700;">9,5:1</div><div><span style="background: #E2ECE4; color: #2C6E4C; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">AAA</span></div></div>
+      <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.8fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #F0E7D8; align-items: center;"><div>Sonnenblume <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#E7B22E</code></div><div>Waldgrün <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#22401E</code></div><div style="font-weight: 700;">5,9:1</div><div><span style="background: #E2ECE4; color: #2C6E4C; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">AA</span></div></div>
+      <div style="display: grid; grid-template-columns: 1.5fr 1.1fr 0.7fr 0.8fr; gap: 12px; padding: 14px 0; align-items: center;"><div>Weiß <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#FFFFFF</code></div><div>Fehler <code style="font-family: ui-monospace, monospace; font-size: 12px; color: #6E6358;">#9C2A22</code></div><div style="font-weight: 700;">7,59:1</div><div><span style="background: #E2ECE4; color: #2C6E4C; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">AAA</span></div></div>
+    </div>
+
+    <div style="display: flex; align-items: flex-start; gap: 10px; margin-top: 16px; max-width: 760px;">
+      <div style="width: 6px; height: 6px; border-radius: 50%; background: #BC4529; margin-top: 8px; flex-shrink: 0;"></div>
+      <p style="margin: 0; font-size: 14px; line-height: 1.55; color: #6E6358;">Regel: Auf hellen Flächen steht Text immer in Tinte oder im jeweiligen <em>Deep</em>-Ton — nie im Base-Ton. Waldgrün <code style="font-family: ui-monospace, monospace; font-size: 12px;">#22401E</code> trägt weißen Text und Sonnenblume als Akzent (AA+); Sonnenblume selbst ist zu hell für Text auf Creme und wird nur auf Grün/Tinte als Textfarbe genutzt. Fotos sind dekorativ — Text steht nie ungeschützt auf Bild, sondern auf Grünfläche oder mit dunklem Verlauf. Coral bleibt die einzige Aktionsfarbe.</p>
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <div style="max-width: 1080px; margin: 60px auto 0 auto; padding: 0 32px;">
+    <div style="border-top: 1px solid #DED0BB; padding-top: 26px; display: flex; justify-content: space-between; align-items: center;">
+      <div style="font-family: 'Luckiest Guy', cursive; font-size: 20px; color: #FF6F4D; text-shadow: 0 2px 0 rgba(42,30,26,0.85); display:flex; align-items:baseline;">BELONG<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D62F6B" stroke-width="2.6" stroke-linecap="round" style="transform: rotate(14deg) translateY(-8px); margin-left:4px; flex-shrink:0;"><path d="M11.2 3.8 C11.9 5.3 12.6 6.6 12.3 8.7"></path><path d="M13.1 15.4 C12.3 16.7 12.7 18.5 11.5 20.2"></path><path d="M3.9 13.2 C5.7 12.4 7.3 12.8 9 12.1"></path><path d="M15.2 11.5 C16.7 11.8 18.3 10.9 20 11.3"></path></svg></div>
+      <div style="font-size: 14px; color: #6E6358;">Design Direction v5 — Wortmarke 2b final · bereit für Handoff.</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>
