@@ -87,6 +87,25 @@ class FirebaseChatRepository implements ChatRepository {
   }
 
   @override
+  Future<void> sendMeetupPin(
+      {required String activityId, required MeetupPin pin}) async {
+    await _auth.ensureSignedIn();
+    final nickname =
+        await _db.get('users/${_auth.uid}/nickname') as String? ?? 'jemand';
+    final hostId = await _db.get('activities/$activityId/hostId') as String?;
+    await _db.push('chats/$activityId/messages', {
+      'senderId': _auth.uid,
+      'senderNickname': nickname,
+      'isOrganizer': hostId == _auth.uid,
+      // Fallback-Text, falls eine Oberfläche die Karte nicht rendert.
+      'text': 'Treffpunkt: ${pin.placeName}',
+      'type': ChatMessageType.meetupPin.toJson(),
+      'pin': pin.toJson(),
+      'sentAt': DateTime.now().toIso8601String(),
+    });
+  }
+
+  @override
   Future<void> reportMessage(String messageId) async {
     await _auth.ensureSignedIn();
     await _db.push('moderation/reports', {

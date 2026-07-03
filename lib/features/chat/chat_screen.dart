@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart' show CupertinoPageRoute;
 import 'package:flutter/material.dart' show InputBorder, InputDecoration, Scaffold, TextField;
+import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,6 +17,7 @@ import '../participation/participation_controller.dart';
 import '../profile/profile_controller.dart';
 import 'chat_controller.dart';
 import 'widgets/chat_bubbles.dart';
+import 'widgets/meetup_sheet.dart';
 import 'widgets/safety_sheet.dart';
 
 /// Gruppenchat · Koordination — sichtbar erst nach dem Beitreten.
@@ -52,11 +54,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     });
   }
 
-  Future<void> _send() async {
-    final text = _composerController.text;
-    _composerController.clear();
-    await ref.read(chatActionsProvider).send(widget.activityId, text);
-    // Ans Ende scrollen, sobald die eigene Nachricht im Stream ist.
+  /// Ans Ende scrollen, sobald die eigene Nachricht im Stream ist.
+  Future<void> _scrollToEnd() async {
     await Future<void>.delayed(const Duration(milliseconds: 80));
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
@@ -65,6 +64,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         curve: BelongMotion.curve,
       );
     }
+  }
+
+  Future<void> _send() async {
+    final text = _composerController.text;
+    _composerController.clear();
+    await ref.read(chatActionsProvider).send(widget.activityId, text);
+    await _scrollToEnd();
+  }
+
+  Future<void> _shareMeetup() async {
+    final pin = await showMeetupSheet(context: context);
+    if (pin == null) return;
+    await ref.read(chatActionsProvider).sendMeetupPin(widget.activityId, pin);
+    await _scrollToEnd();
   }
 
   void _openSafetySheet(ChatMessage message) {
@@ -139,6 +152,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           _MessageEntry(
                             message: message,
                             onLongPressForeign: () => _openSafetySheet(message),
+                            onAddressCopied: () => _showToast(
+                                'Adresse kopiert — füg sie in deine Karten-App ein.'),
                           ),
                           const SizedBox(height: BelongSpacing.sm),
                         ],
@@ -157,7 +172,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               ],
             ),
           ),
-          _Composer(controller: _composerController, onSend: _send),
+          _Composer(
+            controller: _composerController,
+            onSend: _send,
+            onShareMeetup: _shareMeetup,
+          ),
         ],
       ),
     );
@@ -168,10 +187,12 @@ class _MessageEntry extends ConsumerWidget {
   const _MessageEntry({
     required this.message,
     required this.onLongPressForeign,
+    required this.onAddressCopied,
   });
 
   final ChatMessage message;
   final VoidCallback onLongPressForeign;
+  final VoidCallback onAddressCopied;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -183,7 +204,7 @@ class _MessageEntry extends ConsumerWidget {
     final myId = ref.watch(profileProvider).value?.id;
     final isMine = message.senderId == myId;
     if (message.type == ChatMessageType.meetupPin && message.pin != null) {
-      return MeetupPinCard(pin: message.pin!);
+      return MeetupPinCard(pin: message.pin!, onAddressCopied: onAddressCopied);
     }
     return ChatBubble(
       message: message,
@@ -259,12 +280,17 @@ class _ChatHeader extends StatelessWidget {
   }
 }
 
-/// Composer: Standort-Button, Eingabe-Pill, Coral-Senden-FAB (44 px).
+/// Composer: Treffpunkt-Button, Eingabe-Pill, Coral-Senden-FAB (44 px).
 class _Composer extends StatelessWidget {
-  const _Composer({required this.controller, required this.onSend});
+  const _Composer({
+    required this.controller,
+    required this.onSend,
+    required this.onShareMeetup,
+  });
 
   final TextEditingController controller;
   final VoidCallback onSend;
+  final VoidCallback onShareMeetup;
 
   @override
   Widget build(BuildContext context) {
@@ -279,7 +305,8 @@ class _Composer extends StatelessWidget {
       child: Row(
         children: [
           Pressable(
-            semanticLabel: 'Standort teilen',
+            onTap: onShareMeetup,
+            semanticLabel: 'Treffpunkt teilen',
             child: Container(
               width: BelongSpacing.hitTarget,
               height: BelongSpacing.hitTarget,
@@ -301,6 +328,8 @@ class _Composer extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 onSubmitted: (_) => onSend(),
+                // Die Security Rules erlauben max. 500 Zeichen pro Nachricht.
+                inputFormatters: [LengthLimitingTextInputFormatter(500)],
                 style: BelongText.input,
                 cursorColor: BelongColors.coral,
                 decoration: InputDecoration(

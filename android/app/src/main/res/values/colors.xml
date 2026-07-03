@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#F1E8DA</color>
+    <!-- Creme (BelongColors.cream) — nativer Launch-Screen vor dem Flutter-Start. -->
+    <color name="launch_background">#F1E8DA</color>
+</resources>

@@ -89,6 +89,10 @@ konfliktsicher geändert.
 - Datenstruktur: `/users`, `/activities`, `/participations`,
   `/activityParticipants` (Spiegel-Index für die Chat-Zugriffsregel),
   `/chats`, `/moderation` (reports/blocks/mutes).
+- **Security Rules:** `firebase/database.rules.json` ist die Single Source
+  of Truth im Repo. Änderungen dort werden **manuell** in die Firebase-
+  Konsole (Realtime Database → Regeln) kopiert und veröffentlicht — die
+  App selbst braucht dafür keinen neuen Build.
 
 **Plan B (Mockdaten):** Die komplette Mock-Datenschicht bleibt im Projekt.
 Umschalten über den `dataBackendProvider` in `lib/data/providers.dart` —
@@ -102,10 +106,14 @@ fällt die App automatisch auf die Mocks zurück.
 - **Serverseitig erzwungen (Security Rules, empirisch geprüft):** Profile
   sind nur für die eigene Sitzung lesbar; Chats nur für Teilnehmer:innen;
   Aktivitäten ändert nur der Host; Meldungen sind für Clients unlesbar
-  (write-only); Teilnehmerzähler nur um ±1 änderbar.
+  (write-only); Teilnehmerzähler nur um ±1 änderbar; Chat-Nachrichten kann
+  nur die Absender:in anlegen — überschreiben oder löschen kann sie danach
+  niemand. `.validate`-Regeln begrenzen Textlängen (Spitzname 30, Titel 80,
+  Beschreibung/Nachricht 500 Zeichen) und erlauben nur bekannte Kategorien
+  und Sichtbarkeits-Stufen.
 - **Anonyme Auth als bewusster Trade-off:** jeder kann ohne Hürde einsteigen
-  (Produktprinzip); Missbrauchsschutz käme in Produktion über App Check,
-  `.validate`-Regeln und serverseitige Moderation dazu.
+  (Produktprinzip); zusätzlicher Missbrauchsschutz käme in Produktion über
+  App Check und serverseitige Moderation dazu.
 
 **Bekannte Prototyp-Grenzen** (bewusst, siehe Ausblick): Blockieren filtert
 aktuell nur die eigene Anzeige, Meldungen werden noch nicht ausgewertet,
@@ -117,9 +125,8 @@ hat ohne Push-Benachrichtigungen keine Wirkung.
 Nächste sinnvolle Schritte Richtung Veröffentlichung: serverseitige
 Feed-Queries + Cloud Functions für Join/Moderation, echtes (serverseitiges)
 Blockieren, App Check, Push-Benachrichtigungen („Wir sagen dir kurz vorher
-Bescheid"), Host-Werkzeuge (Bearbeiten/Absagen), App-Icon & nativer Splash,
-eigener Signing-Key sowie das Rechtspaket (Datenschutzerklärung,
-Moderationsprozess, Altersgrenze).
+Bescheid"), Host-Werkzeuge (Bearbeiten/Absagen), eigener Signing-Key sowie
+das Rechtspaket (Datenschutzerklärung, Moderationsprozess, Altersgrenze).
 
 ## Design
 

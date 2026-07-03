@@ -141,6 +141,8 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
                 label: 'Titel',
                 controller: _titleController,
                 placeholder: 'Wie heißt deine Aktivität?',
+                // Die Security Rules erlauben max. 80 Zeichen.
+                maxLength: 80,
                 errorText: _titleError,
                 onChanged: (_) {
                   if (_titleError != null) setState(() => _titleError = null);
@@ -252,6 +254,8 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
                 controller: _descriptionController,
                 placeholder: 'Was sollte man wissen?',
                 maxLines: 3,
+                // Die Security Rules erlauben max. 500 Zeichen.
+                maxLength: 500,
               ),
               const SizedBox(height: BelongSpacing.md),
               // CapacityStepper.

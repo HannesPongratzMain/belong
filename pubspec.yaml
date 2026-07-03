@@ -19,6 +19,23 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  # Reines Build-Werkzeug (kein Runtime-Plugin): erzeugt Launcher-Icons
+  # aus assets/icon/ — Quell-PNGs kommen aus tool/generate_icons.dart.
+  flutter_launcher_icons: ^0.14.4
+
+# Launcher-Icon: Marken-Funke (Beere) auf Creme, siehe tool/generate_icons.dart.
+# Neu erzeugen: flutter test tool/generate_icons.dart && dart run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: "assets/icon/icon.png"
+  android: true
+  ios: false
+  adaptive_icon_background: "#F1E8DA"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+  web:
+    generate: true
+    image_path: "assets/icon/icon.png"
+    background_color: "#F1E8DA"
+    theme_color: "#F1E8DA"
 
 flutter:
   uses-material-design: true

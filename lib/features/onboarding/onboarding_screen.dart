@@ -216,6 +216,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       label: 'Dein Spitzname',
       controller: _nicknameController,
       placeholder: _suggestedNickname ?? 'z. B. stiller-fuchs',
+      // Die Security Rules erlauben max. 30 Zeichen.
+      maxLength: 30,
       errorText: _nicknameError,
       onChanged: (_) {
         if (_nicknameError != null) setState(() => _nicknameError = null);

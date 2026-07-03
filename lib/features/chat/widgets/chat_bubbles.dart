@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter/widgets.dart';
 
 import '../../../core/theme/belong_colors.dart';
@@ -129,10 +130,19 @@ class ChatBubble extends StatelessWidget {
 }
 
 /// MeetupPinCard: Treffpunkt mit Karten-Platzhalter und „Route"-Pill.
+/// „Route" kopiert die Adresse in die Zwischenablage (pluginfrei) —
+/// [onAddressCopied] zeigt danach das Feedback, z. B. einen Toast.
 class MeetupPinCard extends StatelessWidget {
-  const MeetupPinCard({super.key, required this.pin});
+  const MeetupPinCard({super.key, required this.pin, this.onAddressCopied});
 
   final MeetupPin pin;
+  final VoidCallback? onAddressCopied;
+
+  Future<void> _copyAddress() async {
+    await Clipboard.setData(
+        ClipboardData(text: '${pin.placeName}, ${pin.address}'));
+    onAddressCopied?.call();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +206,7 @@ class MeetupPinCard extends StatelessWidget {
                   label: 'Route',
                   background: BelongColors.chipNeutral,
                   foreground: BelongColors.inkSoft,
-                  onTap: () {},
+                  onTap: _copyAddress,
                 ),
               ],
             ),

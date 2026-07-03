@@ -27,6 +27,10 @@ class ChatActions {
         .sendMessage(activityId: activityId, text: trimmed);
   }
 
+  Future<void> sendMeetupPin(String activityId, MeetupPin pin) => _ref
+      .read(chatRepositoryProvider)
+      .sendMeetupPin(activityId: activityId, pin: pin);
+
   Future<void> report(ChatMessage message) =>
       _ref.read(chatRepositoryProvider).reportMessage(message.id);
 

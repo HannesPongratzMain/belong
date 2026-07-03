@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 
 import '../theme/belong_colors.dart';
 import '../theme/belong_dimens.dart';
@@ -16,6 +17,7 @@ class BelongTextField extends StatelessWidget {
     this.optionalHint,
     this.prefix,
     this.maxLines = 1,
+    this.maxLength,
     this.textInputAction,
     this.onChanged,
     this.autofocus = false,
@@ -33,6 +35,10 @@ class BelongTextField extends StatelessWidget {
 
   final Widget? prefix;
   final int maxLines;
+
+  /// Stille Obergrenze (ohne Zähler) — passend zu den Security Rules.
+  final int? maxLength;
+
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onChanged;
   final bool autofocus;
@@ -80,6 +86,10 @@ class BelongTextField extends StatelessWidget {
                 child: TextField(
                   controller: controller,
                   maxLines: maxLines,
+                  inputFormatters: [
+                    if (maxLength != null)
+                      LengthLimitingTextInputFormatter(maxLength),
+                  ],
                   autofocus: autofocus,
                   textInputAction: textInputAction,
                   onChanged: onChanged,

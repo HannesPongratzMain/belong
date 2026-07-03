@@ -49,6 +49,27 @@ class MockChatRepository implements ChatRepository {
   }
 
   @override
+  Future<void> sendMeetupPin(
+      {required String activityId, required MeetupPin pin}) {
+    return _db(() {
+      final profile = _db.profile;
+      if (profile == null) return;
+      _db.addMessage(ChatMessage(
+        id: _db.nextId('m'),
+        activityId: activityId,
+        senderId: profile.id,
+        senderNickname: profile.nickname,
+        isOrganizer: _db.myActivityIds.contains(activityId),
+        type: ChatMessageType.meetupPin,
+        // Fallback-Text, falls eine Oberfläche die Karte nicht rendert.
+        text: 'Treffpunkt: ${pin.placeName}',
+        pin: pin,
+        sentAt: DateTime.now(),
+      ));
+    });
+  }
+
+  @override
   Future<void> reportMessage(String messageId) =>
       _db(() => _db.reportedMessageIds.add(messageId));
 

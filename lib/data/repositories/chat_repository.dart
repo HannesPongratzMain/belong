@@ -12,6 +12,10 @@ abstract interface class ChatRepository {
 
   Future<void> sendMessage({required String activityId, required String text});
 
+  /// Teilt einen Treffpunkt als [ChatMessageType.meetupPin]-Nachricht.
+  Future<void> sendMeetupPin(
+      {required String activityId, required MeetupPin pin});
+
   Future<void> reportMessage(String messageId);
 
   /// Blockieren wirkt beidseitig und ohne Ankündigung.

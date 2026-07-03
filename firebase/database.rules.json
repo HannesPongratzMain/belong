@@ -1,0 +1,87 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        "nickname": {
+          ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 30"
+        },
+        "anonymityLevel": {
+          ".validate": "newData.val() === 'anonymous' || newData.val() === 'nickname' || newData.val() === 'nicknameInterests'"
+        }
+      }
+    },
+    "activities": {
+      ".read": "auth != null",
+      ".indexOn": ["startsAt", "area"],
+      "$activityId": {
+        ".write": "auth != null && (!data.exists() ? newData.child('hostId').val() === auth.uid : data.child('hostId').val() === auth.uid)",
+        "title": {
+          ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80"
+        },
+        "description": {
+          ".validate": "newData.isString() && newData.val().length <= 500"
+        },
+        "category": {
+          ".validate": "newData.val() === 'draussen' || newData.val() === 'tanzen' || newData.val() === 'spiele' || newData.val() === 'musik' || newData.val() === 'essen' || newData.val() === 'kaffee'"
+        },
+        "participantCount": {
+          ".write": "auth != null && (newData.val() === data.val() + 1 || newData.val() === data.val() - 1)"
+        }
+      }
+    },
+    "participations": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "activityParticipants": {
+      "$activityId": {
+        ".read": "auth != null",
+        "$uid": {
+          ".write": "auth != null && $uid === auth.uid"
+        }
+      }
+    },
+    "chats": {
+      "$activityId": {
+        ".read": "auth != null && root.child('activityParticipants').child($activityId).child(auth.uid).exists()",
+        "messages": {
+          ".indexOn": ["sentAt"],
+          "$messageId": {
+            ".write": "auth != null && root.child('activityParticipants').child($activityId).child(auth.uid).exists() && !data.exists() && newData.child('senderId').val() === auth.uid",
+            "text": {
+              ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 500"
+            }
+          }
+        }
+      }
+    },
+    "moderation": {
+      "reports": {
+        "$reportId": {
+          ".read": false,
+          ".write": "auth != null && !data.exists()"
+        }
+      },
+      "blocks": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          "$blockedUid": {
+            ".write": "auth != null && auth.uid === $uid"
+          }
+        }
+      },
+      "mutes": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          "$activityId": {
+            ".write": "auth != null && auth.uid === $uid"
+          }
+        }
+      }
+    }
+  }
+}
