@@ -10,13 +10,17 @@ import '../../core/theme/belong_shadows.dart';
 import '../../core/theme/belong_typography.dart';
 import '../../core/widgets/app_header.dart';
 import '../../core/widgets/belong_icons.dart';
+import '../../core/widgets/belong_sheet.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/category_chip.dart';
 import '../../core/widgets/photo_placeholder.dart';
 import '../../core/widgets/pills.dart';
 import '../../core/widgets/pressable.dart';
+import '../../data/providers.dart';
 import '../../domain/models/activity.dart';
 import '../chat/chat_screen.dart';
+import '../create/create_activity_sheet.dart';
+import '../feed/feed_controller.dart';
 import '../participation/participation_controller.dart';
 import '../participation/widgets/join_button.dart';
 
@@ -91,12 +95,19 @@ class ActivityDetailScreen extends ConsumerWidget {
                         ],
                       ),
                       const SizedBox(height: BelongSpacing.md),
-                      JoinButton(activity: activity),
-                      if (joined && !isMine) ...[
+                      if (activity.isCancelled)
+                        const _CancelledBanner()
+                      else
+                        JoinButton(activity: activity),
+                      if (joined && !isMine && !activity.isCancelled) ...[
                         const SizedBox(height: BelongSpacing.xs),
                         Center(
                           child: Text(
-                            'Wir sagen dir kurz vorher Bescheid.',
+                            switch (BelongDates.startsIn(activity.startsAt)) {
+                              final startsIn? =>
+                                "Bald geht's los — Start $startsIn.",
+                              null => 'Wir sagen dir kurz vorher Bescheid.',
+                            },
                             style: BelongText.bodySmall
                                 .copyWith(color: BelongColors.muted),
                           ),
@@ -110,7 +121,24 @@ class ActivityDetailScreen extends ConsumerWidget {
                               .push(ChatScreen.route(activity.id)),
                         ),
                       ],
-                      if (joined && !isMine) ...[
+                      // Host-Werkzeuge: Bearbeiten & Absagen.
+                      if (isMine && !activity.isCancelled) ...[
+                        const SizedBox(height: BelongSpacing.sm),
+                        SecondaryButton(
+                          label: 'Bearbeiten',
+                          onTap: () =>
+                              showCreateActivitySheet(context, edit: activity),
+                        ),
+                        const SizedBox(height: BelongSpacing.xs),
+                        Center(
+                          child: GhostButton(
+                            label: 'Aktivität absagen',
+                            color: BelongColors.berryDeep,
+                            onTap: () => _cancelActivity(context, ref, activity),
+                          ),
+                        ),
+                      ],
+                      if (joined && !isMine && !activity.isCancelled) ...[
                         const SizedBox(height: BelongSpacing.xs),
                         Center(
                           child: GhostButton(
@@ -129,6 +157,43 @@ class ActivityDetailScreen extends ConsumerWidget {
     );
   }
 
+  /// Absage-Flow des Hosts: erst freundlich rückfragen, dann absagen —
+  /// alle Dabei-Leute sehen die Absage als System-Notiz im Chat.
+  Future<void> _cancelActivity(
+      BuildContext context, WidgetRef ref, Activity activity) async {
+    final confirmed = await showBelongSheet<bool>(
+      context: context,
+      builder: (sheetContext) => Padding(
+        padding: const EdgeInsets.fromLTRB(
+            BelongSpacing.md, 0, BelongSpacing.md, BelongSpacing.lg),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SheetHeader(
+              title: 'Wirklich absagen?',
+              subtitle: 'Alle, die dabei sind, sehen die Absage im '
+                  'Gruppenchat. Das lässt sich nicht rückgängig machen.',
+            ),
+            const SizedBox(height: BelongSpacing.md),
+            SecondaryButton(
+              label: 'Ja, absagen',
+              onTap: () => Navigator.of(sheetContext).pop(true),
+            ),
+            GhostButton(
+              label: 'Doch nicht',
+              onTap: () => Navigator.of(sheetContext).pop(false),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirmed != true) return;
+    await ref.read(activityRepositoryProvider).cancelActivity(activity.id);
+    ref.invalidate(feedProvider);
+    ref.invalidate(myActivitiesProvider);
+  }
+
   Widget _spotsBadge(Activity activity) {
     final free = activity.freeSpots;
     final (label, background, foreground) = switch (free) {
@@ -142,6 +207,32 @@ class ActivityDetailScreen extends ConsumerWidget {
       foreground: foreground,
       textStyle: BelongText.badge,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+    );
+  }
+}
+
+/// Ruhiger Hinweis statt Join-Button, wenn der Host abgesagt hat.
+class _CancelledBanner extends StatelessWidget {
+  const _CancelledBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(BelongSpacing.md),
+      decoration: BoxDecoration(
+        color: BelongColors.berryTint,
+        borderRadius: BelongRadii.inputAll,
+      ),
+      child: Text(
+        'Abgesagt — diese Aktivität findet nicht statt.\n'
+        'Der Chat bleibt offen, falls ihr was Neues plant.',
+        textAlign: TextAlign.center,
+        style: BelongText.bodySmall.copyWith(
+          color: BelongColors.berryDeep,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 }
@@ -193,14 +284,24 @@ class _PhotoHeader extends StatelessWidget {
           right: BelongSpacing.md,
           child: Transform.rotate(
             angle: 3 * 3.14159 / 180,
-            child: BelongPill(
-              label: BelongDates.badge(activity.startsAt),
-              background: BelongColors.sunflower,
-              foreground: BelongColors.forest,
-              textStyle: BelongText.badge,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              shadows: BelongShadows.sunflowerBadge,
-            ),
+            child: activity.isCancelled
+                ? BelongPill(
+                    label: 'Abgesagt',
+                    background: BelongColors.chipNeutral,
+                    foreground: BelongColors.muted,
+                    textStyle: BelongText.badge,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  )
+                : BelongPill(
+                    label: BelongDates.badge(activity.startsAt),
+                    background: BelongColors.sunflower,
+                    foreground: BelongColors.forest,
+                    textStyle: BelongText.badge,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    shadows: BelongShadows.sunflowerBadge,
+                  ),
           ),
         ),
       ],

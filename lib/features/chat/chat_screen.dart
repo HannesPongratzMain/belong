@@ -74,7 +74,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   Future<void> _shareMeetup() async {
-    final pin = await showMeetupSheet(context: context);
+    final pin = await showMeetupSheet(
+      context: context,
+      activity: ref.read(activityStreamProvider(widget.activityId)).value,
+    );
     if (pin == null) return;
     await ref.read(chatActionsProvider).sendMeetupPin(widget.activityId, pin);
     await _scrollToEnd();

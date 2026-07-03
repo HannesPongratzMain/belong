@@ -25,6 +25,17 @@ abstract final class BelongDates {
     return '${weekday(dt)} ${time(dt)}';
   }
 
+  /// „in 45 min" / „in 3 h", wenn [dt] innerhalb der nächsten 12 Stunden
+  /// liegt — sonst `null`. Grundlage der In-App-Erinnerung.
+  static String? startsIn(DateTime dt, {DateTime? now}) {
+    final diff = dt.difference(now ?? DateTime.now());
+    if (diff.isNegative || diff > const Duration(hours: 12)) return null;
+    if (diff < const Duration(hours: 1)) {
+      return 'in ${diff.inMinutes.clamp(1, 59)} min';
+    }
+    return 'in ${diff.inHours} h';
+  }
+
   /// „Fr, 4. Juli" für den Tag-Picker.
   static String dayLong(DateTime dt, {DateTime? now}) {
     final reference = now ?? DateTime.now();

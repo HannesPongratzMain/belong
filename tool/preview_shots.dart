@@ -17,6 +17,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:belong/data/mock/mock_database.dart';
 import 'package:belong/data/providers.dart';
+import 'package:belong/domain/models/activity.dart';
 import 'package:belong/features/activity_detail/activity_detail_screen.dart';
 import 'package:belong/features/feed/feed_screen.dart';
 import 'package:belong/main.dart';
@@ -153,5 +154,91 @@ void main() {
     // Den 2-s-Toast-Timer ausklingen lassen — sonst meldet das Test-Binding
     // am Ende einen offenen Timer.
     await tester.pump(const Duration(seconds: 3));
+  });
+
+  testWidgets('Host-Werkzeuge: Bearbeiten, Absagen, Erinnerung',
+      (tester) async {
+    tester.view.physicalSize = const Size(390 * 3, 844 * 3);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+
+    // Eigene Aktivität direkt in die Mock-DB legen — startet „in 2 h",
+    // damit auch die In-App-Erinnerung sichtbar wird.
+    final db = MockDatabase(latency: Duration.zero);
+    db.activities.add(Activity(
+      id: 'a-mine',
+      title: 'Boule im Park',
+      description: 'Kugeln sind da — einfach vorbeikommen.',
+      category: ActivityCategory.draussen,
+      locationName: 'Fuldaaue, Boulebahn',
+      area: 'Mitte',
+      startsAt: DateTime.now().add(const Duration(hours: 2, minutes: 5)),
+      participantCount: 1,
+      hostId: MockDatabase.currentUserId,
+    ));
+    db.myActivityIds.add('a-mine');
+
+    await tester.pumpWidget(
+      RepaintBoundary(
+        key: _rootKey,
+        child: ProviderScope(
+          overrides: [
+            dataBackendProvider.overrideWithValue(DataBackend.mock),
+            mockDatabaseProvider.overrideWithValue(db),
+          ],
+          child: const BelongApp(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text("Los geht's"), 120);
+    await tester.tap(find.text("Los geht's"));
+    await tester.pumpAndSettle();
+
+    // Chats-Tab: Sunflower-Pill „in 2 h" als Erinnerung.
+    await tester.tap(find.text('Chats'));
+    await tester.pumpAndSettle();
+    expect(find.text('in 2 h'), findsOneWidget);
+    await _shot(tester, 'chats-reminder');
+
+    // Detail der eigenen Aktivität: Host-Werkzeuge sichtbar.
+    await tester.tap(find.text('Boule im Park'));
+    await tester.pumpAndSettle();
+    // Der Chats-Tab öffnet den Chat — zurück und über den Feed einsteigen.
+    if (find.byType(ActivityDetailScreen).evaluate().isEmpty) {
+      await tester.tap(find.bySemanticsLabel('Zurück').first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Entdecken'));
+      await tester.pumpAndSettle();
+      await _scrollTo(
+          tester, find.text('Boule im Park'), find.byType(FeedScreen));
+      await tester.tap(find.text('Boule im Park'));
+      await tester.pumpAndSettle();
+    }
+    final detail = find.byType(ActivityDetailScreen);
+    final editButton =
+        find.descendant(of: detail, matching: find.text('Bearbeiten'));
+    await _scrollTo(tester, editButton, detail);
+    await _shot(tester, 'host-tools');
+
+    // Bearbeiten: gleiche Maske, vorbefüllt.
+    await tester.tap(editButton);
+    await tester.pumpAndSettle();
+    expect(find.text('Aktivität bearbeiten'), findsOneWidget);
+    expect(find.text('Boule im Park'), findsWidgets);
+    await _shot(tester, 'edit-sheet');
+    await tester.tap(find.bySemanticsLabel('Schließen'));
+    await tester.pumpAndSettle();
+
+    // Absagen mit Rückfrage → Banner statt Join-Zustand.
+    final cancelButton =
+        find.descendant(of: detail, matching: find.text('Aktivität absagen'));
+    await _scrollTo(tester, cancelButton, detail);
+    await tester.tap(cancelButton);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ja, absagen'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Abgesagt — diese Aktivität'), findsOneWidget);
+    await _shot(tester, 'cancelled');
   });
 }

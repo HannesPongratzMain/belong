@@ -40,6 +40,7 @@ class Activity {
     this.capacity,
     this.hostId,
     this.photoHint,
+    this.isCancelled = false,
   }) : assert(isOnline || locationName != null,
             'Eine Aktivität braucht einen Ort oder ist online.');
 
@@ -67,6 +68,9 @@ class Activity {
   /// Beschreibung des (Platzhalter-)Fotos, z. B. „Laufgruppe von hinten".
   final String? photoHint;
 
+  /// Vom Host abgesagt — verschwindet aus dem Feed, der Chat bleibt offen.
+  final bool isCancelled;
+
   bool get isOpenForAll => capacity == null;
 
   int? get freeSpots =>
@@ -76,7 +80,7 @@ class Activity {
 
   String get placeLabel => isOnline ? 'Online' : locationName!;
 
-  Activity copyWith({int? participantCount}) => Activity(
+  Activity copyWith({int? participantCount, bool? isCancelled}) => Activity(
         id: id,
         title: title,
         description: description,
@@ -89,6 +93,7 @@ class Activity {
         participantCount: participantCount ?? this.participantCount,
         hostId: hostId,
         photoHint: photoHint,
+        isCancelled: isCancelled ?? this.isCancelled,
       );
 
   factory Activity.fromJson(Map<String, dynamic> json) => Activity(
@@ -104,6 +109,7 @@ class Activity {
         participantCount: (json['participantCount'] as num?)?.toInt() ?? 0,
         hostId: json['hostId'] as String?,
         photoHint: json['photoHint'] as String?,
+        isCancelled: json['isCancelled'] as bool? ?? false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -119,6 +125,7 @@ class Activity {
         'participantCount': participantCount,
         'hostId': hostId,
         'photoHint': photoHint,
+        'isCancelled': isCancelled,
       };
 }
 

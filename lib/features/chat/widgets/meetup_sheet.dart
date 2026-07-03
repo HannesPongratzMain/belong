@@ -1,24 +1,30 @@
 import 'package:flutter/services.dart' show TextInputAction;
 import 'package:flutter/widgets.dart';
 
+import '../../../core/format/belong_dates.dart';
 import '../../../core/theme/belong_dimens.dart';
 import '../../../core/widgets/belong_sheet.dart';
 import '../../../core/widgets/belong_text_field.dart';
 import '../../../core/widgets/buttons.dart';
+import '../../../domain/models/activity.dart';
 import '../../../domain/models/chat_message.dart';
 
 /// Sheet „Treffpunkt teilen" hinter dem Standort-Button im Composer:
 /// Ort, Adresse und Zeit-Label ergeben eine [MeetupPin]-Nachricht.
-/// Gibt `null` zurück, wenn das Sheet ohne Teilen geschlossen wird.
-Future<MeetupPin?> showMeetupSheet({required BuildContext context}) {
+/// [activity] befüllt Ort und Zeit vor — meist ist der Treffpunkt ja der
+/// Ort der Aktivität. Gibt `null` zurück, wenn ohne Teilen geschlossen.
+Future<MeetupPin?> showMeetupSheet(
+    {required BuildContext context, Activity? activity}) {
   return showBelongSheet<MeetupPin>(
     context: context,
-    builder: (_) => const _MeetupSheet(),
+    builder: (_) => _MeetupSheet(activity: activity),
   );
 }
 
 class _MeetupSheet extends StatefulWidget {
-  const _MeetupSheet();
+  const _MeetupSheet({this.activity});
+
+  final Activity? activity;
 
   @override
   State<_MeetupSheet> createState() => _MeetupSheetState();
@@ -28,6 +34,15 @@ class _MeetupSheetState extends State<_MeetupSheet> {
   final _placeController = TextEditingController();
   final _addressController = TextEditingController();
   final _timeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final activity = widget.activity;
+    if (activity == null) return;
+    if (!activity.isOnline) _placeController.text = activity.locationName ?? '';
+    _timeController.text = BelongDates.badge(activity.startsAt);
+  }
 
   @override
   void dispose() {

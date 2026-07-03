@@ -1,6 +1,9 @@
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter/widgets.dart';
 
+import '../../../core/platform/maps_opener_io.dart'
+    if (dart.library.js_interop) '../../../core/platform/maps_opener_web.dart';
+
 import '../../../core/theme/belong_colors.dart';
 import '../../../core/theme/belong_dimens.dart';
 import '../../../core/theme/belong_shadows.dart';
@@ -130,17 +133,19 @@ class ChatBubble extends StatelessWidget {
 }
 
 /// MeetupPinCard: Treffpunkt mit Karten-Platzhalter und „Route"-Pill.
-/// „Route" kopiert die Adresse in die Zwischenablage (pluginfrei) —
-/// [onAddressCopied] zeigt danach das Feedback, z. B. einen Toast.
+/// „Route" öffnet im Browser die Karten-Suche (pluginfrei); sonst wandert
+/// die Adresse in die Zwischenablage — [onAddressCopied] zeigt danach das
+/// Feedback, z. B. einen Toast.
 class MeetupPinCard extends StatelessWidget {
   const MeetupPinCard({super.key, required this.pin, this.onAddressCopied});
 
   final MeetupPin pin;
   final VoidCallback? onAddressCopied;
 
-  Future<void> _copyAddress() async {
-    await Clipboard.setData(
-        ClipboardData(text: '${pin.placeName}, ${pin.address}'));
+  Future<void> _openRoute() async {
+    final query = '${pin.placeName}, ${pin.address}';
+    if (openMapsSearch(query)) return;
+    await Clipboard.setData(ClipboardData(text: query));
     onAddressCopied?.call();
   }
 
@@ -206,7 +211,7 @@ class MeetupPinCard extends StatelessWidget {
                   label: 'Route',
                   background: BelongColors.chipNeutral,
                   foreground: BelongColors.inkSoft,
-                  onTap: _copyAddress,
+                  onTap: _openRoute,
                 ),
               ],
             ),

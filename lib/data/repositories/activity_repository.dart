@@ -14,6 +14,14 @@ abstract interface class ActivityRepository {
 
   Future<Activity> createActivity(ActivityDraft draft);
 
+  /// Host-Werkzeug: überarbeitet die Details einer eigenen Aktivität.
+  /// Die Änderung erscheint als System-Notiz im Gruppenchat.
+  Future<Activity> updateActivity(String id, ActivityDraft draft);
+
+  /// Host-Werkzeug: sagt eine eigene Aktivität ab. Sie verschwindet aus
+  /// dem Feed; der Chat bleibt für alle Beteiligten offen.
+  Future<Activity> cancelActivity(String id);
+
   /// Aktivitäten, die die aktuelle Nutzer:in gestartet hat.
   Future<List<Activity>> myActivities();
 }

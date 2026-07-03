@@ -10,6 +10,7 @@ import '../../core/widgets/app_header.dart';
 import '../../core/widgets/belong_icons.dart';
 import '../../core/widgets/belong_wordmark.dart';
 import '../../core/widgets/category_chip.dart';
+import '../../core/widgets/pills.dart';
 import '../../core/widgets/pressable.dart';
 import '../../core/widgets/skeleton.dart';
 import '../../core/widgets/state_view.dart';
@@ -80,6 +81,33 @@ class _ChatRow extends ConsumerWidget {
 
   final Activity activity;
 
+  /// Zeit rechts in der Row: „Abgesagt" (neutral), Sunflower-Pill als
+  /// In-App-Erinnerung („in 2 h"), sonst das übliche Kurzformat.
+  Widget _timeBadge() {
+    if (activity.isCancelled) {
+      return const BelongPill(
+        label: 'Abgesagt',
+        background: BelongColors.chipNeutral,
+        foreground: BelongColors.muted,
+        textStyle: BelongText.badge,
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      );
+    }
+    final startsIn = BelongDates.startsIn(activity.startsAt);
+    if (startsIn != null) {
+      return BelongPill(
+        label: startsIn,
+        background: BelongColors.sunflower,
+        foreground: BelongColors.forest,
+        textStyle: BelongText.badge,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        shadows: BelongShadows.sunflowerBadge,
+      );
+    }
+    return Text(BelongDates.badge(activity.startsAt),
+        style: BelongText.meta.copyWith(fontWeight: FontWeight.w700));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Vorschau: letzte „echte" Nachricht des Chats.
@@ -138,9 +166,7 @@ class _ChatRow extends ConsumerWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(BelongDates.badge(activity.startsAt),
-                    style: BelongText.meta
-                        .copyWith(fontWeight: FontWeight.w700)),
+                _timeBadge(),
                 const SizedBox(height: 6),
                 const BelongIcon(BelongIconGlyph.chevronRight,
                     size: 14, color: BelongColors.placeholder, strokeWidth: 2.6),

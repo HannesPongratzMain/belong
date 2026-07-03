@@ -1,4 +1,5 @@
 import '../../domain/models/activity.dart';
+import '../../domain/models/chat_message.dart';
 import '../../domain/models/feed_filter.dart';
 import '../repositories/activity_repository.dart';
 import 'firebase_auth_client.dart';
@@ -36,6 +37,7 @@ class FirebaseActivityRepository implements ActivityRepository {
     final now = DateTime.now();
     final activities = await _allActivities();
     return activities
+        .where((activity) => !activity.isCancelled)
         .where((activity) => activity.startsAt.isAfter(now))
         .where((activity) => filter.matches(activity, now: now))
         .toList()
@@ -81,6 +83,46 @@ class FirebaseActivityRepository implements ActivityRepository {
       'activityParticipants/$id/$uid': true,
     });
     return _fromEntry(id, data.cast<String, dynamic>());
+  }
+
+  @override
+  Future<Activity> updateActivity(String id, ActivityDraft draft) async {
+    await _auth.ensureSignedIn();
+    // PATCH mit null-Werten entfernt die Schlüssel (RTDB-Semantik) —
+    // passt für locationName (online) und capacity (ohne Limit).
+    await _db.patch('activities/$id', {
+      'title': draft.title,
+      'description': draft.description,
+      'category': draft.category.toJson(),
+      'locationName': draft.isOnline ? null : draft.locationName,
+      'isOnline': draft.isOnline,
+      'startsAt': draft.startsAt.toIso8601String(),
+      'capacity': draft.capacity,
+    });
+    await _pushHostNote(id, 'hat die Details aktualisiert');
+    return activityById(id);
+  }
+
+  @override
+  Future<Activity> cancelActivity(String id) async {
+    await _auth.ensureSignedIn();
+    await _db.put('activities/$id/isCancelled', true);
+    await _pushHostNote(id, 'hat die Aktivität abgesagt');
+    return activityById(id);
+  }
+
+  /// System-Notiz des Hosts im Gruppenchat (Absage / Änderung).
+  Future<void> _pushHostNote(String activityId, String suffix) async {
+    final nickname =
+        await _db.get('users/${_auth.uid}/nickname') as String? ?? 'jemand';
+    await _db.push('chats/$activityId/messages', {
+      'senderId': _auth.uid,
+      'senderNickname': nickname,
+      'isOrganizer': true,
+      'text': '$nickname $suffix',
+      'type': ChatMessageType.system.toJson(),
+      'sentAt': DateTime.now().toIso8601String(),
+    });
   }
 
   @override

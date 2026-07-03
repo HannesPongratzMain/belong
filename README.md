@@ -37,8 +37,15 @@ Anmeldung, kein Account nötig) und zeigt echte Aktivitäten aus Kassel.
 - **One-Click-Join** — Zustand sichtbar: beitreten / dabei / voll / verlassen
 - **Aktivität erstellen** — Formular mit freundlicher Validierung und
   Erfolgs-Moment („Steht!")
+- **Host-Werkzeuge** — Bearbeiten (gleiche Maske, vorbefüllt) und Absagen
+  mit Rückfrage; beides erscheint als System-Notiz im Gruppenchat,
+  Abgesagtes verschwindet aus dem Feed, der Chat bleibt offen
+- **In-App-Erinnerung** — „in 2 h"-Badge im Chats-Tab und Hinweis im
+  Detail, wenn eine Aktivität innerhalb der nächsten 12 Stunden startet
 - **Gruppenchat** — erst nach dem Beitreten zugänglich (serverseitig
-  erzwungen); Melden, Blockieren und Stummschalten über das Schutz-Sheet
+  erzwungen); Treffpunkt teilen (vorbefüllt aus der Aktivität, „Route"
+  öffnet im Browser die Karte, sonst Zwischenablage); Melden, Blockieren
+  und Stummschalten über das Schutz-Sheet
 - **Profil** — minimal & anonym: Stufe jederzeit wechselbar, eigene
   Teilnahmen und gestartete Aktivitäten
 
@@ -124,8 +131,8 @@ hat ohne Push-Benachrichtigungen keine Wirkung.
 
 Nächste sinnvolle Schritte Richtung Veröffentlichung: serverseitige
 Feed-Queries + Cloud Functions für Join/Moderation, echtes (serverseitiges)
-Blockieren, App Check, Push-Benachrichtigungen („Wir sagen dir kurz vorher
-Bescheid"), Host-Werkzeuge (Bearbeiten/Absagen), eigener Signing-Key sowie
+Blockieren, App Check, echte Push-Benachrichtigungen (die In-App-Erinnerung
+ersetzt noch keinen Ping bei geschlossener App), eigener Signing-Key sowie
 das Rechtspaket (Datenschutzerklärung, Moderationsprozess, Altersgrenze).
 
 ## Design

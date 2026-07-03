@@ -21,19 +21,23 @@ import '../activity_detail/activity_detail_screen.dart';
 import '../feed/feed_controller.dart';
 import '../participation/participation_controller.dart';
 
-/// Öffnet „Starte was Kleines" als Bottom-Sheet.
-Future<void> showCreateActivitySheet(BuildContext context) {
+/// Öffnet „Starte was Kleines" als Bottom-Sheet — oder mit [edit] das
+/// gleiche Formular vorbefüllt als „Aktivität bearbeiten" (Host-Werkzeug).
+Future<void> showCreateActivitySheet(BuildContext context, {Activity? edit}) {
   return showBelongSheet<void>(
     context: context,
     expand: true,
-    builder: (context) => const CreateActivitySheet(),
+    builder: (context) => CreateActivitySheet(edit: edit),
   );
 }
 
 /// Aktivität erstellen: sechs Felder, freundliche Validierung,
-/// Erfolgs-Moment mit Funke.
+/// Erfolgs-Moment mit Funke. Mit [edit] wird dieselbe Maske zum
+/// Bearbeiten — Speichern statt Erfolgs-Moment.
 class CreateActivitySheet extends ConsumerStatefulWidget {
-  const CreateActivitySheet({super.key});
+  const CreateActivitySheet({super.key, this.edit});
+
+  final Activity? edit;
 
   @override
   ConsumerState<CreateActivitySheet> createState() =>
@@ -60,11 +64,27 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
   bool _submitting = false;
   Activity? _created;
 
+  bool get _isEdit => widget.edit != null;
+
   @override
   void initState() {
     super.initState();
-    final now = DateTime.now();
-    _day = DateTime(now.year, now.month, now.day);
+    final edit = widget.edit;
+    if (edit == null) {
+      final now = DateTime.now();
+      _day = DateTime(now.year, now.month, now.day);
+      return;
+    }
+    _titleController.text = edit.title;
+    _locationController.text = edit.locationName ?? '';
+    _descriptionController.text = edit.description ?? '';
+    _category = edit.category;
+    _isOnline = edit.isOnline;
+    _day = DateTime(edit.startsAt.year, edit.startsAt.month, edit.startsAt.day);
+    _hour = edit.startsAt.hour;
+    _minute = edit.startsAt.minute;
+    _noLimit = edit.capacity == null;
+    _capacity = edit.capacity ?? 8;
   }
 
   @override
@@ -107,6 +127,16 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
           DateTime(_day.year, _day.month, _day.day, _hour, _minute),
       capacity: _noLimit ? null : _capacity,
     );
+    final edit = widget.edit;
+    if (edit != null) {
+      await ref.read(activityRepositoryProvider).updateActivity(edit.id, draft);
+      ref.invalidate(feedProvider);
+      ref.invalidate(myActivitiesProvider);
+      // Kein Erfolgs-Moment — der Detail-Screen zeigt die Änderung live.
+      if (mounted) Navigator.of(context).pop();
+      return;
+    }
+
     final created =
         await ref.read(activityRepositoryProvider).createActivity(draft);
     ref.invalidate(feedProvider);
@@ -125,8 +155,13 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
 
     return Column(
       children: [
-        const SheetHeader(
-            title: 'Starte was Kleines', subtitle: 'Ein Kaffee reicht schon.'),
+        _isEdit
+            ? const SheetHeader(
+                title: 'Aktivität bearbeiten',
+                subtitle: 'Alle, die dabei sind, sehen die Änderung im Chat.')
+            : const SheetHeader(
+                title: 'Starte was Kleines',
+                subtitle: 'Ein Kaffee reicht schon.'),
         Expanded(
           child: ListView(
             controller: _listController,
@@ -285,14 +320,16 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
               ),
               const SizedBox(height: BelongSpacing.lg),
               PrimaryButton(
-                label: 'Aktivität teilen',
+                label: _isEdit ? 'Änderungen speichern' : 'Aktivität teilen',
                 loading: _submitting,
                 onTap: _submit,
               ),
               const SizedBox(height: BelongSpacing.sm),
               Center(
                 child: Text(
-                  'Sichtbar für alle in Kassel · du bleibst so anonym wie eingestellt',
+                  _isEdit
+                      ? 'Die Änderung erscheint als kurze Notiz im Gruppenchat.'
+                      : 'Sichtbar für alle in Kassel · du bleibst so anonym wie eingestellt',
                   textAlign: TextAlign.center,
                   style: BelongText.bodySmall.copyWith(color: BelongColors.muted),
                 ),
