@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Die App spricht mit der Firebase Realtime Database — auch im
+         Release-Build (das Flutter-Template deklariert INTERNET nur für
+         Debug/Profile). -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="belong"
         android:name="${applicationName}"

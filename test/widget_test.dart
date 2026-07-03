@@ -1,30 +1,47 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:belong/data/mock/mock_database.dart';
+import 'package:belong/data/providers.dart';
 import 'package:belong/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  Widget appWithoutLatency() {
+    return ProviderScope(
+      overrides: [
+        // Tests laufen immer gegen die Mock-Datenschicht (Plan B) …
+        dataBackendProvider.overrideWithValue(DataBackend.mock),
+        // … und ohne simulierte Latenz, damit sie nicht auf Timer warten.
+        mockDatabaseProvider
+            .overrideWithValue(MockDatabase(latency: Duration.zero)),
+      ],
+      child: const BelongApp(),
+    );
+  }
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('Onboarding wird ohne Profil angezeigt', (tester) async {
+    await tester.pumpWidget(appWithoutLatency());
+    await tester.pumpAndSettle();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    expect(find.text('Schön, dass du da bist.'), findsOneWidget);
+    expect(find.text('Ganz anonym'), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Der Button liegt je nach Viewport unterhalb des sichtbaren Bereichs.
+    await tester.scrollUntilVisible(find.text("Los geht's"), 120);
+    expect(find.text("Los geht's"), findsOneWidget);
+  });
+
+  testWidgets('Anonymer Einstieg führt in den Feed', (tester) async {
+    await tester.pumpWidget(appWithoutLatency());
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(find.text("Los geht's"), 120);
+    await tester.tap(find.text("Los geht's"));
+    await tester.pumpAndSettle();
+
+    // Feed mit Mock-Aktivitäten ist sichtbar.
+    expect(find.text('Lauftreff Karlsaue'), findsOneWidget);
+    expect(find.text('Ich bin dabei'), findsWidgets);
   });
 }
