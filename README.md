@@ -2,24 +2,33 @@
 
 **belong** verbindet Menschen über konkrete Aktivitäten statt über Profile —
 anonym, niedrigschwellig, ohne Likes, Follower oder Ranking.
-Funktionsfähiger Flutter-Prototyp für das Modul „Entwicklung eines digitalen
-Produktes – UI, UX und sichere Mensch-Technik-Interaktion".
+Flutter-App mit Firebase-Backend, entstanden im Modul „Entwicklung eines
+digitalen Produktes – UI, UX und sichere Mensch-Technik-Interaktion".
 
 ## Starten
 
 ```bash
 flutter pub get
-flutter run            # Gerät/Emulator auswählen
-flutter run -d chrome  # oder im Browser
+flutter run                  # Gerät/Emulator auswählen
+flutter run -d chrome        # im Browser
+flutter build apk --release  # Android-APK (build/app/outputs/flutter-apk/)
 ```
 
 Tests & Analyse: `flutter test` · `flutter analyze`
 
-**Demo-Tipp:** Long-Press auf die „Kassel"-Pill im Feed simuliert einen
-Netzwerkfehler (Fehler-Zustand). Der Leer-Zustand erscheint z. B. mit
-Filter „Tanzen" + „Heute".
+Die App verbindet sich beim Start mit der Live-Datenbank (anonyme
+Anmeldung, kein Account nötig) und zeigt echte Aktivitäten aus Kassel.
 
-## Was der Prototyp kann
+**Demo-Tipps:**
+- Auf zwei Geräten gleichzeitig öffnen (z. B. Handy + Browser): Beitritte,
+  Teilnehmerzahlen und Chat synchronisieren sich live.
+- Long-Press auf die „Kassel"-Pill im Feed simuliert einen Netzwerkfehler
+  (gestalteter Fehler-Zustand). Der Leer-Zustand erscheint z. B. mit
+  Filter „Tanzen" + „Heute".
+- Long-Press auf eine fremde Chat-Nachricht öffnet das Schutz-Sheet
+  (Melden / Blockieren / Stummschalten).
+
+## Funktionen
 
 - **Onboarding** — anonymer Einstieg mit drei Sichtbarkeits-Stufen
   (ganz anonym / Spitzname / Spitzname + Interessen), ohne E-Mail
@@ -28,8 +37,8 @@ Filter „Tanzen" + „Heute".
 - **One-Click-Join** — Zustand sichtbar: beitreten / dabei / voll / verlassen
 - **Aktivität erstellen** — Formular mit freundlicher Validierung und
   Erfolgs-Moment („Steht!")
-- **Gruppenchat** — erst nach dem Beitreten sichtbar; Melden, Blockieren und
-  Stummschalten über das Schutz-Sheet (Long-Press auf fremde Nachrichten)
+- **Gruppenchat** — erst nach dem Beitreten zugänglich (serverseitig
+  erzwungen); Melden, Blockieren und Stummschalten über das Schutz-Sheet
 - **Profil** — minimal & anonym: Stufe jederzeit wechselbar, eigene
   Teilnahmen und gestartete Aktivitäten
 
@@ -37,7 +46,7 @@ Filter „Tanzen" + „Heute".
 
 ```
 lib/
-├── app/            App-Shell (Tabs), RootGate (Onboarding ↔ App)
+├── app/            App-Shell (Tabs), RootGate (Onboarding ↔ App ↔ Fehler)
 ├── core/
 │   ├── theme/      Design-Tokens aus dem Handoff (Farben, Typo, Radien,
 │   │               Schatten, Spacing) + zentrales Theme
@@ -49,8 +58,10 @@ lib/
 ├── data/
 │   ├── repositories/  Abstrakte Interfaces: ActivityRepository,
 │   │                  AuthRepository, ChatRepository, ParticipationRepository
-│   ├── mock/          Mock-Implementierungen mit simulierter Latenz und
-│   │                  Streams (In-Memory-„Datenbank")
+│   ├── firebase/      Produktiv-Implementierung: Realtime Database + Anonymous
+│   │                  Auth über REST/SSE (Auth-Client, RTDB-Client, 4 Repos)
+│   ├── mock/          Plan B: In-Memory-Implementierung mit simulierter
+│   │                  Latenz und Streams (auch Basis der Widget-Tests)
 │   └── providers.dart **Der eine Austauschpunkt** für die Datenschicht
 └── features/       Feature-Module: onboarding, feed, create,
                     activity_detail, chat, chats, profile, participation
@@ -62,32 +73,53 @@ lib/
 
 ## Backend: Firebase Realtime Database
 
-Die App läuft standardmäßig gegen die Firebase Realtime Database
-(`lib/data/firebase/`) — angebunden über die **REST-API mit Anonymous
-Auth**, bewusst ohne native FlutterFire-Plugins: das funktioniert identisch
-auf iOS, Android, Web **und** Desktop und braucht keine App-Registrierung.
+Die App läuft gegen eine Firebase Realtime Database — angebunden über die
+**REST-API mit Anonymous Auth** (`lib/data/firebase/`), bewusst ohne native
+FlutterFire-Plugins: identisches Verhalten auf iOS, Android, Web und
+Desktop, keine App-Registrierung, keine `google-services.json` nötig.
+Live-Updates (Chat, Teilnehmerzahlen) laufen über das SSE-Streaming der
+RTDB; Zähler werden über ETag-basierte bedingte Schreibzugriffe
+konfliktsicher geändert.
 
-**Einrichten (einmalig):**
-1. In der Firebase-Konsole *Authentication → Sign-in method → Anonym*
-   aktivieren.
-2. Web-API-Schlüssel (*Projekteinstellungen → Allgemein*) in
-   `lib/data/firebase/firebase_config.dart` eintragen — oder beim Bauen
-   mitgeben: `flutter run --dart-define=BELONG_FIREBASE_API_KEY=...`
+- Der Web-API-Key steht in `lib/data/firebase/firebase_config.dart` und
+  kann beim Bauen überschrieben werden:
+  `flutter build apk --dart-define=BELONG_FIREBASE_API_KEY=...`
+  (Der Key ist bei Firebase-Apps öffentlich; die Zugriffskontrolle leisten
+  die Security Rules.)
+- Datenstruktur: `/users`, `/activities`, `/participations`,
+  `/activityParticipants` (Spiegel-Index für die Chat-Zugriffsregel),
+  `/chats`, `/moderation` (reports/blocks/mutes).
 
-**Plan B (Mockdaten):** Die komplette Mock-Datenschicht
-(`lib/data/mock/`) bleibt im Projekt. Ist kein API-Key hinterlegt, fällt
-die App automatisch auf die Mocks zurück; erzwingen lässt sich das über
-den `dataBackendProvider` in `lib/data/providers.dart` (Tests machen genau
-das). Die Umschaltung ist ein einziger Provider — UI und Controller bleiben
-unangetastet.
+**Plan B (Mockdaten):** Die komplette Mock-Datenschicht bleibt im Projekt.
+Umschalten über den `dataBackendProvider` in `lib/data/providers.dart` —
+die Widget-Tests erzwingen so die Mocks. Ist kein API-Key hinterlegt,
+fällt die App automatisch auf die Mocks zurück.
 
-## Privacy by Design
+## Privacy & Sicherheit
 
-Die Kernidee spiegelt sich im Code: kein Klarname und keine E-Mail im
-Datenmodell, Interessen werden nur bei der passenden Stufe überhaupt
-gespeichert (`MockAuthRepository`), Chat-Streams verweigern den Zugriff ohne
-Teilnahme (`ChatAccessDeniedException`), Blockieren filtert serverseitig
-(im Mock) statt nur in der UI.
+- **Datensparsamkeit im Modell:** kein Klarname, keine E-Mail, kein Foto;
+  Interessen werden nur bei der passenden Sichtbarkeits-Stufe gespeichert.
+- **Serverseitig erzwungen (Security Rules, empirisch geprüft):** Profile
+  sind nur für die eigene Sitzung lesbar; Chats nur für Teilnehmer:innen;
+  Aktivitäten ändert nur der Host; Meldungen sind für Clients unlesbar
+  (write-only); Teilnehmerzähler nur um ±1 änderbar.
+- **Anonyme Auth als bewusster Trade-off:** jeder kann ohne Hürde einsteigen
+  (Produktprinzip); Missbrauchsschutz käme in Produktion über App Check,
+  `.validate`-Regeln und serverseitige Moderation dazu.
+
+**Bekannte Prototyp-Grenzen** (bewusst, siehe Ausblick): Blockieren filtert
+aktuell nur die eigene Anzeige, Meldungen werden noch nicht ausgewertet,
+der Feed lädt ungefiltert alle Aktivitäten (skaliert nicht), Stummschalten
+hat ohne Push-Benachrichtigungen keine Wirkung.
+
+## Ausblick
+
+Nächste sinnvolle Schritte Richtung Veröffentlichung: serverseitige
+Feed-Queries + Cloud Functions für Join/Moderation, echtes (serverseitiges)
+Blockieren, App Check, Push-Benachrichtigungen („Wir sagen dir kurz vorher
+Bescheid"), Host-Werkzeuge (Bearbeiten/Absagen), App-Icon & nativer Splash,
+eigener Signing-Key sowie das Rechtspaket (Datenschutzerklärung,
+Moderationsprozess, Altersgrenze).
 
 ## Design
 
