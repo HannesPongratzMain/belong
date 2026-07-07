@@ -56,16 +56,17 @@ Future<void> _scrollTo(
 
 void main() {
   setUpAll(() async {
-    // Echte Handoff-Fonts statt Test-Platzhalter — sonst sind die
+    // Echte Fonts statt Test-Platzhalter — sonst sind die
     // Screenshots nicht aussagekräftig.
     const fonts = {
-      'Luckiest Guy': ['assets/fonts/LuckiestGuy-Regular.ttf'],
-      'Hedvig Letters Serif': ['assets/fonts/HedvigLettersSerif-Regular.ttf'],
-      'Hanken Grotesk': [
-        'assets/fonts/HankenGrotesk-Regular.ttf',
-        'assets/fonts/HankenGrotesk-Medium.ttf',
-        'assets/fonts/HankenGrotesk-SemiBold.ttf',
-        'assets/fonts/HankenGrotesk-Bold.ttf',
+      'Inter': [
+        'assets/fonts/Inter-Regular.ttf',
+        'assets/fonts/Inter-Medium.ttf',
+        'assets/fonts/Inter-SemiBold.ttf',
+        'assets/fonts/Inter-Bold.ttf',
+      ],
+      'packages/lucide_icons_flutter/Lucide': [
+        'packages/lucide_icons_flutter/assets/lucide.ttf',
       ],
     };
     for (final entry in fonts.entries) {

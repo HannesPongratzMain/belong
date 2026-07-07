@@ -6,8 +6,8 @@ import '../theme/belong_typography.dart';
 import 'belong_icons.dart';
 import 'pressable.dart';
 
-/// Öffnet ein Bottom-Sheet im Belong-Stil: Radius 34 oben, Grabber,
-/// warmer Scrim. Wird für Erstellen, Auswahl-Listen und das Schutz-Sheet
+/// Öffnet ein Bottom-Sheet im Belong-Stil: moderater Radius oben, Grabber,
+/// dezenter Scrim. Wird für Erstellen, Auswahl-Listen und das Schutz-Sheet
 /// verwendet.
 Future<T?> showBelongSheet<T>({
   required BuildContext context,
@@ -49,7 +49,7 @@ class _SheetShell extends StatelessWidget {
             margin: const EdgeInsets.only(top: 10, bottom: 4),
             decoration: BoxDecoration(
               color: BelongColors.borderIdle,
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: BelongRadii.pillAll,
             ),
           ),
           if (expand) Expanded(child: child) else Flexible(child: child),
@@ -103,7 +103,7 @@ class SheetHeader extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: const BelongIcon(BelongIconGlyph.close,
-                  size: 18, color: BelongColors.inkSoft, strokeWidth: 2.6),
+                  size: 18, color: BelongColors.inkSoft),
             ),
           ),
         ],

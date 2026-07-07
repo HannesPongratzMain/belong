@@ -8,7 +8,6 @@ import '../../core/theme/belong_colors.dart';
 import '../../core/theme/belong_dimens.dart';
 import '../../core/theme/belong_shadows.dart';
 import '../../core/theme/belong_typography.dart';
-import '../../core/widgets/app_header.dart';
 import '../../core/widgets/belong_icons.dart';
 import '../../core/widgets/belong_sheet.dart';
 import '../../core/widgets/buttons.dart';
@@ -74,7 +73,7 @@ class ActivityDetailScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 6),
                       _MetaRow(
-                        glyph: BelongIconGlyph.discover,
+                        glyph: BelongIconGlyph.clock,
                         text:
                             '${BelongDates.dayLong(activity.startsAt)} · ${BelongDates.time(activity.startsAt)} Uhr',
                       ),
@@ -87,6 +86,9 @@ class ActivityDetailScreen extends ConsumerWidget {
                       const SizedBox(height: BelongSpacing.md),
                       Row(
                         children: [
+                          const BelongIcon(BelongIconGlyph.users,
+                              size: 15, color: BelongColors.inkSoft),
+                          const SizedBox(width: 5),
                           Text('${activity.participantCount} dabei',
                               style:
                                   BelongText.rowTitle.copyWith(fontSize: 15)),
@@ -133,7 +135,7 @@ class ActivityDetailScreen extends ConsumerWidget {
                         Center(
                           child: GhostButton(
                             label: 'Aktivität absagen',
-                            color: BelongColors.berryDeep,
+                            color: BelongColors.error,
                             onTap: () => _cancelActivity(context, ref, activity),
                           ),
                         ),
@@ -221,7 +223,7 @@ class _CancelledBanner extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(BelongSpacing.md),
       decoration: BoxDecoration(
-        color: BelongColors.berryTint,
+        color: BelongColors.chipNeutral,
         borderRadius: BelongRadii.inputAll,
       ),
       child: Text(
@@ -229,7 +231,7 @@ class _CancelledBanner extends StatelessWidget {
         'Der Chat bleibt offen, falls ihr was Neues plant.',
         textAlign: TextAlign.center,
         style: BelongText.bodySmall.copyWith(
-          color: BelongColors.berryDeep,
+          color: BelongColors.inkSoft,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -237,7 +239,7 @@ class _CancelledBanner extends StatelessWidget {
   }
 }
 
-/// Foto-Kopf mit gerissener Kante, Zurück-Button und Zeit-Badge.
+/// Flacher Foto-Kopf mit Zurück-Button und Zeit-Badge.
 class _PhotoHeader extends StatelessWidget {
   const _PhotoHeader({required this.activity});
 
@@ -248,15 +250,12 @@ class _PhotoHeader extends StatelessWidget {
     final topInset = MediaQuery.paddingOf(context).top;
     return Stack(
       children: [
-        ClipPath(
-          clipper: const TornEdgeClipper(amplitude: 5),
-          child: SizedBox(
-            height: 200 + topInset,
-            width: double.infinity,
-            child: PhotoPlaceholder(
-              category: activity.category,
-              photoHint: activity.photoHint,
-            ),
+        SizedBox(
+          height: 200 + topInset,
+          width: double.infinity,
+          child: PhotoPlaceholder(
+            category: activity.category,
+            photoHint: activity.photoHint,
           ),
         ),
         Positioned(
@@ -275,34 +274,30 @@ class _PhotoHeader extends StatelessWidget {
                 boxShadow: BelongShadows.e1,
               ),
               child: const BelongIcon(BelongIconGlyph.chevronLeft,
-                  size: 20, color: BelongColors.inkSoft, strokeWidth: 2.6),
+                  size: 20, color: BelongColors.inkSoft),
             ),
           ),
         ),
         Positioned(
           top: topInset + 14,
           right: BelongSpacing.md,
-          child: Transform.rotate(
-            angle: 3 * 3.14159 / 180,
-            child: activity.isCancelled
-                ? BelongPill(
-                    label: 'Abgesagt',
-                    background: BelongColors.chipNeutral,
-                    foreground: BelongColors.muted,
-                    textStyle: BelongText.badge,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  )
-                : BelongPill(
-                    label: BelongDates.badge(activity.startsAt),
-                    background: BelongColors.sunflower,
-                    foreground: BelongColors.forest,
-                    textStyle: BelongText.badge,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    shadows: BelongShadows.sunflowerBadge,
-                  ),
-          ),
+          child: activity.isCancelled
+              ? BelongPill(
+                  label: 'Abgesagt',
+                  background: BelongColors.chipNeutral,
+                  foreground: BelongColors.muted,
+                  textStyle: BelongText.badge,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                )
+              : BelongPill(
+                  label: BelongDates.badge(activity.startsAt),
+                  background: BelongColors.sunflower,
+                  foreground: BelongColors.forest,
+                  textStyle: BelongText.badge,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                ),
         ),
       ],
     );

@@ -14,6 +14,7 @@ dependencies:
   flutter_riverpod: ^3.3.2
   http: ^1.6.0
   web: ^1.1.1
+  lucide_icons_flutter: ^3.1.14+2
 
 dev_dependencies:
   flutter_test:
@@ -23,38 +24,33 @@ dev_dependencies:
   # aus assets/icon/ — Quell-PNGs kommen aus tool/generate_icons.dart.
   flutter_launcher_icons: ^0.14.4
 
-# Launcher-Icon: Marken-Funke (Beere) auf Creme, siehe tool/generate_icons.dart.
+# Launcher-Icon: Marken-Funke (Koralle) auf Off-White, siehe tool/generate_icons.dart.
 # Neu erzeugen: flutter test tool/generate_icons.dart && dart run flutter_launcher_icons
 flutter_launcher_icons:
   image_path: "assets/icon/icon.png"
   android: true
   ios: false
-  adaptive_icon_background: "#F1E8DA"
+  adaptive_icon_background: "#F2F1ED"
   adaptive_icon_foreground: "assets/icon/icon_foreground.png"
   web:
     generate: true
     image_path: "assets/icon/icon.png"
-    background_color: "#F1E8DA"
-    theme_color: "#F1E8DA"
+    background_color: "#F2F1ED"
+    theme_color: "#F2F1ED"
 
 flutter:
   uses-material-design: true
 
-  # Design-Handoff-Fonts, lokal gebündelt (offline-fähig, identisch auf allen Plattformen).
+  # Ein Font-Stack für alles: Inter, lokal gebündelt (offline-fähig,
+  # identisch auf allen Plattformen). Hierarchie über Gewicht/Größe.
   fonts:
-    - family: Luckiest Guy
+    - family: Inter
       fonts:
-        - asset: assets/fonts/LuckiestGuy-Regular.ttf
-    - family: Hedvig Letters Serif
-      fonts:
-        - asset: assets/fonts/HedvigLettersSerif-Regular.ttf
-    - family: Hanken Grotesk
-      fonts:
-        - asset: assets/fonts/HankenGrotesk-Regular.ttf
+        - asset: assets/fonts/Inter-Regular.ttf
           weight: 400
-        - asset: assets/fonts/HankenGrotesk-Medium.ttf
+        - asset: assets/fonts/Inter-Medium.ttf
           weight: 500
-        - asset: assets/fonts/HankenGrotesk-SemiBold.ttf
+        - asset: assets/fonts/Inter-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/HankenGrotesk-Bold.ttf
+        - asset: assets/fonts/Inter-Bold.ttf
           weight: 700

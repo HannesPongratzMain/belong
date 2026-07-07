@@ -6,7 +6,7 @@ import '../theme/belong_shadows.dart';
 import '../theme/belong_typography.dart';
 import 'pressable.dart';
 
-/// Primär-Button: Koralle, Pill, Glow. Genau **einer** pro Screen.
+/// Primär-Button: Koralle, moderater Radius, flach. Genau **einer** pro Screen.
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
     super.key,
@@ -36,8 +36,8 @@ class PrimaryButton extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: BelongColors.coral,
-            borderRadius: BelongRadii.pillAll,
-            boxShadow: enabled ? BelongShadows.coralGlow : null,
+            borderRadius: BelongRadii.buttonAll,
+            boxShadow: enabled ? BelongShadows.e1 : null,
           ),
           child: loading
               ? const _ButtonDots()
@@ -52,7 +52,7 @@ class PrimaryButton extends StatelessWidget {
   }
 }
 
-/// Sekundär: neutral erhabene weiße Pill.
+/// Sekundär: neutral erhabene weiße Fläche.
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
     super.key,
@@ -76,7 +76,7 @@ class SecondaryButton extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: BelongColors.card,
-          borderRadius: BelongRadii.pillAll,
+          borderRadius: BelongRadii.buttonAll,
           border: Border.all(color: BelongColors.border),
           boxShadow: BelongShadows.e1,
         ),

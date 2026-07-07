@@ -5,8 +5,8 @@ import '../theme/belong_dimens.dart';
 import '../theme/belong_typography.dart';
 import 'buttons.dart';
 
-/// Illustrierter Zustand (Leer/Fehler/Erfolg): organischer Blob mit Symbol,
-/// Serif-Titel, entlastender Text und genau ein CTA.
+/// Zustand (Leer/Fehler/Erfolg): ruhige Symbol-Fläche, Titel,
+/// entlastender Text und genau ein CTA.
 class StateView extends StatefulWidget {
   const StateView({
     super.key,
@@ -18,8 +18,6 @@ class StateView extends StatefulWidget {
     this.onPrimary,
     this.ghostLabel,
     this.onGhost,
-    this.beforePrimary,
-    this.underTitle,
     this.titleStyle,
   });
 
@@ -31,13 +29,6 @@ class StateView extends StatefulWidget {
   final VoidCallback? onPrimary;
   final String? ghostLabel;
   final VoidCallback? onGhost;
-
-  /// Optionales Element zwischen Text und CTA (z. B. Doodle-Pfeil).
-  final Widget? beforePrimary;
-
-  /// Optionales Element direkt unter dem Titel (z. B. Squiggle).
-  final Widget? underTitle;
-
   final TextStyle? titleStyle;
 
   @override
@@ -46,15 +37,15 @@ class StateView extends StatefulWidget {
 
 class _StateViewState extends State<StateView>
     with SingleTickerProviderStateMixin {
-  // Der Blob „poppt" kurz beim Erscheinen (Scale 0.8 → 1, overshoot).
-  late final AnimationController _pop = AnimationController(
+  // Sanftes Einblenden der Symbol-Fläche (kein Overshoot).
+  late final AnimationController _appear = AnimationController(
     vsync: this,
-    duration: BelongMotion.pop,
+    duration: BelongMotion.medium,
   )..forward();
 
   @override
   void dispose() {
-    _pop.dispose();
+    _appear.dispose();
     super.dispose();
   }
 
@@ -69,16 +60,16 @@ class _StateViewState extends State<StateView>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ScaleTransition(
-                scale: CurvedAnimation(parent: _pop, curve: Curves.elasticOut)
-                    .drive(Tween(begin: 0.8, end: 1.0)),
+              FadeTransition(
+                opacity:
+                    CurvedAnimation(parent: _appear, curve: BelongMotion.curve),
                 child: Container(
-                  width: 132,
-                  height: 132,
+                  width: 120,
+                  height: 120,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: widget.blobColor,
-                    borderRadius: BelongRadii.blob(132),
+                    shape: BoxShape.circle,
                   ),
                   child: widget.symbol,
                 ),
@@ -89,17 +80,12 @@ class _StateViewState extends State<StateView>
                 textAlign: TextAlign.center,
                 style: widget.titleStyle ?? BelongText.displayTitle,
               ),
-              if (widget.underTitle != null) ...[
-                const SizedBox(height: 6),
-                widget.underTitle!,
-              ],
               const SizedBox(height: BelongSpacing.sm),
               Text(
                 widget.message,
                 textAlign: TextAlign.center,
                 style: BelongText.body.copyWith(color: BelongColors.muted),
               ),
-              if (widget.beforePrimary != null) widget.beforePrimary!,
               if (widget.primaryLabel != null) ...[
                 const SizedBox(height: BelongSpacing.lg),
                 PrimaryButton(
