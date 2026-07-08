@@ -2,8 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/providers.dart';
 import '../../data/repositories/participation_repository.dart';
+import '../../domain/models/access_level.dart';
 import '../../domain/models/activity.dart';
+import '../../domain/models/verification_level.dart';
 import '../feed/feed_controller.dart';
+import '../profile/profile_controller.dart';
 
 /// Live-Menge der Aktivitäts-IDs, bei denen die Nutzer:in dabei ist.
 final joinedIdsProvider = StreamProvider<Set<String>>(
@@ -80,3 +83,19 @@ final chatActivitiesProvider = FutureProvider<List<Activity>>((ref) async {
 final activityStreamProvider = StreamProvider.family<Activity, String>(
   (ref, id) => ref.watch(activityRepositoryProvider).watchActivity(id),
 );
+
+/// Erlaubter Detailgrad je Aktivität — BEL-03-Sichtbarkeitsmatrix aus
+/// Verifizierung + Teilnahme/Host-Status abgeleitet.
+final accessLevelProvider = Provider.family<AccessLevel, String>((ref, activityId) {
+  final verificationLevel = ref.watch(profileProvider).value?.verificationLevel ??
+      VerificationLevel.none;
+  final joined =
+      ref.watch(joinedIdsProvider).value?.contains(activityId) ?? false;
+  final isMine = ref.watch(myActivitiesProvider).value
+          ?.any((activity) => activity.id == activityId) ??
+      false;
+  return AccessLevel.derive(
+    verificationLevel: verificationLevel,
+    hasAccess: joined || isMine,
+  );
+});

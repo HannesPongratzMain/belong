@@ -249,7 +249,7 @@ class _ChatHeader extends StatelessWidget {
               height: BelongSpacing.hitTarget,
               child: Center(
                 child: BelongIcon(BelongIconGlyph.chevronLeft,
-                    size: 20, color: BelongColors.ink, strokeWidth: 2.6),
+                    size: 20, color: BelongColors.ink),
               ),
             ),
           ),
@@ -262,7 +262,20 @@ class _ChatHeader extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: BelongText.rowTitle.copyWith(fontSize: 16)),
                 const SizedBox(height: 2),
-                Text(subtitle, style: BelongText.meta),
+                if (subtitle.isNotEmpty)
+                  Row(
+                    children: [
+                      const BelongIcon(BelongIconGlyph.users,
+                          size: 12, color: BelongColors.muted),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(subtitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: BelongText.meta),
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -274,7 +287,7 @@ class _ChatHeader extends StatelessWidget {
             foreground: BelongColors.coralDeep,
             onTap: onSafety,
             leading: const BelongIcon(BelongIconGlyph.shield,
-                size: 15, color: BelongColors.coralDeep, strokeWidth: 2.4),
+                size: 15, color: BelongColors.coralDeep),
             textStyle: BelongText.chip.copyWith(fontWeight: FontWeight.w700),
           ),
         ],
@@ -325,7 +338,7 @@ class _Composer extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: BelongColors.surface,
-                borderRadius: BelongRadii.pillAll,
+                borderRadius: BelongRadii.inputAll,
                 border: Border.all(color: BelongColors.border),
               ),
               child: TextField(
@@ -355,13 +368,12 @@ class _Composer extends StatelessWidget {
               width: BelongSpacing.hitTarget,
               height: BelongSpacing.hitTarget,
               alignment: Alignment.center,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: BelongColors.coral,
                 shape: BoxShape.circle,
-                boxShadow: BelongShadows.coralGlow,
               ),
               child: const BelongIcon(BelongIconGlyph.send,
-                  size: 18, color: Color(0xFFFFFFFF), strokeWidth: 2.4),
+                  size: 18, color: Color(0xFFFFFFFF)),
             ),
           ),
         ],

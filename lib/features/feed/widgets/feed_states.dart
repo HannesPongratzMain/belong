@@ -4,9 +4,8 @@ import '../../../core/theme/belong_colors.dart';
 import '../../../core/theme/belong_dimens.dart';
 import '../../../core/theme/belong_shadows.dart';
 import '../../../core/theme/belong_typography.dart';
-import '../../../core/widgets/doodles.dart';
+import '../../../core/widgets/belong_icons.dart';
 import '../../../core/widgets/skeleton.dart';
-import '../../../core/widgets/spark.dart';
 import '../../../core/widgets/state_view.dart';
 
 /// Feed · Laden: Skeletons statt Spinner + freundliche Lade-Notiz.
@@ -90,9 +89,9 @@ class _LoadingNote extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        dot(BelongColors.wordmark),
-        dot(BelongColors.berry),
+        dot(BelongColors.coral),
         dot(BelongColors.sunflower),
+        dot(BelongColors.muted),
         const SizedBox(width: 8),
         Text('Wir schauen, was heute geht …',
             style: BelongText.body.copyWith(
@@ -102,7 +101,7 @@ class _LoadingNote extends StatelessWidget {
   }
 }
 
-/// Feed · Leer: Amber-Blob mit Funke, Doodle-Pfeil auf den CTA.
+/// Feed · Leer: ruhige Amber-Fläche mit Icon, ein CTA.
 class FeedEmptyState extends StatelessWidget {
   const FeedEmptyState({
     super.key,
@@ -117,14 +116,11 @@ class FeedEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return StateView(
       blobColor: BelongColors.amberTint,
-      symbol: const Spark(size: 42, color: BelongColors.amberDeep, strokeWidth: 2.4, rotation: 16),
+      symbol: const BelongIcon(BelongIconGlyph.sparkles,
+          size: 40, color: BelongColors.amberDeep),
       title: 'Gerade noch ruhig hier.',
       message: 'Für diese Filter ist noch nichts geplant. '
           'Starte selbst was Kleines — ein Kaffee reicht schon.',
-      beforePrimary: const Padding(
-        padding: EdgeInsets.only(top: BelongSpacing.sm),
-        child: DoodleArrow(),
-      ),
       primaryLabel: 'Aktivität starten',
       onPrimary: onCreate,
       ghostLabel: 'Filter zurücksetzen',
@@ -133,7 +129,7 @@ class FeedEmptyState extends StatelessWidget {
   }
 }
 
-/// Feed · Fehler: Beeren-Blob mit „!", Retry als einziger CTA.
+/// Feed · Fehler: Coral-Blob mit Alert-Icon, Retry als einziger CTA.
 class FeedErrorState extends StatelessWidget {
   const FeedErrorState({
     super.key,
@@ -149,10 +145,9 @@ class FeedErrorState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StateView(
-      blobColor: BelongColors.berryTint,
-      symbol: Text('!',
-          style: BelongText.displaySuccess
-              .copyWith(fontSize: 44, color: BelongColors.berryDeep)),
+      blobColor: BelongColors.coralTint,
+      symbol: const BelongIcon(BelongIconGlyph.alert,
+          size: 42, color: BelongColors.coralDeep),
       title: 'Hat gerade nicht geklappt.',
       message: 'Wir konnten den Feed nicht laden — '
           'vielleicht hakt die Verbindung. Kein Problem.',

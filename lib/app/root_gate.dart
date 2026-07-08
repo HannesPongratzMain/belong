@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/theme/belong_colors.dart';
 import '../core/theme/belong_dimens.dart';
-import '../core/theme/belong_typography.dart';
+import '../core/widgets/belong_icons.dart';
 import '../core/widgets/belong_wordmark.dart';
 import '../core/widgets/state_view.dart';
 import '../features/onboarding/onboarding_screen.dart';
@@ -34,10 +34,9 @@ class RootGate extends ConsumerWidget {
         AsyncValue(hasError: true) => Scaffold(
             backgroundColor: BelongColors.surface,
             body: StateView(
-              blobColor: BelongColors.berryTint,
-              symbol: Text('!',
-                  style: BelongText.displaySuccess.copyWith(
-                      fontSize: 44, color: BelongColors.berryDeep)),
+              blobColor: BelongColors.coralTint,
+              symbol: const BelongIcon(BelongIconGlyph.alert,
+                  size: 42, color: BelongColors.coralDeep),
               title: 'Da hakt gerade was.',
               message: 'Wir erreichen belong nicht — vielleicht fehlt die '
                   'Internetverbindung. Kein Problem.',
@@ -58,7 +57,7 @@ class _Splash extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: BelongColors.cream,
-      body: Center(child: BelongWordmark(fontSize: 34)),
+      body: Center(child: BelongWordmark(fontSize: 28)),
     );
   }
 }

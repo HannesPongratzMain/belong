@@ -1,5 +1,6 @@
 import '../../domain/models/anonymity_level.dart';
 import '../../domain/models/user_profile.dart';
+import '../../domain/models/verification_level.dart';
 import '../repositories/auth_repository.dart';
 import 'mock_database.dart';
 
@@ -42,6 +43,18 @@ class MockAuthRepository implements AuthRepository {
           : profile.copyWith(interests: const []);
       _db.profile = sanitized;
       return sanitized;
+    });
+  }
+
+  @override
+  Future<UserProfile> verifyPhone() {
+    return _db(() {
+      final current = _db.profile;
+      if (current == null) throw StateError('Kein Profil angelegt.');
+      final updated =
+          current.copyWith(verificationLevel: VerificationLevel.phone);
+      _db.profile = updated;
+      return updated;
     });
   }
 }

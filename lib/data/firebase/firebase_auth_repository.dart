@@ -2,6 +2,7 @@ import 'dart:math';
 
 import '../../domain/models/anonymity_level.dart';
 import '../../domain/models/user_profile.dart';
+import '../../domain/models/verification_level.dart';
 import '../repositories/auth_repository.dart';
 import 'firebase_auth_client.dart';
 import 'rtdb_client.dart';
@@ -70,5 +71,15 @@ class FirebaseAuthRepository implements AuthRepository {
         : profile.copyWith(interests: const []);
     await _db.patch('users/${_auth.uid}', sanitized.toJson()..remove('id'));
     return sanitized;
+  }
+
+  @override
+  Future<UserProfile> verifyPhone() async {
+    await _auth.ensureSignedIn();
+    await _db.put(
+        'users/${_auth.uid}/verificationLevel', VerificationLevel.phone.toJson());
+    final profile = await currentProfile();
+    if (profile == null) throw StateError('Kein Profil angelegt.');
+    return profile;
   }
 }

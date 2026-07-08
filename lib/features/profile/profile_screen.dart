@@ -6,18 +6,20 @@ import '../../core/theme/belong_colors.dart';
 import '../../core/theme/belong_dimens.dart';
 import '../../core/theme/belong_shadows.dart';
 import '../../core/theme/belong_typography.dart';
-import '../../core/widgets/app_header.dart';
 import '../../core/widgets/belong_icons.dart';
 import '../../core/widgets/category_chip.dart';
 import '../../core/widgets/pills.dart';
 import '../../core/widgets/pressable.dart';
+import '../../domain/models/access_level.dart';
 import '../../domain/models/activity.dart';
 import '../../domain/models/anonymity_level.dart';
 import '../../domain/models/user_profile.dart';
+import '../../domain/models/verification_level.dart';
 import '../activity_detail/activity_detail_screen.dart';
 import '../participation/participation_controller.dart';
 import 'profile_controller.dart';
 import 'widgets/change_anonymity_sheet.dart';
+import 'widgets/verify_phone_sheet.dart';
 
 /// Profil · minimal & anonym — die Anti-These zu Social Media:
 /// kein Foto-Zwang, keine Follower, nichts zu polieren.
@@ -72,6 +74,8 @@ class ProfileScreen extends ConsumerWidget {
                 ],
               ],
               const SizedBox(height: BelongSpacing.lg),
+              _VerificationRow(verificationLevel: profile.verificationLevel),
+              const SizedBox(height: BelongSpacing.sm),
               _VisibilityRow(
                   onTap: () => showChangeAnonymitySheet(context)),
             ],
@@ -82,7 +86,7 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-/// Identity-Header auf Sonnenblume — die einzige farbige Kopffläche der App.
+/// Identity-Header auf ruhigem Neutralton — Gelb bleibt Badges vorbehalten.
 class _IdentityHeader extends StatelessWidget {
   const _IdentityHeader({required this.profile});
 
@@ -91,11 +95,12 @@ class _IdentityHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final topInset = MediaQuery.paddingOf(context).top;
-    return ClipPath(
-      clipper: const TornEdgeClipper(amplitude: 5),
-      child: Container(
+    return Container(
         width: double.infinity,
-        color: BelongColors.sunflower,
+        decoration: const BoxDecoration(
+          color: BelongColors.header,
+          border: Border(bottom: BorderSide(color: BelongColors.hairline)),
+        ),
         padding: EdgeInsets.fromLTRB(
             BelongSpacing.lg, topInset + 26, BelongSpacing.lg, 30),
         child: Column(
@@ -106,13 +111,12 @@ class _IdentityHeader extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: BelongColors.card,
-                borderRadius: BelongRadii.blob(76),
+                shape: BoxShape.circle,
                 boxShadow: BelongShadows.e1,
               ),
               child: profile.anonymityLevel == AnonymityLevel.anonymous
-                  ? Text('?',
-                      style: BelongText.displayTitle
-                          .copyWith(fontSize: 30, color: BelongColors.muted))
+                  ? const BelongIcon(BelongIconGlyph.person,
+                      size: 32, color: BelongColors.muted)
                   : Text(profile.nickname.substring(0, 1),
                       style: BelongText.displayTitle
                           .copyWith(fontSize: 30, color: BelongColors.coralDeep)),
@@ -133,8 +137,8 @@ class _IdentityHeader extends StatelessWidget {
                 const SizedBox(width: BelongSpacing.xs),
                 BelongPill(
                   label: 'ändern',
-                  background: BelongColors.ink.withValues(alpha: 0.14),
-                  foreground: BelongColors.forest,
+                  background: BelongColors.ink.withValues(alpha: 0.1),
+                  foreground: BelongColors.inkSoft,
                   onTap: () => showChangeAnonymitySheet(context),
                   textStyle:
                       BelongText.chip.copyWith(fontWeight: FontWeight.w700),
@@ -143,7 +147,6 @@ class _IdentityHeader extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }
@@ -184,11 +187,11 @@ class _InterestChips extends ConsumerWidget {
     'Draußen', 'Spiele', 'Kaffee', 'Tanzen', 'Musik', 'Essen', 'Sport', 'Kreatives',
   ];
 
-  /// Chip-Farben rotieren durch die Stütztöne (wie im Mock).
+  /// Chip-Farben rotieren durch die verbleibenden Tonfamilien.
   static const _tints = [
     (BelongColors.amberTint, BelongColors.amberDeep),
     (BelongColors.coralTint, BelongColors.coralDeep),
-    (BelongColors.berryTint, BelongColors.berryDeep),
+    (BelongColors.chipNeutral, BelongColors.inkSoft),
   ];
 
   @override
@@ -255,7 +258,7 @@ class _JoinedActivityRow extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: activity.category.tint,
-                borderRadius: BelongRadii.blob(48),
+                shape: BoxShape.circle,
               ),
               child: BelongIcon(activity.category.glyph,
                   size: 20, color: activity.category.deep),
@@ -272,7 +275,8 @@ class _JoinedActivityRow extends StatelessWidget {
                   const SizedBox(height: 3),
                   Text(
                     '${BelongDates.weekday(activity.startsAt)} '
-                    '${BelongDates.time(activity.startsAt)} · ${activity.placeLabel}',
+                    '${BelongDates.time(activity.startsAt)} · '
+                    '${activity.placeLabelFor(AccessLevel.joined)}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: BelongText.meta,
@@ -281,7 +285,56 @@ class _JoinedActivityRow extends StatelessWidget {
               ),
             ),
             const BelongIcon(BelongIconGlyph.chevronRight,
-                size: 16, color: BelongColors.placeholder, strokeWidth: 2.6),
+                size: 16, color: BelongColors.placeholder),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// VerificationRow: Status + Einstieg in die (simulierte) Verifizierung —
+/// schaltet Beitreten/Hosten/Chatten frei (BEL-03).
+class _VerificationRow extends StatelessWidget {
+  const _VerificationRow({required this.verificationLevel});
+
+  final VerificationLevel verificationLevel;
+
+  @override
+  Widget build(BuildContext context) {
+    final verified = verificationLevel == VerificationLevel.phone;
+    return Pressable(
+      onTap: verified ? null : () => showVerifyPhoneSheet(context),
+      pressedScale: verified ? 1 : 0.985,
+      semanticLabel: verified ? 'Verifiziert' : 'Jetzt verifizieren',
+      child: Container(
+        padding: const EdgeInsets.all(BelongSpacing.md),
+        decoration: BoxDecoration(
+          color: verified ? BelongColors.sageTint : BelongColors.chipNeutral,
+          borderRadius: BelongRadii.rowCardAll,
+        ),
+        child: Row(
+          children: [
+            BelongIcon(
+              verified ? BelongIconGlyph.verified : BelongIconGlyph.lock,
+              size: 22,
+              color: verified ? BelongColors.sage : BelongColors.muted,
+            ),
+            const SizedBox(width: BelongSpacing.sm),
+            Expanded(
+              child: Text(
+                verified
+                    ? 'Verifiziert — du kannst beitreten, hosten und chatten.'
+                    : 'Noch nicht verifiziert — nötig zum Beitreten und Hosten.',
+                style: BelongText.bodySmall.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: verified ? BelongColors.sage : BelongColors.inkSoft,
+                ),
+              ),
+            ),
+            if (!verified)
+              const BelongIcon(BelongIconGlyph.chevronRight,
+                  size: 16, color: BelongColors.inkSoft),
           ],
         ),
       ),
@@ -310,7 +363,7 @@ class _VisibilityRow extends StatelessWidget {
         child: Row(
           children: [
             const BelongIcon(BelongIconGlyph.shield,
-                size: 22, color: BelongColors.coralDeep, strokeWidth: 2.4),
+                size: 22, color: BelongColors.coralDeep),
             const SizedBox(width: BelongSpacing.sm),
             Expanded(
               child: Text(
@@ -320,7 +373,7 @@ class _VisibilityRow extends StatelessWidget {
               ),
             ),
             const BelongIcon(BelongIconGlyph.chevronRight,
-                size: 16, color: BelongColors.coralDeep, strokeWidth: 2.6),
+                size: 16, color: BelongColors.coralDeep),
           ],
         ),
       ),

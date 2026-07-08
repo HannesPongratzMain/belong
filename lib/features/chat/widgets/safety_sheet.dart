@@ -86,16 +86,17 @@ class _SafetySheet extends StatelessWidget {
                 width: 48,
                 height: 48,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: BelongColors.berryTint,
-                  borderRadius: BelongRadii.blob(48),
+                decoration: const BoxDecoration(
+                  color: BelongColors.coralTint,
+                  shape: BoxShape.circle,
                 ),
                 child: Text(
                   message.senderNickname.substring(0, 1),
                   style: const TextStyle(
-                    fontFamily: BelongFonts.display,
+                    fontFamily: BelongFonts.sans,
                     fontSize: 20,
-                    color: BelongColors.berryDeep,
+                    fontWeight: FontWeight.w600,
+                    color: BelongColors.coralDeep,
                   ),
                 ),
               ),
@@ -118,7 +119,7 @@ class _SafetySheet extends StatelessWidget {
           const SizedBox(height: BelongSpacing.md),
           SafetyRow(
             glyph: BelongIconGlyph.flag,
-            color: BelongColors.berryDeep,
+            color: BelongColors.error,
             title: 'Nachricht melden',
             subtitle: 'Unser Team schaut innerhalb von 24 h drauf.',
             onTap: () => close(onReport),
@@ -126,7 +127,7 @@ class _SafetySheet extends StatelessWidget {
           const SizedBox(height: BelongSpacing.xs),
           SafetyRow(
             glyph: BelongIconGlyph.block,
-            color: BelongColors.berryDeep,
+            color: BelongColors.error,
             title: 'Person blockieren',
             subtitle: 'Ihr seht euch gegenseitig nicht mehr — ohne Ankündigung.',
             onTap: () => close(onBlock),
@@ -230,7 +231,7 @@ class SafetyRow extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 2),
-              child: BelongIcon(glyph, size: 20, color: color, strokeWidth: 2.4),
+              child: BelongIcon(glyph, size: 20, color: color),
             ),
             const SizedBox(width: BelongSpacing.sm),
             Expanded(

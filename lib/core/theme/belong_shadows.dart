@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import 'belong_colors.dart';
 
-/// Schatten-Tokens — immer warm (Basis rgba(74,50,34,x)), nie grau.
+/// Schatten-Tokens — dezente Elevation, keine farbigen Glows.
 abstract final class BelongShadows {
   static Color _warm(double opacity) =>
       BelongColors.shadowBase.withValues(alpha: opacity);
@@ -25,26 +25,4 @@ abstract final class BelongShadows {
         BoxShadow(color: _warm(0.14), offset: const Offset(0, 24), blurRadius: 50),
       ];
 
-  /// Glow unter dem Primär-Button.
-  static List<BoxShadow> get coralGlow => [
-        BoxShadow(
-          color: BelongColors.coral.withValues(alpha: 0.3),
-          offset: const Offset(0, 10),
-          blurRadius: 24,
-        ),
-      ];
-
-  /// Sonnenblume-Badge („Heute · 18:00"): 0 4px 12px rgba(138,90,34,0.3).
-  static List<BoxShadow> get sunflowerBadge => [
-        BoxShadow(
-          color: BelongColors.amberDeep.withValues(alpha: 0.3),
-          offset: const Offset(0, 4),
-          blurRadius: 12,
-        ),
-      ];
-
-  /// Harter Wortmarken-Schatten (Offset ohne Blur) als Text-Shadow.
-  static List<Shadow> get wordmark => const [
-        Shadow(color: BelongColors.wordmarkShadow, offset: Offset(0, 2)),
-      ];
 }

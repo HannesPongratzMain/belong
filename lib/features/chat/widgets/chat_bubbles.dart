@@ -30,7 +30,7 @@ class SystemNote extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 320),
         decoration: BoxDecoration(
           color: highlight ? BelongColors.amberTint : BelongColors.chipNeutral,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BelongRadii.chipAll,
         ),
         child: Text(
           text,
@@ -49,7 +49,7 @@ class SystemNote extends StatelessWidget {
 Color senderColor(ChatMessage message) {
   if (message.isOrganizer) return BelongColors.amberDeep;
   const palette = [
-    BelongColors.berryDeep,
+    BelongColors.inkSoft,
     BelongColors.coralDeep,
     BelongColors.sage,
   ];
@@ -106,6 +106,11 @@ class ChatBubble extends StatelessWidget {
                     color: senderColor(message),
                   ),
                 ),
+                if (message.isSenderVerified) ...[
+                  const SizedBox(width: 4),
+                  const BelongIcon(BelongIconGlyph.verified,
+                      size: 16, color: BelongColors.sage),
+                ],
                 if (message.isOrganizer) ...[
                   const SizedBox(width: 6),
                   BelongPill(
@@ -174,7 +179,7 @@ class MeetupPinCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const BelongIcon(BelongIconGlyph.pin,
-                        size: 24, color: BelongColors.coral, strokeWidth: 2.6),
+                        size: 24, color: BelongColors.coral),
                     const SizedBox(height: 4),
                     Container(
                       padding: const EdgeInsets.symmetric(

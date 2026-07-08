@@ -6,6 +6,7 @@ import '../../core/theme/belong_dimens.dart';
 import '../../core/theme/belong_shadows.dart';
 import '../../core/theme/belong_typography.dart';
 import '../../core/widgets/app_header.dart';
+import '../../core/widgets/belong_icons.dart';
 import '../../core/widgets/belong_sheet.dart';
 import '../../core/widgets/belong_text_field.dart';
 import '../../core/widgets/belong_wordmark.dart';
@@ -13,7 +14,6 @@ import '../../core/widgets/buttons.dart';
 import '../../core/widgets/category_chip.dart';
 import '../../core/widgets/pills.dart';
 import '../../core/widgets/pressable.dart';
-import '../../core/widgets/spark.dart';
 import '../../data/providers.dart';
 import '../../domain/models/anonymity_level.dart';
 import '../profile/profile_controller.dart';
@@ -88,7 +88,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 BelongSpacing.lg, 18, BelongSpacing.lg, 22),
             child: Column(
               children: [
-                Center(child: BelongWordmark(fontSize: 29)),
+                Center(child: BelongWordmark(fontSize: 24)),
                 SizedBox(height: BelongSpacing.md),
                 Text('Schön, dass du da bist.',
                     textAlign: TextAlign.center, style: BelongText.displayTitle),
@@ -118,11 +118,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   onTap: () => setState(() => _level = AnonymityLevel.anonymous),
                   avatar: const _AvatarBlob(
                     background: BelongColors.cream,
-                    child: Text('?',
-                        style: TextStyle(
-                            fontFamily: BelongFonts.display,
-                            fontSize: 20,
-                            color: BelongColors.muted)),
+                    child: BelongIcon(BelongIconGlyph.eyeOff,
+                        size: 20, color: BelongColors.muted),
                   ),
                   badge: 'GUT ZUM STARTEN',
                   description:
@@ -136,12 +133,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   selected: _level == AnonymityLevel.nickname,
                   onTap: () => setState(() => _level = AnonymityLevel.nickname),
                   avatar: const _AvatarBlob(
-                    background: BelongColors.berryTint,
-                    child: Text('m',
-                        style: TextStyle(
-                            fontFamily: BelongFonts.display,
-                            fontSize: 20,
-                            color: BelongColors.berry)),
+                    background: BelongColors.coralTint,
+                    child: BelongIcon(BelongIconGlyph.profile,
+                        size: 20, color: BelongColors.coralDeep),
                   ),
                   description: 'Du wählst selbst einen Namen — sonst nichts.',
                   expanded: _level == AnonymityLevel.nickname
@@ -155,8 +149,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   onTap: () =>
                       setState(() => _level = AnonymityLevel.nicknameInterests),
                   avatar: const _AvatarBlob(
-                    background: BelongColors.coralTint,
-                    child: Spark(size: 20, color: BelongColors.coralDeep),
+                    background: BelongColors.amberTint,
+                    child: BelongIcon(BelongIconGlyph.sparkles,
+                        size: 20, color: BelongColors.amberDeep),
                   ),
                   description:
                       'Zeig, worauf du Lust hast — hilft beim Finden. '
@@ -233,7 +228,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 }
 
-/// AnonymityLevelCard: weiß, Radius 22, ausgewählt = 2 px Coral-Rahmen.
+/// AnonymityLevelCard: weiß, ausgewählt = 2 px Coral-Rahmen.
 class _AnonymityCard extends StatelessWidget {
   const _AnonymityCard({
     required this.level,
@@ -351,7 +346,7 @@ class _RadioDot extends StatelessWidget {
   }
 }
 
-/// Organischer 44-px-Avatar-Blob.
+/// Runde 44-px-Avatar-Fläche.
 class _AvatarBlob extends StatelessWidget {
   const _AvatarBlob({required this.background, required this.child});
 
@@ -364,8 +359,7 @@ class _AvatarBlob extends StatelessWidget {
       width: 44,
       height: 44,
       alignment: Alignment.center,
-      decoration:
-          BoxDecoration(color: background, borderRadius: BelongRadii.blob(44)),
+      decoration: BoxDecoration(color: background, shape: BoxShape.circle),
       child: child,
     );
   }
@@ -443,7 +437,8 @@ class _DataInfoSheet extends StatelessWidget {
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(top: 2),
-                    child: Spark(size: 16, color: BelongColors.coralDeep),
+                    child: BelongIcon(BelongIconGlyph.check,
+                        size: 16, color: BelongColors.coralDeep),
                   ),
                   const SizedBox(width: BelongSpacing.sm),
                   Expanded(

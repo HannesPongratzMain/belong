@@ -50,7 +50,7 @@ class ChatsScreen extends ConsumerWidget {
                 ? StateView(
                     blobColor: BelongColors.coralTint,
                     symbol: const BelongIcon(BelongIconGlyph.chat,
-                        size: 40, color: BelongColors.coralDeep, strokeWidth: 2.4),
+                        size: 40, color: BelongColors.coralDeep),
                     title: 'Noch keine Chats.',
                     message:
                         'Tritt einer Aktivität bei — den Gruppenchat gibt es '
@@ -101,7 +101,6 @@ class _ChatRow extends ConsumerWidget {
         foreground: BelongColors.forest,
         textStyle: BelongText.badge,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        shadows: BelongShadows.sunflowerBadge,
       );
     }
     return Text(BelongDates.badge(activity.startsAt),
@@ -136,7 +135,7 @@ class _ChatRow extends ConsumerWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: activity.category.tint,
-                borderRadius: BelongRadii.blob(52),
+                shape: BoxShape.circle,
               ),
               child: BelongIcon(activity.category.glyph,
                   size: 22, color: activity.category.deep),
@@ -169,7 +168,7 @@ class _ChatRow extends ConsumerWidget {
                 _timeBadge(),
                 const SizedBox(height: 6),
                 const BelongIcon(BelongIconGlyph.chevronRight,
-                    size: 14, color: BelongColors.placeholder, strokeWidth: 2.6),
+                    size: 14, color: BelongColors.placeholder),
               ],
             ),
           ],

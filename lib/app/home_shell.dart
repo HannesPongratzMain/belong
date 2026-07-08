@@ -128,7 +128,7 @@ class _TabItem extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              BelongIcon(glyph, size: 22, color: color),
+              BelongIcon(glyph, size: 24, color: color),
               const SizedBox(height: 3),
               Text(
                 label,

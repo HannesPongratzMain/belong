@@ -6,7 +6,7 @@ import '../theme/belong_typography.dart';
 import 'belong_icons.dart';
 import 'pressable.dart';
 
-/// Universelle Pill (Chips, Badges, Filter): Fläche + Text, Radius 999.
+/// Universeller Chip (Chips, Badges, Filter): Fläche + Text, moderater Radius.
 class BelongPill extends StatelessWidget {
   const BelongPill({
     super.key,
@@ -40,7 +40,7 @@ class BelongPill extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: background,
-        borderRadius: BelongRadii.pillAll,
+        borderRadius: BelongRadii.chipAll,
         border: border,
         boxShadow: shadows,
       ),
@@ -77,9 +77,8 @@ class DropdownPill extends StatelessWidget {
       onTap: onTap,
       trailing: const BelongIcon(
         BelongIconGlyph.chevronDown,
-        size: 12,
+        size: 14,
         color: BelongColors.muted,
-        strokeWidth: 3,
       ),
     );
   }

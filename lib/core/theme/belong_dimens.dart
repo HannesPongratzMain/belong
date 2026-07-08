@@ -18,18 +18,22 @@ abstract final class BelongSpacing {
   static const double hitTarget = 44;
 }
 
-/// Radius-Tokens aus dem Handoff.
+/// Radius-Tokens — bewusst moderat statt „pill-rund": kantiger, professioneller.
 abstract final class BelongRadii {
+  static const double chip = 12; // Chips & Badges (vorher voll rund)
   static const double input = 16;
+  static const double button = 18; // CTAs (vorher Pill 999)
   static const double bubble = 18;
-  static const double rowCard = 20;
-  static const double choiceCard = 22;
-  static const double activityCard = 24;
-  static const double screenInset = 32;
-  static const double sheet = 34;
-  static const double pill = 999;
+  static const double rowCard = 16;
+  static const double choiceCard = 16;
+  static const double activityCard = 18;
+  static const double screenInset = 24;
+  static const double sheet = 24;
+  static const double pill = 999; // nur noch echte Rundformen (Grabber, Dots)
 
+  static BorderRadius get chipAll => BorderRadius.circular(chip);
   static BorderRadius get inputAll => BorderRadius.circular(input);
+  static BorderRadius get buttonAll => BorderRadius.circular(button);
   static BorderRadius get rowCardAll => BorderRadius.circular(rowCard);
   static BorderRadius get choiceCardAll => BorderRadius.circular(choiceCard);
   static BorderRadius get activityCardAll => BorderRadius.circular(activityCard);
@@ -53,19 +57,11 @@ abstract final class BelongRadii {
         bottomLeft: Radius.circular(bubble),
       );
 
-  /// Organischer Blob, CSS `border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%`.
-  static BorderRadius blob(double size) => BorderRadius.only(
-        topLeft: Radius.elliptical(size * 0.46, size * 0.52),
-        topRight: Radius.elliptical(size * 0.54, size * 0.44),
-        bottomRight: Radius.elliptical(size * 0.60, size * 0.56),
-        bottomLeft: Radius.elliptical(size * 0.40, size * 0.48),
-      );
 }
 
 /// Bewegungs-Tokens: Übergänge weich (200–300 ms, easeOut).
 abstract final class BelongMotion {
   static const fast = Duration(milliseconds: 200);
   static const medium = Duration(milliseconds: 300);
-  static const pop = Duration(milliseconds: 350); // Erfolgs-Funke
   static const curve = Curves.easeOut;
 }

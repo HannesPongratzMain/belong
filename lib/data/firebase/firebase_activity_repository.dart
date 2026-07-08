@@ -64,7 +64,9 @@ class FirebaseActivityRepository implements ActivityRepository {
       'title': draft.title,
       'description': draft.description,
       'category': draft.category.toJson(),
-      'locationName': draft.isOnline ? null : draft.locationName,
+      'precise': draft.isOnline
+          ? null
+          : PreciseLocation(address: draft.locationName!).toJson(),
       'isOnline': draft.isOnline,
       'area': 'Mitte',
       'startsAt': draft.startsAt.toIso8601String(),
@@ -89,12 +91,14 @@ class FirebaseActivityRepository implements ActivityRepository {
   Future<Activity> updateActivity(String id, ActivityDraft draft) async {
     await _auth.ensureSignedIn();
     // PATCH mit null-Werten entfernt die Schlüssel (RTDB-Semantik) —
-    // passt für locationName (online) und capacity (ohne Limit).
+    // passt für precise (online) und capacity (ohne Limit).
     await _db.patch('activities/$id', {
       'title': draft.title,
       'description': draft.description,
       'category': draft.category.toJson(),
-      'locationName': draft.isOnline ? null : draft.locationName,
+      'precise': draft.isOnline
+          ? null
+          : PreciseLocation(address: draft.locationName!).toJson(),
       'isOnline': draft.isOnline,
       'startsAt': draft.startsAt.toIso8601String(),
       'capacity': draft.capacity,
