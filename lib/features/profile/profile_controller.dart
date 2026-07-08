@@ -44,4 +44,9 @@ class ProfileController extends AsyncNotifier<UserProfile?> {
         .updateProfile(current.copyWith(interests: interests));
     state = AsyncData(updated);
   }
+
+  Future<void> verifyPhone() async {
+    final updated = await ref.read(authRepositoryProvider).verifyPhone();
+    state = AsyncData(updated);
+  }
 }

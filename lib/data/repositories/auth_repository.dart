@@ -20,4 +20,10 @@ abstract interface class AuthRepository {
 
   /// Aktualisiert Stufe/Spitzname/Interessen — jederzeit möglich.
   Future<UserProfile> updateProfile(UserProfile profile);
+
+  /// Schließt die (simulierte) Telefon-Verifizierung ab — setzt
+  /// `verificationLevel` auf `phone`. Es wird bewusst keine Telefonnummer
+  /// entgegengenommen oder gespeichert: die Demo-Eingabe in
+  /// `verify_phone_sheet.dart` bleibt rein lokal, nur das Ergebnis zählt.
+  Future<UserProfile> verifyPhone();
 }

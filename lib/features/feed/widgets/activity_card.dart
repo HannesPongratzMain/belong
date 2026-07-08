@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/format/belong_dates.dart';
 import '../../../core/theme/belong_colors.dart';
@@ -11,18 +12,20 @@ import '../../../core/widgets/photo_placeholder.dart';
 import '../../../core/widgets/pills.dart';
 import '../../../core/widgets/pressable.dart';
 import '../../../domain/models/activity.dart';
+import '../../participation/participation_controller.dart';
 import '../../participation/widgets/join_button.dart';
 
 /// Große Feed-Karte (featured): flache Bildfläche mit Zeit-Badge,
 /// Kategorie-Chip, Titel, Meta, Plätze + JoinButton.
-class ActivityCard extends StatelessWidget {
+class ActivityCard extends ConsumerWidget {
   const ActivityCard({super.key, required this.activity, this.onTap});
 
   final Activity activity;
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accessLevel = ref.watch(accessLevelProvider(activity.id));
     return Pressable(
       onTap: onTap,
       pressedScale: 0.985,
@@ -82,7 +85,7 @@ class ActivityCard extends StatelessWidget {
                       const SizedBox(width: 4),
                       Flexible(
                         child: Text(
-                          activity.placeLabel,
+                          activity.placeLabelFor(accessLevel),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: BelongText.body
@@ -125,14 +128,15 @@ class ActivityCard extends StatelessWidget {
 }
 
 /// Kompakte Feed-Zeile: Foto-Thumb 56 px, Titel, Meta, Chip + Plätze.
-class ActivityRow extends StatelessWidget {
+class ActivityRow extends ConsumerWidget {
   const ActivityRow({super.key, required this.activity, this.onTap});
 
   final Activity activity;
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accessLevel = ref.watch(accessLevelProvider(activity.id));
     return Pressable(
       onTap: onTap,
       pressedScale: 0.985,
@@ -173,7 +177,7 @@ class ActivityRow extends StatelessWidget {
                       const SizedBox(width: 3),
                       Flexible(
                         child: Text(
-                          '${activity.placeLabel} · '
+                          '${activity.placeLabelFor(accessLevel)} · '
                           '${BelongDates.weekday(activity.startsAt)} '
                           '${BelongDates.time(activity.startsAt)}',
                           maxLines: 1,

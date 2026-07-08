@@ -2,6 +2,8 @@ import 'dart:async';
 
 import '../../domain/models/chat_message.dart';
 import '../../domain/models/participation.dart';
+import '../../domain/models/verification_level.dart';
+import '../repositories/exceptions.dart';
 import '../repositories/participation_repository.dart';
 import 'mock_database.dart';
 
@@ -25,6 +27,9 @@ class MockParticipationRepository implements ParticipationRepository {
   Future<void> join(String activityId) {
     return _db(() {
       if (_db.participations.containsKey(activityId)) return;
+      if (_db.profile?.verificationLevel != VerificationLevel.phone) {
+        throw const VerificationRequiredException();
+      }
       final activity = _db.requireActivity(activityId);
       if (activity.isFull) throw const ActivityFullException();
 

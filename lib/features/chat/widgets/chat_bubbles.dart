@@ -106,6 +106,11 @@ class ChatBubble extends StatelessWidget {
                     color: senderColor(message),
                   ),
                 ),
+                if (message.isSenderVerified) ...[
+                  const SizedBox(width: 4),
+                  const BelongIcon(BelongIconGlyph.verified,
+                      size: 16, color: BelongColors.sage),
+                ],
                 if (message.isOrganizer) ...[
                   const SizedBox(width: 6),
                   BelongPill(

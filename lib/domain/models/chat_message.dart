@@ -58,6 +58,7 @@ class ChatMessage {
     required this.sentAt,
     this.type = ChatMessageType.text,
     this.isOrganizer = false,
+    this.isSenderVerified = false,
     this.pin,
   });
 
@@ -72,6 +73,10 @@ class ChatMessage {
   /// Kennzeichnet die Person, die die Aktivität gestartet hat („ORGA").
   final bool isOrganizer;
 
+  /// Verifizierungsstand zum Sendezeitpunkt (wie [senderNickname] beim
+  /// Versenden eingefroren, kein Live-Lookup) — steuert das ShieldCheck-Badge.
+  final bool isSenderVerified;
+
   final MeetupPin? pin;
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) => ChatMessage(
@@ -83,6 +88,7 @@ class ChatMessage {
         sentAt: parseDateTime(json['sentAt']),
         type: ChatMessageType.fromJson(json['type'] as String? ?? 'text'),
         isOrganizer: json['isOrganizer'] as bool? ?? false,
+        isSenderVerified: json['isSenderVerified'] as bool? ?? false,
         pin: json['pin'] == null
             ? null
             : MeetupPin.fromJson(json['pin'] as Map<String, dynamic>),
@@ -97,6 +103,7 @@ class ChatMessage {
         'sentAt': sentAt.toIso8601String(),
         'type': type.toJson(),
         'isOrganizer': isOrganizer,
+        'isSenderVerified': isSenderVerified,
         'pin': pin?.toJson(),
       };
 }

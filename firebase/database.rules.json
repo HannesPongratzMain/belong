@@ -9,6 +9,9 @@
         },
         "anonymityLevel": {
           ".validate": "newData.val() === 'anonymous' || newData.val() === 'nickname' || newData.val() === 'nicknameInterests'"
+        },
+        "verificationLevel": {
+          ".validate": "newData.val() === 'none' || newData.val() === 'phone'"
         }
       }
     },
@@ -16,7 +19,7 @@
       ".read": "auth != null",
       ".indexOn": ["startsAt", "area"],
       "$activityId": {
-        ".write": "auth != null && (!data.exists() ? newData.child('hostId').val() === auth.uid : data.child('hostId').val() === auth.uid)",
+        ".write": "auth != null && (!data.exists() ? newData.child('hostId').val() === auth.uid && root.child('users').child(auth.uid).child('verificationLevel').val() === 'phone' : data.child('hostId').val() === auth.uid)",
         "title": {
           ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80"
         },
@@ -28,6 +31,12 @@
         },
         "participantCount": {
           ".write": "auth != null && (newData.val() === data.val() + 1 || newData.val() === data.val() - 1)"
+        },
+        "precise": {
+          ".read": "auth != null && root.child('activityParticipants').child($activityId).child(auth.uid).exists()",
+          "address": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 200"
+          }
         }
       }
     },
@@ -41,7 +50,7 @@
       "$activityId": {
         ".read": "auth != null",
         "$uid": {
-          ".write": "auth != null && $uid === auth.uid"
+          ".write": "auth != null && $uid === auth.uid && root.child('users').child($uid).child('verificationLevel').val() === 'phone'"
         }
       }
     },

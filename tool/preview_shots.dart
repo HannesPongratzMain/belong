@@ -171,7 +171,7 @@ void main() {
       title: 'Boule im Park',
       description: 'Kugeln sind da — einfach vorbeikommen.',
       category: ActivityCategory.draussen,
-      locationName: 'Fuldaaue, Boulebahn',
+      precise: const PreciseLocation(address: 'Fuldaaue, Boulebahn'),
       area: 'Mitte',
       startsAt: DateTime.now().add(const Duration(hours: 2, minutes: 5)),
       participantCount: 1,

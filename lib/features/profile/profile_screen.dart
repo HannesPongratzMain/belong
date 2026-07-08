@@ -10,13 +10,16 @@ import '../../core/widgets/belong_icons.dart';
 import '../../core/widgets/category_chip.dart';
 import '../../core/widgets/pills.dart';
 import '../../core/widgets/pressable.dart';
+import '../../domain/models/access_level.dart';
 import '../../domain/models/activity.dart';
 import '../../domain/models/anonymity_level.dart';
 import '../../domain/models/user_profile.dart';
+import '../../domain/models/verification_level.dart';
 import '../activity_detail/activity_detail_screen.dart';
 import '../participation/participation_controller.dart';
 import 'profile_controller.dart';
 import 'widgets/change_anonymity_sheet.dart';
+import 'widgets/verify_phone_sheet.dart';
 
 /// Profil · minimal & anonym — die Anti-These zu Social Media:
 /// kein Foto-Zwang, keine Follower, nichts zu polieren.
@@ -71,6 +74,8 @@ class ProfileScreen extends ConsumerWidget {
                 ],
               ],
               const SizedBox(height: BelongSpacing.lg),
+              _VerificationRow(verificationLevel: profile.verificationLevel),
+              const SizedBox(height: BelongSpacing.sm),
               _VisibilityRow(
                   onTap: () => showChangeAnonymitySheet(context)),
             ],
@@ -270,7 +275,8 @@ class _JoinedActivityRow extends StatelessWidget {
                   const SizedBox(height: 3),
                   Text(
                     '${BelongDates.weekday(activity.startsAt)} '
-                    '${BelongDates.time(activity.startsAt)} · ${activity.placeLabel}',
+                    '${BelongDates.time(activity.startsAt)} · '
+                    '${activity.placeLabelFor(AccessLevel.joined)}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: BelongText.meta,
@@ -280,6 +286,55 @@ class _JoinedActivityRow extends StatelessWidget {
             ),
             const BelongIcon(BelongIconGlyph.chevronRight,
                 size: 16, color: BelongColors.placeholder),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// VerificationRow: Status + Einstieg in die (simulierte) Verifizierung —
+/// schaltet Beitreten/Hosten/Chatten frei (BEL-03).
+class _VerificationRow extends StatelessWidget {
+  const _VerificationRow({required this.verificationLevel});
+
+  final VerificationLevel verificationLevel;
+
+  @override
+  Widget build(BuildContext context) {
+    final verified = verificationLevel == VerificationLevel.phone;
+    return Pressable(
+      onTap: verified ? null : () => showVerifyPhoneSheet(context),
+      pressedScale: verified ? 1 : 0.985,
+      semanticLabel: verified ? 'Verifiziert' : 'Jetzt verifizieren',
+      child: Container(
+        padding: const EdgeInsets.all(BelongSpacing.md),
+        decoration: BoxDecoration(
+          color: verified ? BelongColors.sageTint : BelongColors.chipNeutral,
+          borderRadius: BelongRadii.rowCardAll,
+        ),
+        child: Row(
+          children: [
+            BelongIcon(
+              verified ? BelongIconGlyph.verified : BelongIconGlyph.lock,
+              size: 22,
+              color: verified ? BelongColors.sage : BelongColors.muted,
+            ),
+            const SizedBox(width: BelongSpacing.sm),
+            Expanded(
+              child: Text(
+                verified
+                    ? 'Verifiziert — du kannst beitreten, hosten und chatten.'
+                    : 'Noch nicht verifiziert — nötig zum Beitreten und Hosten.',
+                style: BelongText.bodySmall.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: verified ? BelongColors.sage : BelongColors.inkSoft,
+                ),
+              ),
+            ),
+            if (!verified)
+              const BelongIcon(BelongIconGlyph.chevronRight,
+                  size: 16, color: BelongColors.inkSoft),
           ],
         ),
       ),

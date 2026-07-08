@@ -16,6 +16,7 @@ import '../../core/widgets/photo_placeholder.dart';
 import '../../core/widgets/pills.dart';
 import '../../core/widgets/pressable.dart';
 import '../../data/providers.dart';
+import '../../domain/models/access_level.dart';
 import '../../domain/models/activity.dart';
 import '../chat/chat_screen.dart';
 import '../create/create_activity_sheet.dart';
@@ -42,6 +43,7 @@ class ActivityDetailScreen extends ConsumerWidget {
     final isMine = ref.watch(myActivitiesProvider).value
             ?.any((mine) => mine.id == activityId) ??
         false;
+    final accessLevel = ref.watch(accessLevelProvider(activityId));
 
     return Scaffold(
       backgroundColor: BelongColors.surface,
@@ -66,10 +68,13 @@ class ActivityDetailScreen extends ConsumerWidget {
                         glyph: activity.isOnline
                             ? BelongIconGlyph.globe
                             : BelongIconGlyph.pin,
-                        text: activity.isOnline
-                            ? 'Online — Link kommt im Gruppenchat'
-                            : '${activity.locationName}'
+                        text: switch ((activity.isOnline, accessLevel)) {
+                          (true, _) => 'Online — Link kommt im Gruppenchat',
+                          (false, AccessLevel.joined) =>
+                            '${activity.placeLabelFor(accessLevel)}'
                                 '${activity.area != null ? ' · ${activity.area}' : ''}',
+                          (false, _) => activity.placeLabelFor(accessLevel),
+                        },
                       ),
                       const SizedBox(height: 6),
                       _MetaRow(

@@ -1,4 +1,26 @@
+import 'access_level.dart';
 import 'json_utils.dart';
+
+/// Exakter Treffpunkt einer Aktivität — serverseitig unter
+/// `activities/$id/precise` ausgelagert und nur für Teilnehmer:innen lesbar
+/// (siehe `firebase/database.rules.json`). `lat`/`lon` sind für eine
+/// spätere Karten-Ansicht vorgesehen, aktuell zeigt die App nur [address].
+class PreciseLocation {
+  const PreciseLocation({required this.address, this.lat, this.lon});
+
+  final String address;
+  final double? lat;
+  final double? lon;
+
+  factory PreciseLocation.fromJson(Map<String, dynamic> json) =>
+      PreciseLocation(
+        address: json['address'] as String,
+        lat: (json['lat'] as num?)?.toDouble(),
+        lon: (json['lon'] as num?)?.toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {'address': address, 'lat': lat, 'lon': lon};
+}
 
 /// Kategorien aus dem Design (Feed-Chips & CategoryPicker).
 enum ActivityCategory {
@@ -34,23 +56,25 @@ class Activity {
     required this.startsAt,
     required this.participantCount,
     this.description,
-    this.locationName,
+    this.precise,
     this.isOnline = false,
     this.area,
     this.capacity,
     this.hostId,
     this.photoHint,
     this.isCancelled = false,
-  }) : assert(isOnline || locationName != null,
-            'Eine Aktivität braucht einen Ort oder ist online.');
+  });
 
   final String id;
   final String title;
   final String? description;
   final ActivityCategory category;
 
-  /// Treffpunkt — `null`, wenn [isOnline].
-  final String? locationName;
+  /// Exakter Treffpunkt — `null`, wenn [isOnline] **oder** wenn die
+  /// aktuelle Nutzer:in (noch) nicht beigetreten ist: der Server hält das
+  /// Feld dann serverseitig zurück (`activities/$id/precise`), es ist kein
+  /// reines UI-Ausblenden.
+  final PreciseLocation? precise;
   final bool isOnline;
 
   /// Stadtteil für den Orts-Filter (z. B. „Vorderer Westen").
@@ -78,14 +102,21 @@ class Activity {
 
   bool get isFull => freeSpots != null && freeSpots == 0;
 
-  String get placeLabel => isOnline ? 'Online' : locationName!;
+  /// Ortstext für den jeweils erlaubten Detailgrad — vor Beitritt nur der
+  /// Stadtteil, danach der exakte Treffpunkt (BEL-03-Sichtbarkeitsmatrix).
+  /// Gleiche visuelle Darstellung in Feed/Detail, nur der Text ändert sich.
+  String placeLabelFor(AccessLevel level) {
+    if (isOnline) return 'Online';
+    if (level == AccessLevel.joined && precise != null) return precise!.address;
+    return area ?? '…';
+  }
 
   Activity copyWith({int? participantCount, bool? isCancelled}) => Activity(
         id: id,
         title: title,
         description: description,
         category: category,
-        locationName: locationName,
+        precise: precise,
         isOnline: isOnline,
         area: area,
         startsAt: startsAt,
@@ -101,7 +132,10 @@ class Activity {
         title: json['title'] as String,
         description: json['description'] as String?,
         category: ActivityCategory.fromJson(json['category'] as String),
-        locationName: json['locationName'] as String?,
+        precise: json['precise'] == null
+            ? null
+            : PreciseLocation.fromJson(
+                (json['precise'] as Map).cast<String, dynamic>()),
         isOnline: json['isOnline'] as bool? ?? false,
         area: json['area'] as String?,
         startsAt: parseDateTime(json['startsAt']),
@@ -117,7 +151,7 @@ class Activity {
         'title': title,
         'description': description,
         'category': category.toJson(),
-        'locationName': locationName,
+        'precise': precise?.toJson(),
         'isOnline': isOnline,
         'area': area,
         'startsAt': startsAt.toIso8601String(),
