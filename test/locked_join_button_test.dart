@@ -19,8 +19,11 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    // Anonymer Einstieg — Profil ist danach angelegt, aber unverifiziert.
+    // Anonymer Einstieg (inkl. 18+-Bestätigung) — Profil ist danach
+    // angelegt, aber unverifiziert.
     await tester.scrollUntilVisible(find.text("Los geht's"), 120);
+    await tester.tap(find.text('Ich bin mindestens 18 Jahre alt.'));
+    await tester.pump();
     await tester.tap(find.text("Los geht's"));
     await tester.pumpAndSettle();
 
