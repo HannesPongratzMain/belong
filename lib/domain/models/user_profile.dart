@@ -9,11 +9,17 @@ class UserProfile {
     required this.anonymityLevel,
     this.interests = const [],
     this.verificationLevel = VerificationLevel.none,
+    this.ageConfirmed = false,
   });
 
   final String id;
   final String nickname;
   final AnonymityLevel anonymityLevel;
+
+  /// Selbstbestätigung „18 oder älter" — bewusst nur ein Boolean,
+  /// kein Geburtsdatum (Datensparsamkeit). Ohne Bestätigung bleibt die
+  /// App hinter dem Age-Gate (siehe RootGate).
+  final bool ageConfirmed;
 
   /// Nur bei [AnonymityLevel.nicknameInterests] sichtbar für andere.
   final List<String> interests;
@@ -27,6 +33,7 @@ class UserProfile {
     AnonymityLevel? anonymityLevel,
     List<String>? interests,
     VerificationLevel? verificationLevel,
+    bool? ageConfirmed,
   }) =>
       UserProfile(
         id: id,
@@ -34,6 +41,7 @@ class UserProfile {
         anonymityLevel: anonymityLevel ?? this.anonymityLevel,
         interests: interests ?? this.interests,
         verificationLevel: verificationLevel ?? this.verificationLevel,
+        ageConfirmed: ageConfirmed ?? this.ageConfirmed,
       );
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
@@ -43,6 +51,7 @@ class UserProfile {
         interests: (json['interests'] as List<dynamic>? ?? []).cast<String>(),
         verificationLevel:
             VerificationLevel.fromJson(json['verificationLevel'] as String?),
+        ageConfirmed: json['ageConfirmed'] as bool? ?? false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -51,5 +60,6 @@ class UserProfile {
         'anonymityLevel': anonymityLevel.toJson(),
         'interests': interests,
         'verificationLevel': verificationLevel.toJson(),
+        'ageConfirmed': ageConfirmed,
       };
 }

@@ -17,14 +17,23 @@ class ProfileController extends AsyncNotifier<UserProfile?> {
   Future<void> completeOnboarding({
     required AnonymityLevel level,
     required String nickname,
+    required bool ageConfirmed,
     List<String> interests = const [],
   }) async {
     final profile = await ref.read(authRepositoryProvider).completeOnboarding(
           level: level,
           nickname: nickname,
+          ageConfirmed: ageConfirmed,
           interests: interests,
         );
     state = AsyncData(profile);
+  }
+
+  /// Nachträgliche 18+-Bestätigung für Profile aus der Zeit vor dem
+  /// Age-Gate — der RootGate blockiert die App-Shell bis dahin.
+  Future<void> confirmAge() async {
+    final updated = await ref.read(authRepositoryProvider).confirmAge();
+    state = AsyncData(updated);
   }
 
   Future<void> changeAnonymity(AnonymityLevel level, {String? nickname}) async {

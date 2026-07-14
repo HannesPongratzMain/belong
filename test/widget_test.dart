@@ -36,11 +36,25 @@ void main() {
     await tester.pumpWidget(appWithoutLatency());
     await tester.pumpAndSettle();
 
+    // Ohne 18+-Bestätigung geht es nicht weiter.
     await tester.scrollUntilVisible(find.text("Los geht's"), 120);
+    await tester.tap(find.text('Ich bin mindestens 18 Jahre alt.'));
+    await tester.pump();
     await tester.tap(find.text("Los geht's"));
     await tester.pumpAndSettle();
 
-    // Feed mit Mock-Aktivitäten ist sichtbar.
+    // Feed mit Mock-Aktivitäten ist sichtbar (die Karte kann je nach
+    // Tageszeit weiter unten liegen — Seeds hängen an DateTime.now()).
+    // Explizit in der vertikalen Feed-Liste scrollen, nicht in der
+    // horizontalen Filter-Chip-Leiste.
+    final feedList = find.byWidgetPredicate(
+        (w) => w is ListView && w.scrollDirection == Axis.vertical);
+    await tester.scrollUntilVisible(
+      find.text('Lauftreff Karlsaue'),
+      120,
+      scrollable:
+          find.descendant(of: feedList, matching: find.byType(Scrollable)),
+    );
     expect(find.text('Lauftreff Karlsaue'), findsOneWidget);
     expect(find.text('Ich bin dabei'), findsWidgets);
   });

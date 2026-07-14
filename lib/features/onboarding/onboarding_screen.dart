@@ -36,6 +36,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final Set<String> _interests = {};
   String? _suggestedNickname;
   String? _nicknameError;
+  bool _ageConfirmed = false;
+  String? _ageError;
   bool _submitting = false;
 
   static const _interestPool = [
@@ -65,13 +67,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       setState(() => _nicknameError = 'Such dir einen Spitznamen aus — reicht völlig.');
       return;
     }
+    if (!_ageConfirmed) {
+      setState(() =>
+          _ageError = 'belong ist ab 18 — bitte bestätige kurz dein Alter.');
+      return;
+    }
     setState(() {
       _nicknameError = null;
+      _ageError = null;
       _submitting = true;
     });
     await ref.read(profileProvider.notifier).completeOnboarding(
           level: _level,
           nickname: nickname,
+          ageConfirmed: _ageConfirmed,
           interests: _interests.toList(),
         );
     // Kein setState nach Erfolg nötig — der RootGate wechselt zur App-Shell.
@@ -185,6 +194,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 const SizedBox(height: BelongSpacing.md),
                 const _TrustNote(
                     text: 'Ohne E-Mail · jederzeit änderbar · nichts wird bewertet'),
+                const SizedBox(height: BelongSpacing.md),
+                _AgeGateCheck(
+                  confirmed: _ageConfirmed,
+                  errorText: _ageError,
+                  onTap: () => setState(() {
+                    _ageConfirmed = !_ageConfirmed;
+                    if (_ageConfirmed) _ageError = null;
+                  }),
+                ),
                 const SizedBox(height: BelongSpacing.md),
                 PrimaryButton(
                   label: "Los geht's",
@@ -393,6 +411,101 @@ class _TrustNote extends StatelessWidget {
   }
 }
 
+/// Altersgrenze 18+ als Selbstbestätigung — bewusst kein Geburtsdatum
+/// (Datensparsamkeit): gespeichert wird nur das Ja. Ohne Haken blockiert
+/// „Los geht's" mit einem freundlichen Inline-Fehler.
+class _AgeGateCheck extends StatelessWidget {
+  const _AgeGateCheck({
+    required this.confirmed,
+    required this.onTap,
+    this.errorText,
+  });
+
+  final bool confirmed;
+  final VoidCallback onTap;
+  final String? errorText;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasError = errorText != null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Pressable(
+          onTap: onTap,
+          pressedScale: 0.985,
+          semanticLabel: 'Ich bin mindestens 18 Jahre alt',
+          child: AnimatedContainer(
+            duration: BelongMotion.fast,
+            curve: BelongMotion.curve,
+            padding: const EdgeInsets.all(BelongSpacing.md),
+            decoration: BoxDecoration(
+              color: BelongColors.card,
+              borderRadius: BelongRadii.inputAll,
+              border: Border.all(
+                color: hasError
+                    ? BelongColors.error
+                    : confirmed
+                        ? BelongColors.coral
+                        : BelongColors.border,
+                width: hasError || confirmed ? 2 : 1,
+              ),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AnimatedContainer(
+                  duration: BelongMotion.fast,
+                  width: 24,
+                  height: 24,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: confirmed ? BelongColors.coral : BelongColors.card,
+                    borderRadius: BorderRadius.circular(7),
+                    border: Border.all(
+                      color: confirmed
+                          ? BelongColors.coral
+                          : BelongColors.borderIdle,
+                      width: 2,
+                    ),
+                  ),
+                  child: confirmed
+                      ? const BelongIcon(BelongIconGlyph.check,
+                          size: 14, color: BelongColors.card)
+                      : null,
+                ),
+                const SizedBox(width: BelongSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Ich bin mindestens 18 Jahre alt.',
+                          style: BelongText.body
+                              .copyWith(fontWeight: FontWeight.w700)),
+                      const SizedBox(height: 2),
+                      Text(
+                        'belong ist nur für Erwachsene. Wir speichern nur '
+                        'deine Bestätigung — kein Geburtsdatum.',
+                        style: BelongText.bodySmall
+                            .copyWith(color: BelongColors.muted),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (hasError) ...[
+          const SizedBox(height: 6),
+          Text(errorText!,
+              style: BelongText.chip.copyWith(color: BelongColors.error)),
+        ],
+      ],
+    );
+  }
+}
+
 /// „Was passiert mit meinen Daten?" — Datensparsamkeit sichtbar gemacht.
 class _DataInfoSheet extends StatelessWidget {
   const _DataInfoSheet();
@@ -415,6 +528,11 @@ class _DataInfoSheet extends StatelessWidget {
       (
         'Nichts wird bewertet',
         'Keine Likes, keine Follower, kein Ranking — nur echte Verabredungen.'
+      ),
+      (
+        'Ab 18 — ohne Geburtsdatum',
+        'belong ist nur für Erwachsene. Wir merken uns nur, dass du das '
+            'bestätigt hast — dein Alter fragen wir nie ab.'
       ),
     ];
     return SingleChildScrollView(

@@ -4,6 +4,7 @@ import '../../domain/models/anonymity_level.dart';
 import '../../domain/models/user_profile.dart';
 import '../../domain/models/verification_level.dart';
 import '../repositories/auth_repository.dart';
+import '../repositories/exceptions.dart';
 import 'firebase_auth_client.dart';
 import 'rtdb_client.dart';
 
@@ -46,8 +47,12 @@ class FirebaseAuthRepository implements AuthRepository {
   Future<UserProfile> completeOnboarding({
     required AnonymityLevel level,
     required String nickname,
+    required bool ageConfirmed,
     List<String> interests = const [],
   }) async {
+    // Die Rules lehnen neue Profile ohne `ageConfirmed === true` ohnehin ab —
+    // hier zusätzlich früh und mit sprechender Exception.
+    if (!ageConfirmed) throw const AgeConfirmationRequiredException();
     await _auth.ensureSignedIn();
     final profile = UserProfile(
       id: _auth.uid,
@@ -56,6 +61,7 @@ class FirebaseAuthRepository implements AuthRepository {
       // Datensparsamkeit: Interessen nur bei der passenden Stufe speichern.
       interests:
           level == AnonymityLevel.nicknameInterests ? interests : const [],
+      ageConfirmed: true,
     );
     await _db.put('users/${_auth.uid}', {
       ...profile.toJson()..remove('id'),
@@ -78,6 +84,15 @@ class FirebaseAuthRepository implements AuthRepository {
     await _auth.ensureSignedIn();
     await _db.put(
         'users/${_auth.uid}/verificationLevel', VerificationLevel.phone.toJson());
+    final profile = await currentProfile();
+    if (profile == null) throw StateError('Kein Profil angelegt.');
+    return profile;
+  }
+
+  @override
+  Future<UserProfile> confirmAge() async {
+    await _auth.ensureSignedIn();
+    await _db.put('users/${_auth.uid}/ageConfirmed', true);
     final profile = await currentProfile();
     if (profile == null) throw StateError('Kein Profil angelegt.');
     return profile;

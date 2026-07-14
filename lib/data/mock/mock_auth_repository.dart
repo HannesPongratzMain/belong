@@ -2,6 +2,7 @@ import '../../domain/models/anonymity_level.dart';
 import '../../domain/models/user_profile.dart';
 import '../../domain/models/verification_level.dart';
 import '../repositories/auth_repository.dart';
+import '../repositories/exceptions.dart';
 import 'mock_database.dart';
 
 class MockAuthRepository implements AuthRepository {
@@ -19,9 +20,12 @@ class MockAuthRepository implements AuthRepository {
   Future<UserProfile> completeOnboarding({
     required AnonymityLevel level,
     required String nickname,
+    required bool ageConfirmed,
     List<String> interests = const [],
   }) {
     return _db(() {
+      // Spiegelt die Database Rules: ohne Altersbestätigung kein Profil.
+      if (!ageConfirmed) throw const AgeConfirmationRequiredException();
       final profile = UserProfile(
         id: MockDatabase.currentUserId,
         nickname: nickname,
@@ -29,6 +33,7 @@ class MockAuthRepository implements AuthRepository {
         // Interessen werden nur bei der passenden Stufe überhaupt gespeichert
         // (Datensparsamkeit auf Modell-Ebene, nicht nur im UI).
         interests: level == AnonymityLevel.nicknameInterests ? interests : const [],
+        ageConfirmed: true,
       );
       _db.profile = profile;
       return profile;
@@ -53,6 +58,17 @@ class MockAuthRepository implements AuthRepository {
       if (current == null) throw StateError('Kein Profil angelegt.');
       final updated =
           current.copyWith(verificationLevel: VerificationLevel.phone);
+      _db.profile = updated;
+      return updated;
+    });
+  }
+
+  @override
+  Future<UserProfile> confirmAge() {
+    return _db(() {
+      final current = _db.profile;
+      if (current == null) throw StateError('Kein Profil angelegt.');
+      final updated = current.copyWith(ageConfirmed: true);
       _db.profile = updated;
       return updated;
     });

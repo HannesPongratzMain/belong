@@ -33,7 +33,9 @@ void main() {
     activities = MockActivityRepository(db);
     participations = MockParticipationRepository(db);
     await auth.completeOnboarding(
-        level: AnonymityLevel.nickname, nickname: 'test-nutzer');
+        level: AnonymityLevel.nickname,
+        nickname: 'test-nutzer',
+        ageConfirmed: true);
   });
 
   group('unverifiziert, nicht beigetreten', () {

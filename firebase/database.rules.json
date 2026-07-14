@@ -4,8 +4,12 @@
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
         ".write": "auth != null && auth.uid === $uid",
+        ".validate": "data.exists() || newData.child('ageConfirmed').val() === true",
         "nickname": {
           ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 30"
+        },
+        "ageConfirmed": {
+          ".validate": "newData.val() === true"
         },
         "anonymityLevel": {
           ".validate": "newData.val() === 'anonymous' || newData.val() === 'nickname' || newData.val() === 'nicknameInterests'"
@@ -19,7 +23,7 @@
       ".read": "auth != null",
       ".indexOn": ["startsAt", "area"],
       "$activityId": {
-        ".write": "auth != null && (!data.exists() ? newData.child('hostId').val() === auth.uid && root.child('users').child(auth.uid).child('verificationLevel').val() === 'phone' : data.child('hostId').val() === auth.uid)",
+        ".write": "auth != null && (!data.exists() ? newData.child('hostId').val() === auth.uid && root.child('users').child(auth.uid).child('verificationLevel').val() === 'phone' && root.child('users').child(auth.uid).child('ageConfirmed').val() === true : data.child('hostId').val() === auth.uid)",
         "title": {
           ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 80"
         },
@@ -50,7 +54,7 @@
       "$activityId": {
         ".read": "auth != null",
         "$uid": {
-          ".write": "auth != null && $uid === auth.uid && root.child('users').child($uid).child('verificationLevel').val() === 'phone'"
+          ".write": "auth != null && $uid === auth.uid && root.child('users').child($uid).child('verificationLevel').val() === 'phone' && root.child('users').child($uid).child('ageConfirmed').val() === true"
         }
       }
     },
