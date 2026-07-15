@@ -24,7 +24,7 @@ abstract final class BelongTheme {
 
     final base = ThemeData(
       useMaterial3: true,
-      fontFamily: BelongFonts.body,
+      fontFamily: BelongFonts.sans,
       scaffoldBackgroundColor: BelongColors.surface,
       colorScheme: const ColorScheme.light(
         primary: BelongColors.coral,

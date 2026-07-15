@@ -6,7 +6,7 @@ import '../theme/belong_dimens.dart';
 import '../theme/belong_typography.dart';
 
 /// Eingabefeld im Belong-Stil: weiße Fläche, Radius 16, Label darüber,
-/// freundlicher Inline-Fehler (Beere, nie rotes Alarm-Design).
+/// freundlicher Inline-Fehler (ruhiges Dunkelrot, kein Alarm-Design).
 class BelongTextField extends StatelessWidget {
   const BelongTextField({
     super.key,
@@ -27,7 +27,7 @@ class BelongTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String? placeholder;
 
-  /// Fehlermeldung — aktiviert den 2-px-Beeren-Rahmen.
+  /// Fehlermeldung — aktiviert den 2-px-Fehler-Rahmen.
   final String? errorText;
 
   /// Zusatz hinter dem Label, z. B. „optional".
@@ -68,7 +68,7 @@ class BelongTextField extends StatelessWidget {
             color: BelongColors.card,
             borderRadius: BelongRadii.inputAll,
             border: Border.all(
-              color: hasError ? BelongColors.berry : BelongColors.border,
+              color: hasError ? BelongColors.error : BelongColors.border,
               width: hasError ? 2 : 1,
             ),
           ),
@@ -115,7 +115,7 @@ class BelongTextField extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             errorText!,
-            style: BelongText.chip.copyWith(color: BelongColors.berryDeep),
+            style: BelongText.chip.copyWith(color: BelongColors.error),
           ),
         ],
       ],

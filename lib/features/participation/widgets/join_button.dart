@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/belong_colors.dart';
 import '../../../core/theme/belong_dimens.dart';
 import '../../../core/theme/belong_typography.dart';
+import '../../../core/widgets/belong_icons.dart';
 import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/pressable.dart';
 import '../../../domain/models/activity.dart';
@@ -37,7 +38,8 @@ class JoinButton extends ConsumerWidget {
     }
     if (joined) {
       return _StatusPill(
-        label: 'Du bist dabei ✓',
+        label: 'Du bist dabei',
+        glyph: BelongIconGlyph.check,
         background: BelongColors.sageTint,
         foreground: BelongColors.sage,
       );
@@ -66,11 +68,13 @@ class _StatusPill extends StatelessWidget {
     required this.label,
     required this.background,
     required this.foreground,
+    this.glyph,
   });
 
   final String label;
   final Color background;
   final Color foreground;
+  final BelongIconGlyph? glyph;
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +86,19 @@ class _StatusPill extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: background,
-          borderRadius: BelongRadii.pillAll,
+          borderRadius: BelongRadii.buttonAll,
         ),
-        child: Text(label, style: BelongText.button.copyWith(color: foreground)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (glyph != null) ...[
+              BelongIcon(glyph!, size: 17, color: foreground),
+              const SizedBox(width: 6),
+            ],
+            Text(label,
+                style: BelongText.button.copyWith(color: foreground)),
+          ],
+        ),
       ),
     );
   }

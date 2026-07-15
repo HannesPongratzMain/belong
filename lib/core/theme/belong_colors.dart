@@ -1,24 +1,23 @@
 import 'package:flutter/widgets.dart';
 
-/// Farb-Tokens aus dem Design-Handoff (`design_handoff_belong_flutter/README.md`).
+/// Farb-Tokens — reduzierte Palette: Neutral + Koralle (Orange) + Sonnenblume (Gelb).
 ///
 /// Verbindliche Rollen:
 /// - Koralle ist die **einzige** Aktionsfarbe — genau ein Primär-Button pro Screen.
-/// - Beere ist reiner Akzent (Funke, einzelne Chips, Fehler-Rahmen), nie Fläche.
-/// - Grundton ist Creme; App-Header sind Creme, nicht farbig gefüllt.
+/// - Sonnenblume ist reiner Status-/Badge-Akzent (z. B. „in 2 h"), nie Fläche.
+/// - Grundton ist Off-White; Karten setzen sich in reinem Weiß ab.
 abstract final class BelongColors {
   // Grundflächen
-  static const cream = Color(0xFFF1E8DA); // App-Grundton
-  static const surface = Color(0xFFFCF8F2); // Screen-/Listen-Hintergrund
+  static const cream = Color(0xFFF2F1ED); // App-Grundton (neutrales Off-White)
+  static const surface = Color(0xFFF8F7F4); // Screen-/Listen-Hintergrund
   static const card = Color(0xFFFFFFFF); // Karten
-  static const header = Color(0xFFEFE6D8); // App-Header-Fläche
-  static const headerBlob = Color(0xFFF6D3C7); // Deko-Blob im Header, Opacity 0.8
+  static const header = Color(0xFFF2F1ED); // App-Header-Fläche
 
-  // Text (warme Tinte — nie kühles Grau)
-  static const ink = Color(0xFF2F2A25); // Primärtext
-  static const inkSoft = Color(0xFF4A423B); // Labels
-  static const muted = Color(0xFF6E6358); // Sekundärtext (AA auf Creme)
-  static const placeholder = Color(0xFFB9A08D);
+  // Text (2–3 neutrale Graustufen — Dunkelgrau statt Schwarz)
+  static const ink = Color(0xFF2A2B2E); // Primärtext
+  static const inkSoft = Color(0xFF48494C); // Labels
+  static const muted = Color(0xFF66686C); // Sekundärtext (AA auf Off-White)
+  static const placeholder = Color(0xFFA6A7A9);
 
   // Koralle — DIE einzige Aktionsfarbe
   static const coral = Color(0xFFF25A43); // Buttons, aktive Chips, Radio
@@ -27,32 +26,28 @@ abstract final class BelongColors {
   static const coralWash = Color(0xFFFDF2EB);
 
   // Wortmarke
-  static const wordmark = Color(0xFFFF6F4D); // „BELONG" in Luckiest Guy
-  static const wordmarkShadow = Color(0xD92A1E1A); // rgba(42,30,26,0.85)
+  static const wordmark = Color(0xFFFF6F4D);
+  static const wordmarkShadow = Color(0xD92A1E1A);
+  static const berry = Color(0xFFD62F6B);
 
-  // Beere — reiner Akzent, nie Grundfläche
-  static const berry = Color(0xFFD62F6B); // Funke, kleine Details, Fehler-Rahmen
-  static const berryDeep = Color(0xFFA81552); // Text auf berryTint
-  static const berryTint = Color(0xFFF8DCE7); // Chips (z. B. „Tanzen")
-
-  // Stütztöne
-  static const amberTint = Color(0xFFF4E6CC); // Chips (z. B. „Draußen")
+  // Sonnenblume (Gelb) — nur Badges/Status, nie Fläche
+  static const amberTint = Color(0xFFF6EAC9); // Chips (z. B. „Draußen")
   static const amberDeep = Color(0xFF8A5A22); // Text auf amberTint
-  static const sunflower = Color(0xFFE7B22E); // Badges („Heute · 18:00"), Profil-Header
+  static const sunflower = Color(0xFFE7B22E); // Badges („Heute · 18:00")
   static const forest = Color(0xFF22401E); // Text auf sunflower
   static const sage = Color(0xFF2C6E4C); // Erfolg
   static const sageTint = Color(0xFFE2ECE4);
   static const error = Color(0xFF9C2A22); // semantischer Fehler (Text auf Weiß)
 
   // Linien & neutrale Chips
-  static const hairline = Color(0xFFEBDECB);
-  static const border = Color(0xFFEEE4D6);
-  static const borderIdle = Color(0xFFDFD2BB); // inaktive Radio-Ringe
-  static const chipNeutral = Color(0xFFF1E6D5); // Filter-Dropdown-Pills
+  static const hairline = Color(0xFFEAE9E6);
+  static const border = Color(0xFFECEBE8);
+  static const borderIdle = Color(0xFFD8D7D3); // inaktive Radio-Ringe
+  static const chipNeutral = Color(0xFFEFEEEB); // Filter-Dropdown-Pills
 
-  // Scrim für Sheets (rgba(42,30,26,0.32))
-  static const scrim = Color(0x522A1E1A);
+  // Scrim für Sheets (dunkles Neutral, 32 %)
+  static const scrim = Color(0x52242529);
 
-  // Warmer Schatten-Grundton rgba(74,50,34,x)
-  static const shadowBase = Color(0xFF4A3222);
+  // Schatten-Grundton (nahezu neutral, minimal warm)
+  static const shadowBase = Color(0xFF3A3835);
 }

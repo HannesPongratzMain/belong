@@ -10,10 +10,8 @@ import '../../core/widgets/belong_sheet.dart';
 import '../../core/widgets/belong_text_field.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/category_chip.dart';
-import '../../core/widgets/doodles.dart';
 import '../../core/widgets/option_sheet.dart';
 import '../../core/widgets/pressable.dart';
-import '../../core/widgets/spark.dart';
 import '../../core/widgets/state_view.dart';
 import '../../data/providers.dart';
 import '../../domain/models/activity.dart';
@@ -32,7 +30,7 @@ Future<void> showCreateActivitySheet(BuildContext context, {Activity? edit}) {
 }
 
 /// Aktivität erstellen: sechs Felder, freundliche Validierung,
-/// Erfolgs-Moment mit Funke. Mit [edit] wird dieselbe Maske zum
+/// ruhiger Erfolgs-Moment. Mit [edit] wird dieselbe Maske zum
 /// Bearbeiten — Speichern statt Erfolgs-Moment.
 class CreateActivitySheet extends ConsumerStatefulWidget {
   const CreateActivitySheet({super.key, this.edit});
@@ -193,6 +191,7 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
                   for (final category in ActivityCategory.values)
                     PickerChip(
                       label: category.label,
+                      glyph: category.glyph,
                       selected: _category == category,
                       onTap: () => setState(() => _category = category),
                     ),
@@ -205,12 +204,14 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
                   const Spacer(),
                   PickerChip(
                     label: 'Vor Ort',
+                    glyph: BelongIconGlyph.pin,
                     selected: !_isOnline,
                     onTap: () => setState(() => _isOnline = false),
                   ),
                   const SizedBox(width: 6),
                   PickerChip(
                     label: 'Online',
+                    glyph: BelongIconGlyph.wifi,
                     selected: _isOnline,
                     onTap: () => setState(() {
                       _isOnline = true;
@@ -230,7 +231,7 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
                   ),
                   child: Row(
                     children: [
-                      const BelongIcon(BelongIconGlyph.globe,
+                      const BelongIcon(BelongIconGlyph.wifi,
                           size: 18, color: BelongColors.coralDeep),
                       const SizedBox(width: 10),
                       Expanded(
@@ -300,7 +301,15 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Max. Teilnehmer:innen', style: BelongText.label),
+                        Row(
+                          children: [
+                            const BelongIcon(BelongIconGlyph.users,
+                                size: 15, color: BelongColors.inkSoft),
+                            const SizedBox(width: 5),
+                            Text('Max. Teilnehmer:innen',
+                                style: BelongText.label),
+                          ],
+                        ),
                         const SizedBox(height: BelongSpacing.xs),
                         PickerChip(
                           label: 'ohne Limit',
@@ -389,20 +398,19 @@ class _ValidationBanner extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
           horizontal: BelongSpacing.md, vertical: 14),
       decoration: BoxDecoration(
-        color: BelongColors.berryTint,
+        color: BelongColors.amberTint,
         borderRadius: BelongRadii.inputAll,
       ),
       child: Row(
         children: [
-          Text('!',
-              style: BelongText.rowTitle
-                  .copyWith(fontSize: 18, color: BelongColors.berryDeep)),
+          const BelongIcon(BelongIconGlyph.alert,
+              size: 18, color: BelongColors.amberDeep),
           const SizedBox(width: BelongSpacing.sm),
           Expanded(
             child: Text(
               'Fast geschafft — ein Feld fehlt noch.',
               style: BelongText.rowTitle
-                  .copyWith(color: BelongColors.berryDeep, fontSize: 15),
+                  .copyWith(color: BelongColors.amberDeep, fontSize: 15),
             ),
           ),
         ],
@@ -450,7 +458,7 @@ class _PickerField extends StatelessWidget {
                       style: BelongText.input),
                 ),
                 const BelongIcon(BelongIconGlyph.chevronDown,
-                    size: 14, color: BelongColors.muted, strokeWidth: 3),
+                    size: 16, color: BelongColors.muted),
               ],
             ),
           ),
@@ -487,8 +495,7 @@ class _CapacityStepper extends StatelessWidget {
                 size: 16,
                 color: onTap == null
                     ? BelongColors.placeholder
-                    : BelongColors.inkSoft,
-                strokeWidth: 2.6),
+                    : BelongColors.inkSoft),
           ),
         );
 
@@ -499,7 +506,7 @@ class _CapacityStepper extends StatelessWidget {
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           color: BelongColors.card,
-          borderRadius: BelongRadii.pillAll,
+          borderRadius: BelongRadii.buttonAll,
           border: Border.all(color: BelongColors.border),
         ),
         child: Row(
@@ -523,7 +530,7 @@ class _CapacityStepper extends StatelessWidget {
   }
 }
 
-/// Erstellen · Erfolg: „Steht!" mit Squiggle und Funke-Blob.
+/// Erstellen · Erfolg: „Steht!" — ruhige Bestätigung mit Check.
 class _SuccessView extends StatelessWidget {
   const _SuccessView({required this.activity});
 
@@ -531,56 +538,24 @@ class _SuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // Hintergrund-Blobs in den Ecken.
-        Positioned(
-          top: -40,
-          left: -50,
-          child: _CornerBlob(color: BelongColors.coralTint, size: 170),
-        ),
-        Positioned(
-          bottom: -50,
-          right: -40,
-          child: _CornerBlob(color: BelongColors.berryTint, size: 190),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: BelongSpacing.xl),
-          child: StateView(
-            blobColor: BelongColors.sunflower,
-            symbol: const Spark(
-                size: 46, color: BelongColors.forest, strokeWidth: 2.6, rotation: 16),
-            title: 'Steht!',
-            titleStyle: BelongText.displaySuccess,
-            message: '„${activity.title}" ist jetzt für alle in Kassel '
-                'sichtbar. Wir sagen dir, sobald jemand dabei ist.',
-            underTitle: const SquiggleUnderline(),
-            primaryLabel: 'Zur Aktivität',
-            onPrimary: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).push(ActivityDetailScreen.route(activity.id));
-            },
-            ghostLabel: 'Zurück zum Feed',
-            onGhost: () => Navigator.of(context).pop(),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _CornerBlob extends StatelessWidget {
-  const _CornerBlob({required this.color, required this.size});
-
-  final Color color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(color: color, borderRadius: BelongRadii.blob(size)),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: BelongSpacing.xl),
+      child: StateView(
+        blobColor: BelongColors.sageTint,
+        symbol: const BelongIcon(BelongIconGlyph.check,
+            size: 44, color: BelongColors.sage),
+        title: 'Steht!',
+        titleStyle: BelongText.displaySuccess,
+        message: '„${activity.title}" ist jetzt für alle in Kassel '
+            'sichtbar. Wir sagen dir, sobald jemand dabei ist.',
+        primaryLabel: 'Zur Aktivität',
+        onPrimary: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).push(ActivityDetailScreen.route(activity.id));
+        },
+        ghostLabel: 'Zurück zum Feed',
+        onGhost: () => Navigator.of(context).pop(),
+      ),
     );
   }
 }

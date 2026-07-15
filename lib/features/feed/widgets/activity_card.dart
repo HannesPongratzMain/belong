@@ -5,7 +5,7 @@ import '../../../core/theme/belong_colors.dart';
 import '../../../core/theme/belong_dimens.dart';
 import '../../../core/theme/belong_shadows.dart';
 import '../../../core/theme/belong_typography.dart';
-import '../../../core/widgets/app_header.dart';
+import '../../../core/widgets/belong_icons.dart';
 import '../../../core/widgets/category_chip.dart';
 import '../../../core/widgets/photo_placeholder.dart';
 import '../../../core/widgets/pills.dart';
@@ -13,8 +13,8 @@ import '../../../core/widgets/pressable.dart';
 import '../../../domain/models/activity.dart';
 import '../../participation/widgets/join_button.dart';
 
-/// Große Feed-Karte (featured): Foto mit Sonnenblume-Badge und gerissener
-/// Kante, Kategorie-Chip, Serif-Titel, Meta, Plätze + JoinButton.
+/// Große Feed-Karte (featured): flache Bildfläche mit Zeit-Badge,
+/// Kategorie-Chip, Titel, Meta, Plätze + JoinButton.
 class ActivityCard extends StatelessWidget {
   const ActivityCard({super.key, required this.activity, this.onTap});
 
@@ -37,34 +37,27 @@ class ActivityCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Foto mit gerissener Weiß-Kante unten.
+            // Flache Bildfläche mit Zeit-Badge.
             Stack(
               children: [
-                ClipPath(
-                  clipper: const TornEdgeClipper(amplitude: 4),
-                  child: SizedBox(
-                    height: 132,
-                    width: double.infinity,
-                    child: PhotoPlaceholder(
-                      category: activity.category,
-                      photoHint: activity.photoHint,
-                    ),
+                SizedBox(
+                  height: 132,
+                  width: double.infinity,
+                  child: PhotoPlaceholder(
+                    category: activity.category,
+                    photoHint: activity.photoHint,
                   ),
                 ),
                 Positioned(
                   top: 10,
                   right: 10,
-                  child: Transform.rotate(
-                    angle: 3 * 3.14159 / 180,
-                    child: BelongPill(
-                      label: BelongDates.badge(activity.startsAt),
-                      background: BelongColors.sunflower,
-                      foreground: BelongColors.forest,
-                      textStyle: BelongText.badge,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
-                      shadows: BelongShadows.sunflowerBadge,
-                    ),
+                  child: BelongPill(
+                    label: BelongDates.badge(activity.startsAt),
+                    background: BelongColors.sunflower,
+                    foreground: BelongColors.forest,
+                    textStyle: BelongText.badge,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   ),
                 ),
               ],
@@ -81,17 +74,38 @@ class ActivityCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(activity.title, style: BelongText.cardTitle),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${activity.placeLabel} · '
-                    '${BelongDates.dayLong(activity.startsAt)}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: BelongText.body.copyWith(color: BelongColors.muted),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      const BelongIcon(BelongIconGlyph.pin,
+                          size: 14, color: BelongColors.muted),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          activity.placeLabel,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: BelongText.body
+                              .copyWith(color: BelongColors.muted),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      const BelongIcon(BelongIconGlyph.clock,
+                          size: 14, color: BelongColors.muted),
+                      const SizedBox(width: 4),
+                      Text(
+                        BelongDates.dayLong(activity.startsAt),
+                        style:
+                            BelongText.body.copyWith(color: BelongColors.muted),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: BelongSpacing.sm),
                   Row(
                     children: [
+                      const BelongIcon(BelongIconGlyph.users,
+                          size: 15, color: BelongColors.inkSoft),
+                      const SizedBox(width: 5),
                       Text('${activity.participantCount} dabei',
                           style: BelongText.rowTitle.copyWith(fontSize: 15)),
                       const Spacer(),
@@ -152,13 +166,22 @@ class ActivityRow extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: BelongText.rowTitle),
                   const SizedBox(height: 3),
-                  Text(
-                    '${activity.placeLabel} · '
-                    '${BelongDates.weekday(activity.startsAt)} '
-                    '${BelongDates.time(activity.startsAt)}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: BelongText.meta,
+                  Row(
+                    children: [
+                      const BelongIcon(BelongIconGlyph.pin,
+                          size: 12, color: BelongColors.muted),
+                      const SizedBox(width: 3),
+                      Flexible(
+                        child: Text(
+                          '${activity.placeLabel} · '
+                          '${BelongDates.weekday(activity.startsAt)} '
+                          '${BelongDates.time(activity.startsAt)}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: BelongText.meta,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
