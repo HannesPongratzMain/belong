@@ -105,7 +105,7 @@ class MockDatabase {
             'Lockere 5 km durch die Karlsaue — wir laufen im Gesprächstempo '
             'und warten an jeder Ecke. Null Leistungsdruck, versprochen.',
         category: ActivityCategory.draussen,
-        locationName: 'Orangerie, Karlsaue',
+        precise: const PreciseLocation(address: 'Orangerie, Karlsaue'),
         area: 'Mitte',
         startsAt: today18.isBefore(now) ? today18.add(const Duration(days: 1)) : today18,
         participantCount: 12,
@@ -119,7 +119,7 @@ class MockDatabase {
             'Erste Schritte, keine Vorkenntnisse, keine Tanzpartner:in nötig. '
             'Danach gibt es Limo an der Bar.',
         category: ActivityCategory.tanzen,
-        locationName: 'Tanzschule La Vida',
+        precise: const PreciseLocation(address: 'Tanzschule La Vida'),
         area: 'Vorderer Westen',
         startsAt: _nextWeekday(now, DateTime.wednesday, 19, 0),
         capacity: 12,
@@ -134,7 +134,7 @@ class MockDatabase {
             'Gemütliche Tour flussabwärts bis zur Schleuse. Boote sind '
             'reserviert, Schwimmwesten gibt es vor Ort.',
         category: ActivityCategory.draussen,
-        locationName: 'Bootsverleih Ahoi',
+        precise: const PreciseLocation(address: 'Bootsverleih Ahoi'),
         area: 'Mitte',
         startsAt: _nextWeekday(now, DateTime.saturday, 10, 0),
         capacity: 8,
@@ -149,7 +149,7 @@ class MockDatabase {
             'Von Azul bis Codenames — wir bringen Spiele mit, du dich. '
             'Der große Tisch hinten ist reserviert.',
         category: ActivityCategory.spiele,
-        locationName: 'Café Buntes Haus',
+        precise: const PreciseLocation(address: 'Café Buntes Haus'),
         area: 'Vorderer Westen',
         startsAt: _nextWeekday(now, DateTime.friday, 19, 30),
         participantCount: 5,
@@ -163,7 +163,7 @@ class MockDatabase {
             'Einfach vorbeikommen und mitsingen — Notenkenntnisse braucht '
             'hier niemand.',
         category: ActivityCategory.musik,
-        locationName: 'Kulturhaus Dock 4',
+        precise: const PreciseLocation(address: 'Kulturhaus Dock 4'),
         area: 'Mitte',
         startsAt: _nextWeekday(now, DateTime.thursday, 18, 30),
         participantCount: 9,
@@ -177,7 +177,7 @@ class MockDatabase {
             'Eine Stunde Kaffee mit neuen Leuten aus dem Viertel. '
             'Kommen, sitzen, quatschen — mehr ist es nicht.',
         category: ActivityCategory.kaffee,
-        locationName: 'Rösterei Kaffeewerk',
+        precise: const PreciseLocation(address: 'Rösterei Kaffeewerk'),
         area: 'Wehlheiden',
         startsAt: _nextWeekday(now, DateTime.sunday, 15, 0),
         capacity: 6,

@@ -11,13 +11,16 @@ import '../../core/widgets/belong_text_field.dart';
 import '../../core/widgets/buttons.dart';
 import '../../core/widgets/category_chip.dart';
 import '../../core/widgets/option_sheet.dart';
+import '../../core/widgets/locked_action.dart';
 import '../../core/widgets/pressable.dart';
 import '../../core/widgets/state_view.dart';
 import '../../data/providers.dart';
 import '../../domain/models/activity.dart';
+import '../../domain/models/verification_level.dart';
 import '../activity_detail/activity_detail_screen.dart';
 import '../feed/feed_controller.dart';
 import '../participation/participation_controller.dart';
+import '../profile/profile_controller.dart';
 
 /// Öffnet „Starte was Kleines" als Bottom-Sheet — oder mit [edit] das
 /// gleiche Formular vorbefüllt als „Aktivität bearbeiten" (Host-Werkzeug).
@@ -64,6 +67,10 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
 
   bool get _isEdit => widget.edit != null;
 
+  bool get _isVerified =>
+      ref.watch(profileProvider).value?.verificationLevel ==
+      VerificationLevel.phone;
+
   @override
   void initState() {
     super.initState();
@@ -74,7 +81,7 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
       return;
     }
     _titleController.text = edit.title;
-    _locationController.text = edit.locationName ?? '';
+    _locationController.text = edit.precise?.address ?? '';
     _descriptionController.text = edit.description ?? '';
     _category = edit.category;
     _isOnline = edit.isOnline;
@@ -328,11 +335,14 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
                 ],
               ),
               const SizedBox(height: BelongSpacing.lg),
-              PrimaryButton(
-                label: _isEdit ? 'Änderungen speichern' : 'Aktivität teilen',
-                loading: _submitting,
-                onTap: _submit,
-              ),
+              if (!_isEdit && !_isVerified)
+                const _LockedSubmitButton()
+              else
+                PrimaryButton(
+                  label: _isEdit ? 'Änderungen speichern' : 'Aktivität teilen',
+                  loading: _submitting,
+                  onTap: _submit,
+                ),
               const SizedBox(height: BelongSpacing.sm),
               Center(
                 child: Text(
@@ -385,6 +395,43 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
         _minute = time.minute;
       });
     }
+  }
+}
+
+/// Gesperrter Submit für unverifizierte Nutzer:innen — Graustufe, Lock-Icon,
+/// Tap zeigt nur den Hinweis (kein Dialog/Modal).
+class _LockedSubmitButton extends StatelessWidget {
+  const _LockedSubmitButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final tooltipKey = GlobalKey<LockedActionTooltipState>();
+    return LockedActionTooltip(
+      key: tooltipKey,
+      child: Pressable(
+        onTap: () => tooltipKey.currentState?.show(),
+        semanticLabel: 'Aktivität teilen — Verifizierung nötig',
+        child: Container(
+          width: double.infinity,
+          height: 52,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: BelongColors.chipNeutral,
+            borderRadius: BelongRadii.buttonAll,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const BelongIcon(BelongIconGlyph.lock,
+                  size: 16, color: BelongColors.muted),
+              const SizedBox(width: 6),
+              Text('Aktivität teilen',
+                  style: BelongText.button.copyWith(color: BelongColors.muted)),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

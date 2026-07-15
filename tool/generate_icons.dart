@@ -9,8 +9,8 @@
 //   flutter test tool/generate_icons.dart
 //   dart run flutter_launcher_icons
 //
-// Der Funke lebt nur noch hier als App-Icon-Motiv (viewBox 24×24,
-// vier Kubik-Striche, 14° gedreht) — im UI selbst kommt er nicht mehr vor.
+// Der Funke ist 1:1 der CustomPainter aus lib/core/widgets/spark.dart
+// (viewBox 24×24, vier Kubik-Striche, 14° gedreht wie in der Wortmarke).
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
@@ -29,7 +29,7 @@ void _drawSpark(Canvas canvas, {required double extent}) {
   canvas.translate(-12 * s, -12 * s);
 
   final paint = Paint()
-    ..color = BelongColors.coral
+    ..color = BelongColors.berry
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.6 * s
     ..strokeCap = StrokeCap.round;

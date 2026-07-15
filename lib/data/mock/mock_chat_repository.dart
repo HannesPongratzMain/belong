@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import '../../domain/models/chat_message.dart';
+import '../../domain/models/verification_level.dart';
 import '../repositories/chat_repository.dart';
 import 'mock_database.dart';
 
@@ -42,6 +43,7 @@ class MockChatRepository implements ChatRepository {
         senderId: profile.id,
         senderNickname: profile.nickname,
         isOrganizer: _db.myActivityIds.contains(activityId),
+        isSenderVerified: profile.verificationLevel == VerificationLevel.phone,
         text: text,
         sentAt: DateTime.now(),
       ));
@@ -60,6 +62,7 @@ class MockChatRepository implements ChatRepository {
         senderId: profile.id,
         senderNickname: profile.nickname,
         isOrganizer: _db.myActivityIds.contains(activityId),
+        isSenderVerified: profile.verificationLevel == VerificationLevel.phone,
         type: ChatMessageType.meetupPin,
         // Fallback-Text, falls eine Oberfläche die Karte nicht rendert.
         text: 'Treffpunkt: ${pin.placeName}',

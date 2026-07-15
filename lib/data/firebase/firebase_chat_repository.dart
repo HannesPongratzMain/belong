@@ -69,17 +69,26 @@ class FirebaseChatRepository implements ChatRepository {
     return controller.stream;
   }
 
+  /// Absender-Metadaten zum Sendezeitpunkt einfrieren — wie [senderNickname]
+  /// kein Live-Lookup, sondern eine Momentaufnahme in der Nachricht.
+  Future<(String nickname, bool isVerified)> _senderMeta() async {
+    final user = await _db.get('users/${_auth.uid}') as Map<String, dynamic>?;
+    final nickname = user?['nickname'] as String? ?? 'jemand';
+    final isVerified = user?['verificationLevel'] == 'phone';
+    return (nickname, isVerified);
+  }
+
   @override
   Future<void> sendMessage(
       {required String activityId, required String text}) async {
     await _auth.ensureSignedIn();
-    final nickname =
-        await _db.get('users/${_auth.uid}/nickname') as String? ?? 'jemand';
+    final (nickname, isVerified) = await _senderMeta();
     final hostId = await _db.get('activities/$activityId/hostId') as String?;
     await _db.push('chats/$activityId/messages', {
       'senderId': _auth.uid,
       'senderNickname': nickname,
       'isOrganizer': hostId == _auth.uid,
+      'isSenderVerified': isVerified,
       'text': text,
       'type': ChatMessageType.text.toJson(),
       'sentAt': DateTime.now().toIso8601String(),
@@ -90,13 +99,13 @@ class FirebaseChatRepository implements ChatRepository {
   Future<void> sendMeetupPin(
       {required String activityId, required MeetupPin pin}) async {
     await _auth.ensureSignedIn();
-    final nickname =
-        await _db.get('users/${_auth.uid}/nickname') as String? ?? 'jemand';
+    final (nickname, isVerified) = await _senderMeta();
     final hostId = await _db.get('activities/$activityId/hostId') as String?;
     await _db.push('chats/$activityId/messages', {
       'senderId': _auth.uid,
       'senderNickname': nickname,
       'isOrganizer': hostId == _auth.uid,
+      'isSenderVerified': isVerified,
       // Fallback-Text, falls eine Oberfläche die Karte nicht rendert.
       'text': 'Treffpunkt: ${pin.placeName}',
       'type': ChatMessageType.meetupPin.toJson(),

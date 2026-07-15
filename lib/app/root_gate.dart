@@ -7,12 +7,14 @@ import '../core/theme/belong_dimens.dart';
 import '../core/widgets/belong_icons.dart';
 import '../core/widgets/belong_wordmark.dart';
 import '../core/widgets/state_view.dart';
+import '../features/onboarding/age_gate_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/profile/profile_controller.dart';
 import 'home_shell.dart';
 
 /// Weiche zwischen Onboarding und App: solange kein Profil existiert,
-/// gibt es nur den anonymen Einstieg.
+/// gibt es nur den anonymen Einstieg. Profile ohne 18+-Bestätigung
+/// (angelegt vor Einführung der Altersgrenze) landen erst im Age-Gate.
 class RootGate extends ConsumerWidget {
   const RootGate({super.key});
 
@@ -24,6 +26,10 @@ class RootGate extends ConsumerWidget {
       duration: BelongMotion.medium,
       switchInCurve: BelongMotion.curve,
       child: switch (profile) {
+        AsyncValue(value: final p?) when !p.ageConfirmed => const Scaffold(
+            backgroundColor: BelongColors.surface,
+            body: AgeGateScreen(),
+          ),
         AsyncValue(value: _?) => const HomeShell(),
         AsyncValue(hasValue: true) => const Scaffold(
             backgroundColor: BelongColors.surface,

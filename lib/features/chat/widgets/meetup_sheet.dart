@@ -40,7 +40,7 @@ class _MeetupSheetState extends State<_MeetupSheet> {
     super.initState();
     final activity = widget.activity;
     if (activity == null) return;
-    if (!activity.isOnline) _placeController.text = activity.locationName ?? '';
+    if (!activity.isOnline) _placeController.text = activity.precise?.address ?? '';
     _timeController.text = BelongDates.badge(activity.startsAt);
   }
 

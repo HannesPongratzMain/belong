@@ -32,6 +32,10 @@ Anmeldung, kein Account nötig) und zeigt echte Aktivitäten aus Kassel.
 
 - **Onboarding** — anonymer Einstieg mit drei Sichtbarkeits-Stufen
   (ganz anonym / Spitzname / Spitzname + Interessen), ohne E-Mail
+- **Altersgrenze 18+** — datensparsame Selbstbestätigung im Onboarding
+  (nur das „Ja" wird gespeichert, kein Geburtsdatum); serverseitig über
+  die Database Rules erzwungen, Bestandsprofile ohne Bestätigung landen
+  in einem Age-Gate vor der App
 - **Feed** — Aktivitäten entdecken, Filter (Stadtteil, Zeitraum, Kategorie),
   inkl. Lade- (Skeletons), Leer- und Fehler-Zustand
 - **One-Click-Join** — Zustand sichtbar: beitreten / dabei / voll / verlassen
