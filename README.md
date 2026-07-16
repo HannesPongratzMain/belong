@@ -39,8 +39,12 @@ gilt als „nicht konfiguriert" — die App fällt dann automatisch auf die
 Mock-Datenschicht zurück (siehe [Plan B](#backend-firebase-realtime-database)):
 
 ```bash
-flutter run --dart-define=BELONG_FIREBASE_API_KEY=<disabled>
+flutter run --dart-define='BELONG_FIREBASE_API_KEY=<disabled>'
 ```
+
+(`<`/`>` sind Shell-Umleitungszeichen — den Wert unbedingt in
+Anführungszeichen setzen, sonst gibt es einen Syntaxfehler; unter
+PowerShell doppelte statt einfache Anführungszeichen verwenden.)
 
 ## Funktionen
 
