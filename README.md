@@ -26,7 +26,21 @@ Anmeldung, kein Account nötig) und zeigt echte Aktivitäten aus Kassel.
   (gestalteter Fehler-Zustand). Der Leer-Zustand erscheint z. B. mit
   Filter „Tanzen" + „Heute".
 - Long-Press auf eine fremde Chat-Nachricht öffnet das Schutz-Sheet
-  (Melden / Blockieren / Stummschalten).
+  (Melden / Blockieren / Stummschalten / Als Freund anfragen).
+- **Freundesystem demoen:** dafür den Mock-Modus erzwingen (siehe unten) —
+  dort sind zwei eingehende Anfragen (`jan_orga`, `cafe-lena`) vorgeseedet
+  und sofort unter „Du" → „FREUNDE" sichtbar (Annehmen/Ablehnen). Eine
+  eigene Anfrage sendest du per Long-Press auf eine fremde Nachricht im
+  Gruppenchat einer beigetretenen Aktivität.
+
+**Mock-Modus erzwingen** (kein Firebase-Zugriff, Demo-Daten aus
+`lib/data/mock/mock_database.dart`): jeder API-Key, der mit `<` beginnt,
+gilt als „nicht konfiguriert" — die App fällt dann automatisch auf die
+Mock-Datenschicht zurück (siehe [Plan B](#backend-firebase-realtime-database)):
+
+```bash
+flutter run --dart-define=BELONG_FIREBASE_API_KEY=<disabled>
+```
 
 ## Funktionen
 
@@ -52,6 +66,10 @@ Anmeldung, kein Account nötig) und zeigt echte Aktivitäten aus Kassel.
   und Stummschalten über das Schutz-Sheet
 - **Profil** — minimal & anonym: Stufe jederzeit wechselbar, eigene
   Teilnahmen und gestartete Aktivitäten
+- **Freundesystem (BEL-04, v1)** — verifizierte Mitglieder fragen sich
+  gegenseitig per Long-Press auf eine Chat-Nachricht als Freund:in an;
+  Annehmen/Ablehnen im Profil unter „FREUNDE". Bewusst ohne
+  Kontaktabgleich/Telefonbuch-Upload — passt so zum Anonymitäts-Prinzip.
 - **Safety-by-Design-Hinweise** — Gruppengröße („X von Y dabei") prominent
   im Aktivitätsdetail ohne Scrollen sichtbar; Sicherheitshinweis „Erstes
   Treffen? Öffentlicher Treffpunkt empfohlen." im Detail, beim
@@ -103,11 +121,16 @@ konfliktsicher geändert.
   die Security Rules.)
 - Datenstruktur: `/users`, `/activities`, `/participations`,
   `/activityParticipants` (Spiegel-Index für die Chat-Zugriffsregel),
-  `/chats`, `/moderation` (reports/blocks/mutes).
+  `/chats`, `/friendRequests`, `/friendships`, `/moderation`
+  (reports/blocks/mutes).
 - **Security Rules:** `firebase/database.rules.json` ist die Single Source
   of Truth im Repo. Änderungen dort werden **manuell** in die Firebase-
   Konsole (Realtime Database → Regeln) kopiert und veröffentlicht — die
   App selbst braucht dafür keinen neuen Build.
+  ⚠️ Die Regeln für `/friendRequests` und `/friendships` (Freundesystem)
+  liegen aktuell nur lokal im Repo und sind **noch nicht** in die
+  Firebase-Konsole übernommen — bis dahin funktioniert das Freundesystem
+  nur im Mock-Modus.
 
 **Plan B (Mockdaten):** Die komplette Mock-Datenschicht bleibt im Projekt.
 Umschalten über den `dataBackendProvider` in `lib/data/providers.dart` —
