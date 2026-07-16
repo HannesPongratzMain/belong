@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/format/belong_dates.dart';
 import '../../../core/theme/belong_colors.dart';
@@ -9,15 +10,18 @@ import '../../../core/widgets/belong_sheet.dart';
 import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/pressable.dart';
 import '../../../domain/models/chat_message.dart';
+import '../../friends/friends_controller.dart';
 
 /// SafetySheet nach Long-Press auf eine fremde Nachricht:
-/// Melden / Blockieren / Stummschalten — freundlich, aber unmissverständlich.
+/// Melden / Blockieren / Stummschalten / Als Freund anfragen — freundlich,
+/// aber unmissverständlich.
 Future<void> showSafetySheet({
   required BuildContext context,
   required ChatMessage message,
   required VoidCallback onReport,
   required VoidCallback onBlock,
   required VoidCallback onMute,
+  required VoidCallback onAddFriend,
 }) {
   return showBelongSheet<void>(
     context: context,
@@ -26,6 +30,7 @@ Future<void> showSafetySheet({
       onReport: onReport,
       onBlock: onBlock,
       onMute: onMute,
+      onAddFriend: onAddFriend,
     ),
   );
 }
@@ -41,18 +46,20 @@ Future<void> showChatProtectionSheet({
   );
 }
 
-class _SafetySheet extends StatelessWidget {
+class _SafetySheet extends ConsumerWidget {
   const _SafetySheet({
     required this.message,
     required this.onReport,
     required this.onBlock,
     required this.onMute,
+    required this.onAddFriend,
   });
 
   final ChatMessage message;
   final VoidCallback onReport;
   final VoidCallback onBlock;
   final VoidCallback onMute;
+  final VoidCallback onAddFriend;
 
   /// „heute", „gestern" oder Kurz-Wochentag — für die Kontextzeile.
   static String _dayLabel(DateTime sentAt) {
@@ -67,11 +74,17 @@ class _SafetySheet extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     void close(VoidCallback action) {
       Navigator.of(context).pop();
       action();
     }
+
+    // Wer eine Nachricht in diesem Chat sehen kann, ist bereits Teilnehmer:in
+    // oder Host — beides setzt Verifizierung voraus (BEL-03). Ein eigenes
+    // "erst verifizieren"-Sheet braucht es an dieser Stelle also nicht.
+    final alreadyFriends =
+        ref.watch(friendIdsProvider).contains(message.senderId);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(BelongSpacing.md, BelongSpacing.xs,
@@ -140,6 +153,16 @@ class _SafetySheet extends StatelessWidget {
             subtitle: 'Du bleibst dabei, bekommst aber keine Pings mehr.',
             onTap: () => close(onMute),
           ),
+          if (!alreadyFriends) ...[
+            const SizedBox(height: BelongSpacing.xs),
+            SafetyRow(
+              glyph: BelongIconGlyph.userAdd,
+              color: BelongColors.coralDeep,
+              title: 'Als Freund anfragen',
+              subtitle: 'Nur du siehst später, ob ihr euch kennt.',
+              onTap: () => close(onAddFriend),
+            ),
+          ],
           const SizedBox(height: BelongSpacing.xs),
           GhostButton(
             label: 'Abbrechen',

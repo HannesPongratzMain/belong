@@ -32,6 +32,7 @@ enum BelongIconGlyph {
   globe(LucideIcons.globe),
   lock(LucideIcons.lock),
   verified(LucideIcons.shieldCheck),
+  userAdd(LucideIcons.userPlus),
   // Kategorien
   tree(LucideIcons.treePine),
   dance(LucideIcons.music2),

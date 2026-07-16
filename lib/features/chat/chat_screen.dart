@@ -13,6 +13,7 @@ import '../../core/widgets/belong_icons.dart';
 import '../../core/widgets/pills.dart';
 import '../../core/widgets/pressable.dart';
 import '../../domain/models/chat_message.dart';
+import '../friends/friends_controller.dart';
 import '../participation/participation_controller.dart';
 import '../profile/profile_controller.dart';
 import 'chat_controller.dart';
@@ -98,6 +99,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       onMute: () async {
         await ref.read(chatActionsProvider).mute(widget.activityId);
         _showToast('Chat stummgeschaltet — du bleibst dabei.');
+      },
+      onAddFriend: () async {
+        await ref
+            .read(friendActionControllerProvider.notifier)
+            .sendRequest(message.senderId);
+        _showToast('Anfrage an ${message.senderNickname} gesendet.');
       },
     );
   }

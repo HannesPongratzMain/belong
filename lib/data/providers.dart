@@ -5,16 +5,19 @@ import 'firebase/firebase_auth_client.dart';
 import 'firebase/firebase_auth_repository.dart';
 import 'firebase/firebase_chat_repository.dart';
 import 'firebase/firebase_config.dart';
+import 'firebase/firebase_friend_repository.dart';
 import 'firebase/firebase_participation_repository.dart';
 import 'firebase/rtdb_client.dart';
 import 'mock/mock_activity_repository.dart';
 import 'mock/mock_auth_repository.dart';
 import 'mock/mock_chat_repository.dart';
 import 'mock/mock_database.dart';
+import 'mock/mock_friend_repository.dart';
 import 'mock/mock_participation_repository.dart';
 import 'repositories/activity_repository.dart';
 import 'repositories/auth_repository.dart';
 import 'repositories/chat_repository.dart';
+import 'repositories/friend_repository.dart';
 import 'repositories/participation_repository.dart';
 
 /// Verfügbare Datenquellen der App.
@@ -86,6 +89,14 @@ final chatRepositoryProvider = Provider<ChatRepository>((ref) {
     DataBackend.firebase => FirebaseChatRepository(
         ref.watch(firebaseAuthClientProvider), ref.watch(rtdbClientProvider)),
     DataBackend.mock => MockChatRepository(ref.watch(mockDatabaseProvider)),
+  };
+});
+
+final friendRepositoryProvider = Provider<FriendRepository>((ref) {
+  return switch (ref.watch(dataBackendProvider)) {
+    DataBackend.firebase => FirebaseFriendRepository(
+        ref.watch(firebaseAuthClientProvider), ref.watch(rtdbClientProvider)),
+    DataBackend.mock => MockFriendRepository(ref.watch(mockDatabaseProvider)),
   };
 });
 

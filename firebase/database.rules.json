@@ -72,6 +72,28 @@
         }
       }
     },
+    "friendRequests": {
+      "$toUserId": {
+        ".read": "auth != null && auth.uid === $toUserId",
+        "$fromUserId": {
+          ".write": "auth != null && (auth.uid === $toUserId || (auth.uid === $fromUserId && !data.exists() && root.child('users').child(auth.uid).child('verificationLevel').val() === 'phone' && root.child('users').child($toUserId).child('verificationLevel').val() === 'phone'))",
+          "fromNickname": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 30"
+          }
+        }
+      }
+    },
+    "friendships": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        "$friendUid": {
+          ".write": "auth != null && (auth.uid === $uid || (auth.uid === $friendUid && root.child('friendRequests').child(auth.uid).child($uid).exists()))",
+          "nickname": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 30"
+          }
+        }
+      }
+    },
     "moderation": {
       "reports": {
         "$reportId": {

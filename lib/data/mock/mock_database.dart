@@ -3,6 +3,8 @@ import 'dart:math';
 
 import '../../domain/models/activity.dart';
 import '../../domain/models/chat_message.dart';
+import '../../domain/models/friend.dart';
+import '../../domain/models/friend_request.dart';
 import '../../domain/models/participation.dart';
 import '../../domain/models/user_profile.dart';
 
@@ -34,6 +36,12 @@ class MockDatabase {
   final Set<String> blockedUserIds = {};
   final Set<String> reportedMessageIds = {};
 
+  /// Eingehende Freundschaftsanfragen, Schlüssel `fromUserId` (geseedet,
+  /// siehe [_seedFriendRequests] — der Mock kennt nur "mich" vollständig,
+  /// es gibt also keine echte Gegenseite, die selbst Anfragen auslöst).
+  final Map<String, FriendRequest> incomingFriendRequests = _seedFriendRequests();
+  final Map<String, Friend> friends = {};
+
   /// Demo-Schalter: lässt den nächsten Feed-Abruf fehlschlagen
   /// (Fehler-Zustand aus dem Design vorführbar machen).
   bool failNextFeedFetch = false;
@@ -41,6 +49,9 @@ class MockDatabase {
   final joinedIdsChanges = StreamController<Set<String>>.broadcast();
   final activityChanges = StreamController<Activity>.broadcast();
   final messageChanges = StreamController<ChatMessage>.broadcast();
+  final friendRequestChanges =
+      StreamController<Map<String, FriendRequest>>.broadcast();
+  final friendChanges = StreamController<Map<String, Friend>>.broadcast();
 
   Set<String> get joinedIds => participations.keys.toSet();
 
@@ -73,6 +84,25 @@ class MockDatabase {
       '$prefix-${DateTime.now().microsecondsSinceEpoch}-${_random.nextInt(9999)}';
 
   String randomNickname() => _nicknamePool[_random.nextInt(_nicknamePool.length)];
+
+  /// Ein paar geseedete eingehende Anfragen — von Personen, die im Demo-Chat
+  /// schon als Organisator:innen bekannt sind (Annehmen/Ablehnen sofort
+  /// testbar, ohne eine zweite echte Nutzer:in zu brauchen).
+  static Map<String, FriendRequest> _seedFriendRequests() {
+    final now = DateTime.now();
+    return {
+      'u-jan': FriendRequest(
+        fromUserId: 'u-jan',
+        fromNickname: 'jan_orga',
+        createdAt: now.subtract(const Duration(days: 1)),
+      ),
+      'u-lena': FriendRequest(
+        fromUserId: 'u-lena',
+        fromNickname: 'cafe-lena',
+        createdAt: now.subtract(const Duration(hours: 5)),
+      ),
+    };
+  }
 
   static const _nicknamePool = [
     'stiller-fuchs',

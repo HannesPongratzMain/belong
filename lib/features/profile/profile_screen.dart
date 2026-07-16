@@ -7,15 +7,19 @@ import '../../core/theme/belong_dimens.dart';
 import '../../core/theme/belong_shadows.dart';
 import '../../core/theme/belong_typography.dart';
 import '../../core/widgets/belong_icons.dart';
+import '../../core/widgets/buttons.dart';
 import '../../core/widgets/category_chip.dart';
 import '../../core/widgets/pills.dart';
 import '../../core/widgets/pressable.dart';
 import '../../domain/models/access_level.dart';
 import '../../domain/models/activity.dart';
 import '../../domain/models/anonymity_level.dart';
+import '../../domain/models/friend.dart';
+import '../../domain/models/friend_request.dart';
 import '../../domain/models/user_profile.dart';
 import '../../domain/models/verification_level.dart';
 import '../activity_detail/activity_detail_screen.dart';
+import '../friends/friends_controller.dart';
 import '../participation/participation_controller.dart';
 import 'profile_controller.dart';
 import 'widgets/change_anonymity_sheet.dart';
@@ -51,6 +55,10 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(height: BelongSpacing.sm),
                 _InterestChips(profile: profile),
               ],
+              const SizedBox(height: BelongSpacing.lg),
+              Text('FREUNDE', style: BelongText.sectionLabel),
+              const SizedBox(height: BelongSpacing.sm),
+              const _FriendsSection(),
               const SizedBox(height: BelongSpacing.lg),
               Text('DU BIST DABEI', style: BelongText.sectionLabel),
               const SizedBox(height: BelongSpacing.sm),
@@ -376,6 +384,137 @@ class _VisibilityRow extends StatelessWidget {
                 size: 16, color: BelongColors.coralDeep),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Eingehende Anfragen (annehmen/ablehnen) + angenommene Freundschaften —
+/// Einstieg zum Anfragen selbst liegt im Chat (Long-Press auf eine
+/// Nachricht), hier nur Verwaltung.
+class _FriendsSection extends ConsumerWidget {
+  const _FriendsSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final requests = ref.watch(incomingFriendRequestsProvider).value ?? const [];
+    final friends = ref.watch(friendsProvider).value ?? const [];
+    final pending = ref.watch(friendActionControllerProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final request in requests) ...[
+          _FriendRequestRow(
+              request: request, pending: pending.contains(request.fromUserId)),
+          const SizedBox(height: BelongSpacing.xs),
+        ],
+        if (friends.isEmpty)
+          Text(
+            'Noch keine Freunde — frag im Chat einer Aktivität jemanden an.',
+            style: BelongText.bodySmall.copyWith(color: BelongColors.muted),
+          )
+        else
+          for (final friend in friends) ...[
+            _FriendRow(friend: friend),
+            const SizedBox(height: BelongSpacing.xs),
+          ],
+      ],
+    );
+  }
+}
+
+class _FriendRequestRow extends ConsumerWidget {
+  const _FriendRequestRow({required this.request, required this.pending});
+
+  final FriendRequest request;
+  final bool pending;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      padding: const EdgeInsets.all(BelongSpacing.sm),
+      decoration: BoxDecoration(
+        color: BelongColors.card,
+        borderRadius: BelongRadii.rowCardAll,
+        border: Border.all(color: BelongColors.border),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(request.fromNickname,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: BelongText.rowTitle.copyWith(fontSize: 15)),
+          ),
+          Opacity(
+            opacity: pending ? 0.5 : 1,
+            child: BelongPill(
+              label: 'Annehmen',
+              background: BelongColors.coral,
+              foreground: const Color(0xFFFFFFFF),
+              textStyle: BelongText.chip.copyWith(fontWeight: FontWeight.w700),
+              onTap: pending
+                  ? null
+                  : () => ref
+                      .read(friendActionControllerProvider.notifier)
+                      .accept(request.fromUserId),
+            ),
+          ),
+          const SizedBox(width: BelongSpacing.xs),
+          GhostButton(
+            label: 'Ablehnen',
+            onTap: pending
+                ? null
+                : () => ref
+                    .read(friendActionControllerProvider.notifier)
+                    .decline(request.fromUserId),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FriendRow extends StatelessWidget {
+  const _FriendRow({required this.friend});
+
+  final Friend friend;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(BelongSpacing.sm),
+      decoration: BoxDecoration(
+        color: BelongColors.card,
+        borderRadius: BelongRadii.rowCardAll,
+        border: Border.all(color: BelongColors.border),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                color: BelongColors.coralTint, shape: BoxShape.circle),
+            child: Text(
+              friend.nickname.substring(0, 1),
+              style: const TextStyle(
+                fontFamily: BelongFonts.sans,
+                fontWeight: FontWeight.w600,
+                color: BelongColors.coralDeep,
+              ),
+            ),
+          ),
+          const SizedBox(width: BelongSpacing.sm),
+          Expanded(
+            child: Text(friend.nickname,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: BelongText.rowTitle.copyWith(fontSize: 15)),
+          ),
+        ],
       ),
     );
   }
