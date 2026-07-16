@@ -36,15 +36,15 @@ Anmeldung, kein Account nötig) und zeigt echte Aktivitäten aus Kassel.
 **Mock-Modus erzwingen** (kein Firebase-Zugriff, Demo-Daten aus
 `lib/data/mock/mock_database.dart`): jeder API-Key, der mit `<` beginnt,
 gilt als „nicht konfiguriert" — die App fällt dann automatisch auf die
-Mock-Datenschicht zurück (siehe [Plan B](#backend-firebase-realtime-database)):
+Mock-Datenschicht zurück (siehe [Plan B](#backend-firebase-realtime-database)).
+Der Wert steht in `mock.env.json` (im Repo enthalten), damit `<`/`>` nicht
+als Shell-Umleitung über `--dart-define=…` interpretiert werden — das
+passiert unter Windows sowohl in PowerShell als auch in Git Bash, weil
+`flutter.bat` die Zeichen intern nochmal an `cmd.exe` weiterreicht:
 
 ```bash
-flutter run --dart-define='BELONG_FIREBASE_API_KEY=<disabled>'
+flutter run --dart-define-from-file=mock.env.json
 ```
-
-(`<`/`>` sind Shell-Umleitungszeichen — den Wert unbedingt in
-Anführungszeichen setzen, sonst gibt es einen Syntaxfehler; unter
-PowerShell doppelte statt einfache Anführungszeichen verwenden.)
 
 ## Funktionen
 
