@@ -2,7 +2,10 @@ import 'package:flutter/services.dart' show TextInputAction;
 import 'package:flutter/widgets.dart';
 
 import '../../../core/format/belong_dates.dart';
+import '../../../core/theme/belong_colors.dart';
 import '../../../core/theme/belong_dimens.dart';
+import '../../../core/theme/belong_typography.dart';
+import '../../../core/widgets/belong_icons.dart';
 import '../../../core/widgets/belong_sheet.dart';
 import '../../../core/widgets/belong_text_field.dart';
 import '../../../core/widgets/buttons.dart';
@@ -89,6 +92,21 @@ class _MeetupSheetState extends State<_MeetupSheet> {
             autofocus: true,
             textInputAction: TextInputAction.next,
             onChanged: (_) => setState(() {}),
+          ),
+          const SizedBox(height: 6),
+          // Dezenter Safety-Hinweis, wie im Aktivitätsdetail.
+          Row(
+            children: [
+              const BelongIcon(BelongIconGlyph.shield,
+                  size: 14, color: BelongColors.muted),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  'Erstes Treffen? Öffentlicher Treffpunkt empfohlen.',
+                  style: BelongText.meta,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: BelongSpacing.sm),
           BelongTextField(

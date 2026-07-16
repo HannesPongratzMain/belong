@@ -52,6 +52,10 @@ Anmeldung, kein Account nötig) und zeigt echte Aktivitäten aus Kassel.
   und Stummschalten über das Schutz-Sheet
 - **Profil** — minimal & anonym: Stufe jederzeit wechselbar, eigene
   Teilnahmen und gestartete Aktivitäten
+- **Safety-by-Design-Hinweise** — Gruppengröße („X von Y dabei") prominent
+  im Aktivitätsdetail ohne Scrollen sichtbar; Sicherheitshinweis „Erstes
+  Treffen? Öffentlicher Treffpunkt empfohlen." im Detail, beim
+  Treffpunkt-Teilen und als Hilfetext im Erstellen-Formular
 
 ## Architektur
 

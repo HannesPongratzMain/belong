@@ -251,7 +251,7 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
                     ],
                   ),
                 )
-              else
+              else ...[
                 BelongTextField(
                   label: '',
                   controller: _locationController,
@@ -265,6 +265,12 @@ class _CreateActivitySheetState extends ConsumerState<CreateActivitySheet> {
                     }
                   },
                 ),
+                const SizedBox(height: 6),
+                Text(
+                  'Wähle einen öffentlichen Treffpunkt (Café, Park, Platz).',
+                  style: BelongText.meta,
+                ),
+              ],
               const SizedBox(height: BelongSpacing.md),
               // Tag/Uhrzeit-Grid.
               Row(

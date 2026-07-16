@@ -82,25 +82,29 @@ class ActivityDetailScreen extends ConsumerWidget {
                         text:
                             '${BelongDates.dayLong(activity.startsAt)} · ${BelongDates.time(activity.startsAt)} Uhr',
                       ),
+                      // Gruppengröße prominent und ohne Scrollen sichtbar —
+                      // deshalb vor der (oft langen) Beschreibung.
+                      const SizedBox(height: BelongSpacing.md),
+                      Row(
+                        children: [
+                          const BelongIcon(BelongIconGlyph.users,
+                              size: 16, color: BelongColors.inkSoft),
+                          const SizedBox(width: 6),
+                          Text(_groupSizeLabel(activity),
+                              style:
+                                  BelongText.rowTitle.copyWith(fontSize: 16)),
+                          const Spacer(),
+                          _spotsBadge(activity),
+                        ],
+                      ),
+                      const SizedBox(height: BelongSpacing.sm),
+                      const _SafetyHint(),
                       if (activity.description != null) ...[
                         const SizedBox(height: BelongSpacing.md),
                         Text(activity.description!,
                             style: BelongText.body
                                 .copyWith(color: BelongColors.inkSoft)),
                       ],
-                      const SizedBox(height: BelongSpacing.md),
-                      Row(
-                        children: [
-                          const BelongIcon(BelongIconGlyph.users,
-                              size: 15, color: BelongColors.inkSoft),
-                          const SizedBox(width: 5),
-                          Text('${activity.participantCount} dabei',
-                              style:
-                                  BelongText.rowTitle.copyWith(fontSize: 15)),
-                          const Spacer(),
-                          _spotsBadge(activity),
-                        ],
-                      ),
                       const SizedBox(height: BelongSpacing.md),
                       if (activity.isCancelled)
                         const _CancelledBanner()
@@ -201,6 +205,14 @@ class ActivityDetailScreen extends ConsumerWidget {
     ref.invalidate(myActivitiesProvider);
   }
 
+  /// "X von Y dabei" mit Kapazität, sonst nur "X dabei" (offen für alle).
+  String _groupSizeLabel(Activity activity) {
+    final capacity = activity.capacity;
+    return capacity == null
+        ? '${activity.participantCount} dabei'
+        : '${activity.participantCount} von $capacity dabei';
+  }
+
   Widget _spotsBadge(Activity activity) {
     final free = activity.freeSpots;
     final (label, background, foreground) = switch (free) {
@@ -214,6 +226,48 @@ class ActivityDetailScreen extends ConsumerWidget {
       foreground: foreground,
       textStyle: BelongText.badge,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+    );
+  }
+}
+
+/// Safety-by-Design: kurzer, immer sichtbarer Hinweis für ein erstes Treffen.
+/// Icon + Text, nicht nur über Farbe transportiert (WCAG 2.1 AA).
+class _SafetyHint extends StatelessWidget {
+  const _SafetyHint();
+
+  static const _text = 'Erstes Treffen? Öffentlicher Treffpunkt empfohlen.';
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: _text,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(
+            horizontal: BelongSpacing.md, vertical: 14),
+        decoration: BoxDecoration(
+          color: BelongColors.coralWash,
+          borderRadius: BelongRadii.inputAll,
+        ),
+        child: Row(
+          children: [
+            const BelongIcon(BelongIconGlyph.shield,
+                size: 18, color: BelongColors.coralDeep),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ExcludeSemantics(
+                child: Text(
+                  _text,
+                  style: BelongText.bodySmall.copyWith(
+                    color: BelongColors.coralDeep,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
