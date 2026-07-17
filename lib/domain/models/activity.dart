@@ -1,6 +1,13 @@
 import 'access_level.dart';
 import 'json_utils.dart';
 
+/// Ab dieser Meldungszahl gilt eine Aktivität als "wird geprüft" — im Feed
+/// ausgeblendet, direkt geöffnet erscheint der Prüf-Zustand statt der
+/// Details (siehe [Activity.isUnderReview]). Rein clientseitig gezählt,
+/// keine Ent-Duplizierung pro Nutzer (siehe README, „Bekannte
+/// Prototyp-Grenzen") — bewusster Kompromiss für den Prototyp.
+const kReportHideThreshold = 3;
+
 /// Exakter Treffpunkt einer Aktivität — serverseitig unter
 /// `activities/$id/precise` ausgelagert und nur für Teilnehmer:innen lesbar
 /// (siehe `firebase/database.rules.json`). `lat`/`lon` sind für eine
@@ -63,6 +70,7 @@ class Activity {
     this.hostId,
     this.photoHint,
     this.isCancelled = false,
+    this.reportCount = 0,
   });
 
   final String id;
@@ -95,7 +103,15 @@ class Activity {
   /// Vom Host abgesagt — verschwindet aus dem Feed, der Chat bleibt offen.
   final bool isCancelled;
 
+  /// Aggregierte Meldungszahl — kein personenbezogener Report, nur die
+  /// Summe (siehe `reportActivity()` im `ActivityRepository`).
+  final int reportCount;
+
   bool get isOpenForAll => capacity == null;
+
+  /// Ab [kReportHideThreshold] Meldungen: im Feed ausgeblendet, direkt
+  /// geöffnet erscheint der „wird geprüft"-Zustand statt der Details.
+  bool get isUnderReview => reportCount >= kReportHideThreshold;
 
   int? get freeSpots =>
       capacity == null ? null : (capacity! - participantCount).clamp(0, capacity!);
@@ -111,7 +127,8 @@ class Activity {
     return area ?? '…';
   }
 
-  Activity copyWith({int? participantCount, bool? isCancelled}) => Activity(
+  Activity copyWith({int? participantCount, bool? isCancelled, int? reportCount}) =>
+      Activity(
         id: id,
         title: title,
         description: description,
@@ -125,6 +142,7 @@ class Activity {
         hostId: hostId,
         photoHint: photoHint,
         isCancelled: isCancelled ?? this.isCancelled,
+        reportCount: reportCount ?? this.reportCount,
       );
 
   factory Activity.fromJson(Map<String, dynamic> json) => Activity(
@@ -144,6 +162,7 @@ class Activity {
         hostId: json['hostId'] as String?,
         photoHint: json['photoHint'] as String?,
         isCancelled: json['isCancelled'] as bool? ?? false,
+        reportCount: (json['reportCount'] as num?)?.toInt() ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -160,6 +179,7 @@ class Activity {
         'hostId': hostId,
         'photoHint': photoHint,
         'isCancelled': isCancelled,
+        'reportCount': reportCount,
       };
 }
 

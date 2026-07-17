@@ -36,6 +36,10 @@
         "participantCount": {
           ".write": "auth != null && (newData.val() === data.val() + 1 || newData.val() === data.val() - 1)"
         },
+        "reportCount": {
+          ".write": "auth != null && newData.val() === data.val() + 1",
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
         "precise": {
           ".read": "auth != null && root.child('activityParticipants').child($activityId).child(auth.uid).exists()",
           "address": {

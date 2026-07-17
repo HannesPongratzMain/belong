@@ -24,4 +24,9 @@ abstract interface class ActivityRepository {
 
   /// Aktivitäten, die die aktuelle Nutzer:in gestartet hat.
   Future<List<Activity>> myActivities();
+
+  /// Erhöht `reportCount` um genau +1 (bedingter Schreibzugriff, analog zum
+  /// Teilnehmerzähler). Keine personenbezogene Meldung, nur die aggregierte
+  /// Zahl — Ent-Duplizierung pro Nutzer bleibt Ausblick (siehe README).
+  Future<Activity> reportActivity(String id);
 }

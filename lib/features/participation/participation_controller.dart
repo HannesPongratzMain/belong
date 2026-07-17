@@ -99,3 +99,22 @@ final accessLevelProvider = Provider.family<AccessLevel, String>((ref, activityI
     hasAccess: joined || isMine,
   );
 });
+
+/// IDs bereits in dieser Sitzung gemeldeter Aktivitäten — rein clientseitige
+/// Sperre gegen Mehrfach-Tippen. Echte Ent-Duplizierung pro Nutzer bleibt
+/// Ausblick (siehe README, „Bekannte Prototyp-Grenzen").
+final reportedActivityIdsProvider =
+    NotifierProvider<ActivityReportController, Set<String>>(
+        ActivityReportController.new);
+
+class ActivityReportController extends Notifier<Set<String>> {
+  @override
+  Set<String> build() => const {};
+
+  Future<void> report(String activityId) async {
+    if (state.contains(activityId)) return;
+    state = {...state, activityId};
+    await ref.read(activityRepositoryProvider).reportActivity(activityId);
+    ref.invalidate(feedProvider);
+  }
+}

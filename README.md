@@ -26,12 +26,28 @@ Anmeldung, kein Account nötig) und zeigt echte Aktivitäten aus Kassel.
   (gestalteter Fehler-Zustand). Der Leer-Zustand erscheint z. B. mit
   Filter „Tanzen" + „Heute".
 - Long-Press auf eine fremde Chat-Nachricht öffnet das Schutz-Sheet
-  (Melden / Blockieren / Stummschalten / Als Freund anfragen).
+  (Melden / Blockieren / Stummschalten / Als Freund anfragen); bist du
+  Host, kannst du darüber auch jede Nachricht (auch eigene) anpinnen.
 - **Freundesystem demoen:** dafür den Mock-Modus erzwingen (siehe unten) —
   dort sind zwei eingehende Anfragen (`jan_orga`, `cafe-lena`) vorgeseedet
   und sofort unter „Du" → „FREUNDE" sichtbar (Annehmen/Ablehnen). Eine
   eigene Anfrage sendest du per Long-Press auf eine fremde Nachricht im
   Gruppenchat einer beigetretenen Aktivität.
+- **Umfragen/Pins demoen:** im Gruppenchat einer selbst gehosteten
+  Aktivität zeigt das Composer-Icon (Balkendiagramm, neben dem
+  Treffpunkt-Pin) „Umfrage erstellen" — nur für den Host sichtbar. Stimmen
+  aktualisieren sich live als Balken + Zahl. Angepinnt wird über das
+  Schutz-Sheet (siehe oben); die angepinnte Nachricht erscheint als Banner
+  oben im Chat, „Lösen" ist ebenfalls Host-only.
+- **Melden/Auto-Hide demoen:** auf einer Aktivitätsdetailseite (nicht der
+  eigenen) unten „Aktivität melden" tippen zeigt sofort die Bestätigung —
+  ein zweites Mal in derselben Sitzung geht bewusst nicht (Client-Sperre).
+  Die Schwelle selbst (3 Meldungen) lässt sich mit einer echten Nutzer:in
+  über die UI kaum vorführen; am schnellsten testest du sie im Code, indem
+  du vor dem Pumpen einer Aktivität `reportCount: 3` mitgibst (z. B.
+  `db.replaceActivity(db.requireActivity('a-kanutour').copyWith(reportCount: 3))`
+  auf einer `MockDatabase`-Instanz) — dann verschwindet sie aus dem Feed,
+  direkt geöffnet erscheint „Wird geprüft".
 
 **Mock-Modus erzwingen** (kein Firebase-Zugriff, Demo-Daten aus
 `lib/data/mock/mock_database.dart`): jeder API-Key, der mit `<` beginnt,
@@ -78,6 +94,17 @@ flutter run --dart-define-from-file=mock.env.json
   im Aktivitätsdetail ohne Scrollen sichtbar; Sicherheitshinweis „Erstes
   Treffen? Öffentlicher Treffpunkt empfohlen." im Detail, beim
   Treffpunkt-Teilen und als Hilfetext im Erstellen-Formular
+- **Umfragen & angepinnte Nachrichten im Chat** — Host erstellt Umfragen
+  (2–6 Optionen, Einfach- oder Mehrfachauswahl) über ein Sheet; alle
+  Teilnehmer:innen stimmen ab, Ergebnis live als Balken + Zahl (nie nur
+  Farbe). Umfragen sind nach dem Anlegen unveränderlich und getrennt von
+  Chat-Nachrichten gespeichert. Der Host kann außerdem eine Nachricht
+  anpinnen (Banner oben im Chat, „Lösen" jederzeit möglich) — Nachrichten
+  selbst bleiben dabei unverändert
+- **Melden & Auto-Hide für Aktivitäten** — dezenter „Aktivität melden"-
+  Link im Detail (pro Sitzung einmal auslösbar); ab drei Meldungen
+  verschwindet eine Aktivität aus dem Feed, direkt geöffnet erscheint
+  „Wird geprüft" statt der Details
 
 ## Architektur
 
@@ -131,10 +158,11 @@ konfliktsicher geändert.
   of Truth im Repo. Änderungen dort werden **manuell** in die Firebase-
   Konsole (Realtime Database → Regeln) kopiert und veröffentlicht — die
   App selbst braucht dafür keinen neuen Build.
-  ⚠️ Die Regeln für `/friendRequests` und `/friendships` (Freundesystem)
-  liegen aktuell nur lokal im Repo und sind **noch nicht** in die
-  Firebase-Konsole übernommen — bis dahin funktioniert das Freundesystem
-  nur im Mock-Modus.
+  ⚠️ Die Regeln für `/friendRequests`, `/friendships` (Freundesystem),
+  `chats/*/polls`, `chats/*/meta` (Umfragen/Pins) sowie
+  `activities/*/reportCount` (Melden/Auto-Hide) liegen aktuell nur lokal
+  im Repo und sind **noch nicht** in die Firebase-Konsole übernommen — bis
+  dahin funktionieren diese drei Features nur im Mock-Modus.
 
 **Plan B (Mockdaten):** Die komplette Mock-Datenschicht bleibt im Projekt.
 Umschalten über den `dataBackendProvider` in `lib/data/providers.dart` —
@@ -156,25 +184,45 @@ fällt die App automatisch auf die Mocks zurück.
 - **Anonyme Auth als bewusster Trade-off:** jeder kann ohne Hürde einsteigen
   (Produktprinzip); zusätzlicher Missbrauchsschutz käme in Produktion über
   App Check und serverseitige Moderation dazu.
+- **Moderiert werden Artefakte, nicht Identitäten** (bewusste
+  Designentscheidung): gemeldet werden können Aktivitäten und Nachrichten,
+  nicht Profile — es gibt kein Profil-Melden. Aus demselben Grund kann der
+  Host Nachrichten weder löschen noch bearbeiten (Chat-Nachrichten bleiben
+  unveränderlich, siehe oben) und niemanden aus dem Chat entfernen — ein
+  Host-Kick wäre selbst ein Machtmittel, das der Host gegen genau die
+  Personen einsetzen könnte, über die er Rechenschaft ablegen sollte.
 
 **Bekannte Prototyp-Grenzen** (bewusst, siehe Ausblick): Blockieren filtert
-aktuell nur die eigene Anzeige, Meldungen werden noch nicht ausgewertet,
-der Feed lädt ungefiltert alle Aktivitäten (skaliert nicht), Stummschalten
-hat ohne Push-Benachrichtigungen keine Wirkung. Umfragen/Pins sind bewusst
-minimal: eine angepinnte Nachricht genügt (kein Verlauf), Umfragen lassen
-sich nach dem Anlegen nicht mehr bearbeiten oder löschen, und die
+aktuell nur die eigene Anzeige, der Feed lädt ungefiltert alle Aktivitäten
+(skaliert nicht), Stummschalten hat ohne Push-Benachrichtigungen keine
+Wirkung. Melde-Auswertung gibt es bislang nur für **Aktivitäten**: ab
+`kReportHideThreshold` (Default 3, `lib/domain/models/activity.dart`)
+verschwindet eine Aktivität aus dem Feed, direkt geöffnet erscheint „wird
+geprüft" statt der Details. Chat-Nachrichten-Meldungen werden weiterhin
+nicht ausgewertet (reiner Write-only-Bucket unter `moderation/reports`).
+Der Melde-Zähler ist rein clientseitig aggregiert — kein serverseitiges
+Nachzählen, keine Ent-Duplizierung pro Nutzer: dieselbe Person könnte
+theoretisch mehrfach melden, und es gibt keinen Schutz vor koordiniertem
+Wegmelden legitimer Aktivitäten (Brigading). Umfragen/Pins sind ebenfalls
+bewusst minimal: eine angepinnte Nachricht genügt (kein Verlauf), Umfragen
+lassen sich nach dem Anlegen nicht mehr bearbeiten oder löschen, und die
 Ergebnis-Aggregation läuft rein im Client (kein serverseitiges Nachzählen/
 keine serverseitige Deduplizierung bei Mehrfachauswahl).
 
 ## Ausblick
 
 Nächste sinnvolle Schritte Richtung Veröffentlichung: serverseitige
-Feed-Queries + Cloud Functions für Join/Moderation, echtes (serverseitiges)
-Blockieren, App Check, echte Push-Benachrichtigungen (die In-App-Erinnerung
-ersetzt noch keinen Ping bei geschlossener App), eigener Signing-Key sowie
-das Rechtspaket (Datenschutzerklärung, Moderationsprozess, Altersgrenze).
-Naheliegende Erweiterung der Umfragen/Pins: ein Planungs-Assistent im Chat
-(Checkliste/To-dos fürs Treffen, gemeinsame Abstimmung über mehrere
+Feed-Queries + Cloud Functions für Join/Moderation, echte (serverseitige)
+Melde-Auswertung mit Ent-Duplizierung pro Nutzer (löst das Brigading-Risiko
+oben), echtes (serverseitiges) Blockieren, App Check, echte
+Push-Benachrichtigungen (die In-App-Erinnerung ersetzt noch keinen Ping bei
+geschlossener App), eigener Signing-Key sowie das Rechtspaket
+(Datenschutzerklärung, Moderationsprozess, Altersgrenze). Ein
+Host-Kick/Teilnehmer-Entfernen bleibt bewusst offen — dafür bräuchte es
+zunächst einen Eskalationsweg an ein unabhängiges Moderationsteam, sonst
+ließe sich die Funktion gegen genau die Personen wenden, die sie schützen
+soll. Naheliegende Erweiterung der Umfragen/Pins: ein Planungs-Assistent im
+Chat (Checkliste/To-dos fürs Treffen, gemeinsame Abstimmung über mehrere
 Fragen hinweg statt einer einzelnen Umfrage) — baut direkt auf den hier
 gelegten `/polls`- und `/meta`-Pfaden auf.
 

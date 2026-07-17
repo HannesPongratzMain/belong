@@ -38,6 +38,7 @@ class FirebaseActivityRepository implements ActivityRepository {
     final activities = await _allActivities();
     return activities
         .where((activity) => !activity.isCancelled)
+        .where((activity) => !activity.isUnderReview)
         .where((activity) => activity.startsAt.isAfter(now))
         .where((activity) => filter.matches(activity, now: now))
         .toList()
@@ -75,6 +76,9 @@ class FirebaseActivityRepository implements ActivityRepository {
       'participantCount': 1,
       'hostId': uid,
       'createdAt': DateTime.now().toIso8601String(),
+      // Explizit auf 0 statt fehlend — reportActivity() erhöht per ETag um
+      // +1 relativ zum aktuellen Wert, das braucht einen vorhandenen Start.
+      'reportCount': 0,
     };
     final id = await _db.push('activities', data);
     // Host als Teilnehmer eintragen (Chat-Zugriff via Rules).
@@ -137,5 +141,13 @@ class FirebaseActivityRepository implements ActivityRepository {
         .where((activity) => activity.hostId == _auth.uid)
         .toList()
       ..sort((a, b) => a.startsAt.compareTo(b.startsAt));
+  }
+
+  @override
+  Future<Activity> reportActivity(String id) async {
+    await _auth.ensureSignedIn();
+    await _db.compareAndSet('activities/$id/reportCount',
+        (current) => ((current as num?)?.toInt() ?? 0) + 1);
+    return activityById(id);
   }
 }

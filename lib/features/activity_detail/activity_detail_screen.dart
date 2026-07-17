@@ -15,6 +15,7 @@ import '../../core/widgets/category_chip.dart';
 import '../../core/widgets/photo_placeholder.dart';
 import '../../core/widgets/pills.dart';
 import '../../core/widgets/pressable.dart';
+import '../../core/widgets/state_view.dart';
 import '../../data/providers.dart';
 import '../../domain/models/access_level.dart';
 import '../../domain/models/activity.dart';
@@ -49,7 +50,9 @@ class ActivityDetailScreen extends ConsumerWidget {
       backgroundColor: BelongColors.surface,
       body: activity == null
           ? const SizedBox.expand()
-          : Column(
+          : activity.isUnderReview
+              ? const _UnderReviewView()
+              : Column(
               children: [
                 _PhotoHeader(activity: activity),
                 Expanded(
@@ -159,6 +162,10 @@ class ActivityDetailScreen extends ConsumerWidget {
                                 .leave(activity.id),
                           ),
                         ),
+                      ],
+                      if (!isMine && !activity.isCancelled) ...[
+                        const SizedBox(height: BelongSpacing.md),
+                        _ReportActivityAction(activityId: activity.id),
                       ],
                     ],
                   ),
@@ -380,6 +387,81 @@ class _MetaRow extends StatelessWidget {
               style: BelongText.body.copyWith(color: BelongColors.muted)),
         ),
       ],
+    );
+  }
+}
+
+/// Dezenter Melden-Einstieg für Aktivitäten (Icon + Text, WCAG-konform —
+/// nie nur über Farbe). Pro Sitzung nur einmal auslösbar, siehe
+/// `ActivityReportController`.
+class _ReportActivityAction extends ConsumerWidget {
+  const _ReportActivityAction({required this.activityId});
+
+  final String activityId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final reported = ref.watch(reportedActivityIdsProvider).contains(activityId);
+    if (reported) {
+      return Center(
+        child: Semantics(
+          label: 'Gemeldet — danke, wir schauen uns das an.',
+          child: ExcludeSemantics(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const BelongIcon(BelongIconGlyph.check,
+                    size: 14, color: BelongColors.muted),
+                const SizedBox(width: 6),
+                Text('Gemeldet — danke, wir schauen uns das an.',
+                    style: BelongText.bodySmall
+                        .copyWith(color: BelongColors.muted)),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return Center(
+      child: Pressable(
+        onTap: () =>
+            ref.read(reportedActivityIdsProvider.notifier).report(activityId),
+        semanticLabel: 'Aktivität melden',
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const BelongIcon(BelongIconGlyph.flag,
+                size: 14, color: BelongColors.muted),
+            const SizedBox(width: 6),
+            Text('Aktivität melden',
+                style: BelongText.bodySmall.copyWith(
+                  color: BelongColors.muted,
+                  decoration: TextDecoration.underline,
+                )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Voller Ersatz für die Detailansicht, solange eine Aktivität wegen zu
+/// vieler Meldungen geprüft wird — zeigt bewusst keine Details (Titel,
+/// Ort, Foto), bis die Prüfung abgeschlossen ist.
+class _UnderReviewView extends StatelessWidget {
+  const _UnderReviewView();
+
+  @override
+  Widget build(BuildContext context) {
+    return StateView(
+      blobColor: BelongColors.chipNeutral,
+      symbol: const BelongIcon(BelongIconGlyph.flag,
+          size: 40, color: BelongColors.muted),
+      title: 'Wird geprüft',
+      message: 'Mehrere Meldungen — wir schauen uns das gerade an. '
+          'Details siehst du wieder, sobald das erledigt ist.',
+      ghostLabel: 'Zurück zum Feed',
+      onGhost: () => Navigator.of(context).pop(),
     );
   }
 }

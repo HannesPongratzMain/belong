@@ -37,6 +37,7 @@ class MockActivityRepository implements ActivityRepository {
       hostId: activity.hostId,
       photoHint: activity.photoHint,
       isCancelled: activity.isCancelled,
+      reportCount: activity.reportCount,
     );
   }
 
@@ -56,6 +57,7 @@ class MockActivityRepository implements ActivityRepository {
       final now = DateTime.now();
       final result = _db.activities
           .where((activity) => !activity.isCancelled)
+          .where((activity) => !activity.isUnderReview)
           .where((activity) => activity.startsAt.isAfter(now))
           .where((activity) => filter.matches(activity, now: now))
           .map(_redacted)
@@ -161,5 +163,15 @@ class MockActivityRepository implements ActivityRepository {
         .where((activity) => _db.myActivityIds.contains(activity.id))
         .toList()
       ..sort((a, b) => a.startsAt.compareTo(b.startsAt)));
+  }
+
+  @override
+  Future<Activity> reportActivity(String id) {
+    return _db(() {
+      final updated = _db.requireActivity(id)
+          .copyWith(reportCount: _db.requireActivity(id).reportCount + 1);
+      _db.replaceActivity(updated);
+      return updated;
+    });
   }
 }
