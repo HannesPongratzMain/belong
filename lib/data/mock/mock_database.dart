@@ -6,6 +6,7 @@ import '../../domain/models/chat_message.dart';
 import '../../domain/models/friend.dart';
 import '../../domain/models/friend_request.dart';
 import '../../domain/models/participation.dart';
+import '../../domain/models/poll.dart';
 import '../../domain/models/user_profile.dart';
 
 /// Gemeinsame In-Memory-„Datenbank" aller Mock-Repositories.
@@ -42,6 +43,13 @@ class MockDatabase {
   final Map<String, FriendRequest> incomingFriendRequests = _seedFriendRequests();
   final Map<String, Friend> friends = {};
 
+  /// Umfragen je Chat, in Erstellreihenfolge (Basis für `polls/{pollId}`).
+  final Map<String, List<Poll>> polls = {};
+
+  /// Angepinnte Nachricht je Chat (`activityId` → `messageId`, ohne Eintrag
+  /// = nichts angepinnt) — Spiegel von `chats/{activityId}/meta`.
+  final Map<String, String> pinnedMessageIds = {};
+
   /// Demo-Schalter: lässt den nächsten Feed-Abruf fehlschlagen
   /// (Fehler-Zustand aus dem Design vorführbar machen).
   bool failNextFeedFetch = false;
@@ -52,6 +60,12 @@ class MockDatabase {
   final friendRequestChanges =
       StreamController<Map<String, FriendRequest>>.broadcast();
   final friendChanges = StreamController<Map<String, Friend>>.broadcast();
+
+  /// Emittiert die `activityId`, deren Umfragen sich geändert haben.
+  final pollChanges = StreamController<String>.broadcast();
+
+  /// Emittiert die `activityId`, deren Pin sich geändert hat.
+  final pinChanges = StreamController<String>.broadcast();
 
   Set<String> get joinedIds => participations.keys.toSet();
 

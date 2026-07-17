@@ -13,13 +13,37 @@ import '../../core/widgets/belong_icons.dart';
 import '../../core/widgets/pills.dart';
 import '../../core/widgets/pressable.dart';
 import '../../domain/models/chat_message.dart';
+import '../../domain/models/poll.dart';
 import '../friends/friends_controller.dart';
 import '../participation/participation_controller.dart';
 import '../profile/profile_controller.dart';
 import 'chat_controller.dart';
 import 'widgets/chat_bubbles.dart';
+import 'widgets/create_poll_sheet.dart';
 import 'widgets/meetup_sheet.dart';
+import 'widgets/poll_card.dart';
 import 'widgets/safety_sheet.dart';
+
+/// Ein Eintrag der Chat-Timeline — Nachrichten und Umfragen werden nach
+/// Erstellzeit gemeinsam einsortiert (Umfragen leben in einem eigenen,
+/// von Nachrichten getrennten Pfad, siehe `chat_repository.dart`).
+sealed class _TimelineItem {
+  DateTime get time;
+}
+
+class _MessageTimelineItem extends _TimelineItem {
+  _MessageTimelineItem(this.message);
+  final ChatMessage message;
+  @override
+  DateTime get time => message.sentAt;
+}
+
+class _PollTimelineItem extends _TimelineItem {
+  _PollTimelineItem(this.poll);
+  final Poll poll;
+  @override
+  DateTime get time => poll.createdAt;
+}
 
 /// Gruppenchat · Koordination — sichtbar erst nach dem Beitreten.
 class ChatScreen extends ConsumerStatefulWidget {
@@ -38,8 +62,23 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final _composerController = TextEditingController();
   final _scrollController = ScrollController();
+  final Map<String, GlobalKey> _messageKeys = {};
   String? _toast;
   bool _didInitialScroll = false;
+
+  GlobalKey _keyFor(String messageId) =>
+      _messageKeys.putIfAbsent(messageId, GlobalKey.new);
+
+  void _scrollToMessage(String messageId) {
+    final messageContext = _messageKeys[messageId]?.currentContext;
+    if (messageContext == null) return;
+    Scrollable.ensureVisible(
+      messageContext,
+      duration: BelongMotion.medium,
+      curve: BelongMotion.curve,
+      alignment: 0.5,
+    );
+  }
 
   @override
   void dispose() {
@@ -84,10 +123,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     await _scrollToEnd();
   }
 
-  void _openSafetySheet(ChatMessage message) {
+  void _openSafetySheet(ChatMessage message,
+      {required bool isMine, required bool isHost}) {
+    final pinnedId =
+        ref.read(pinnedMessageIdProvider(widget.activityId)).value;
     showSafetySheet(
       context: context,
       message: message,
+      isMine: isMine,
+      canPin: isHost,
+      isPinned: pinnedId == message.id,
       onReport: () async {
         await ref.read(chatActionsProvider).report(message);
         _showToast('Danke — unser Team schaut innerhalb von 24 h drauf.');
@@ -106,6 +151,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             .sendRequest(message.senderId);
         _showToast('Anfrage an ${message.senderNickname} gesendet.');
       },
+      onPin: () async {
+        await ref
+            .read(chatActionsProvider)
+            .pinMessage(widget.activityId, message.id);
+        _showToast('Nachricht angepinnt.');
+      },
+      onUnpin: () async {
+        await ref.read(chatActionsProvider).unpinMessage(widget.activityId);
+        _showToast('Anheftung gelöst.');
+      },
     );
   }
 
@@ -113,6 +168,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     final activity = ref.watch(activityStreamProvider(widget.activityId)).value;
     final messages = ref.watch(chatMessagesProvider(widget.activityId));
+    final polls = ref.watch(chatPollsProvider(widget.activityId)).value ?? const [];
+    final pinnedId = ref.watch(pinnedMessageIdProvider(widget.activityId)).value;
+    final myId = ref.watch(profileProvider).value?.id;
+    final isHost = activity?.hostId != null && activity!.hostId == myId;
 
     // Beim ersten Laden ans Ende springen — die neueste Nachricht zählt.
     ref.listen(chatMessagesProvider(widget.activityId), (_, next) {
@@ -148,25 +207,59 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             child: Stack(
               children: [
                 switch (messages) {
-                  AsyncValue(:final value?) => ListView(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.fromLTRB(BelongSpacing.md,
-                          BelongSpacing.md, BelongSpacing.md, BelongSpacing.lg),
+                  AsyncValue(:final value?) => Column(
                       children: [
-                        // Privatsphäre-Hinweis steht immer am Anfang.
-                        const SystemNote(
-                            text:
-                                'Alle sehen nur Spitznamen — so wie du es eingestellt hast'),
-                        const SizedBox(height: BelongSpacing.sm),
-                        for (final message in value) ...[
-                          _MessageEntry(
-                            message: message,
-                            onLongPressForeign: () => _openSafetySheet(message),
-                            onAddressCopied: () => _showToast(
-                                'Adresse kopiert — füg sie in deine Karten-App ein.'),
+                        if (pinnedId != null)
+                          _PinnedBanner(
+                            message: _findMessage(value, pinnedId),
+                            isHost: isHost,
+                            onTap: () => _scrollToMessage(pinnedId),
+                            onUnpin: () async {
+                              await ref
+                                  .read(chatActionsProvider)
+                                  .unpinMessage(widget.activityId);
+                              _showToast('Anheftung gelöst.');
+                            },
                           ),
-                          const SizedBox(height: BelongSpacing.sm),
-                        ],
+                        Expanded(
+                          child: ListView(
+                            controller: _scrollController,
+                            padding: const EdgeInsets.fromLTRB(
+                                BelongSpacing.md,
+                                BelongSpacing.md,
+                                BelongSpacing.md,
+                                BelongSpacing.lg),
+                            children: [
+                              // Privatsphäre-Hinweis steht immer am Anfang.
+                              const SystemNote(
+                                  text:
+                                      'Alle sehen nur Spitznamen — so wie du es eingestellt hast'),
+                              const SizedBox(height: BelongSpacing.sm),
+                              for (final item in _timeline(value, polls)) ...[
+                                switch (item) {
+                                  _MessageTimelineItem(:final message) =>
+                                    KeyedSubtree(
+                                      key: _keyFor(message.id),
+                                      child: _MessageEntry(
+                                        message: message,
+                                        isHost: isHost,
+                                        onLongPress: (message, {required isMine}) =>
+                                            _openSafetySheet(message,
+                                                isMine: isMine, isHost: isHost),
+                                        onAddressCopied: () => _showToast(
+                                            'Adresse kopiert — füg sie in deine Karten-App ein.'),
+                                      ),
+                                    ),
+                                  _PollTimelineItem(:final poll) => PollCard(
+                                      activityId: widget.activityId,
+                                      poll: poll,
+                                    ),
+                                },
+                                const SizedBox(height: BelongSpacing.sm),
+                              ],
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   AsyncValue(hasError: true) => const _AccessDeniedView(),
@@ -186,22 +279,45 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             controller: _composerController,
             onSend: _send,
             onShareMeetup: _shareMeetup,
+            onCreatePoll: canCreatePoll(isHost: isHost)
+                ? () => showCreatePollSheet(
+                    context: context, activityId: widget.activityId)
+                : null,
           ),
         ],
       ),
     );
+  }
+
+  /// Nachrichten + Umfragen gemeinsam nach Erstellzeit einsortiert.
+  List<_TimelineItem> _timeline(List<ChatMessage> messages, List<Poll> polls) {
+    return [
+      for (final message in messages) _MessageTimelineItem(message),
+      for (final poll in polls) _PollTimelineItem(poll),
+    ]..sort((a, b) => a.time.compareTo(b.time));
+  }
+
+  ChatMessage? _findMessage(List<ChatMessage> messages, String id) {
+    for (final message in messages) {
+      if (message.id == id) return message;
+    }
+    return null;
   }
 }
 
 class _MessageEntry extends ConsumerWidget {
   const _MessageEntry({
     required this.message,
-    required this.onLongPressForeign,
+    required this.isHost,
+    required this.onLongPress,
     required this.onAddressCopied,
   });
 
   final ChatMessage message;
-  final VoidCallback onLongPressForeign;
+
+  /// Der Host darf jede Nachricht anpinnen — auch eigene.
+  final bool isHost;
+  final void Function(ChatMessage message, {required bool isMine}) onLongPress;
   final VoidCallback onAddressCopied;
 
   @override
@@ -216,10 +332,14 @@ class _MessageEntry extends ConsumerWidget {
     if (message.type == ChatMessageType.meetupPin && message.pin != null) {
       return MeetupPinCard(pin: message.pin!, onAddressCopied: onAddressCopied);
     }
+    // Host darf jede Nachricht anpinnen, alle anderen nur fremde
+    // long-pressen (Melden/Blockieren/Stummschalten/Freund-Anfrage).
+    final canLongPress = isHost || !isMine;
     return ChatBubble(
       message: message,
       isMine: isMine,
-      onLongPress: isMine ? null : onLongPressForeign,
+      onLongPress:
+          canLongPress ? () => onLongPress(message, isMine: isMine) : null,
     );
   }
 }
@@ -309,11 +429,16 @@ class _Composer extends StatelessWidget {
     required this.controller,
     required this.onSend,
     required this.onShareMeetup,
+    this.onCreatePoll,
   });
 
   final TextEditingController controller;
   final VoidCallback onSend;
   final VoidCallback onShareMeetup;
+
+  /// `null` = kein Umfrage-Recht (siehe `canCreatePoll` in
+  /// `chat_controller.dart`) — Button dann ausgeblendet.
+  final VoidCallback? onCreatePoll;
 
   @override
   Widget build(BuildContext context) {
@@ -340,6 +465,22 @@ class _Composer extends StatelessWidget {
                   size: 19, color: BelongColors.inkSoft),
             ),
           ),
+          if (onCreatePoll != null) ...[
+            const SizedBox(width: 6),
+            Pressable(
+              onTap: onCreatePoll,
+              semanticLabel: 'Umfrage erstellen',
+              child: Container(
+                width: BelongSpacing.hitTarget,
+                height: BelongSpacing.hitTarget,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                    color: BelongColors.header, shape: BoxShape.circle),
+                child: const BelongIcon(BelongIconGlyph.poll,
+                    size: 18, color: BelongColors.inkSoft),
+              ),
+            ),
+          ],
           const SizedBox(width: BelongSpacing.xs),
           Expanded(
             child: Container(
@@ -384,6 +525,86 @@ class _Composer extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Banner über der Chat-Liste, solange eine Nachricht angepinnt ist.
+/// Tippen springt zur Nachricht; „Lösen" ist nur für den Host sichtbar.
+class _PinnedBanner extends StatelessWidget {
+  const _PinnedBanner({
+    required this.message,
+    required this.isHost,
+    required this.onTap,
+    required this.onUnpin,
+  });
+
+  /// `null`, solange die gepinnte Nachricht noch nicht geladen ist.
+  final ChatMessage? message;
+  final bool isHost;
+  final VoidCallback onTap;
+  final VoidCallback onUnpin;
+
+  @override
+  Widget build(BuildContext context) {
+    final message = this.message;
+    if (message == null) return const SizedBox.shrink();
+    return Semantics(
+      label: 'Angepinnt: ${message.senderNickname}: ${message.text}. '
+          'Tippen, um zur Nachricht zu springen.',
+      button: true,
+      excludeSemantics: true,
+      child: Pressable(
+        onTap: onTap,
+        semanticButton: false,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(
+              horizontal: BelongSpacing.md, vertical: 10),
+          decoration: const BoxDecoration(
+            color: BelongColors.amberTint,
+            border: Border(bottom: BorderSide(color: BelongColors.hairline)),
+          ),
+          child: Row(
+            children: [
+              const BelongIcon(BelongIconGlyph.pinned,
+                  size: 16, color: BelongColors.amberDeep),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Angepinnt',
+                        style: BelongText.caption.copyWith(
+                            color: BelongColors.amberDeep,
+                            fontWeight: FontWeight.w700)),
+                    Text(message.text,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: BelongText.bodySmall
+                            .copyWith(color: BelongColors.inkSoft)),
+                  ],
+                ),
+              ),
+              if (isHost) ...[
+                const SizedBox(width: 8),
+                Pressable(
+                  onTap: onUnpin,
+                  semanticLabel: 'Anheftung lösen',
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: BelongSpacing.xs),
+                    child: Text('Lösen',
+                        style: BelongText.chip.copyWith(
+                            color: BelongColors.amberDeep,
+                            fontWeight: FontWeight.w700)),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -18,19 +18,29 @@ import '../../friends/friends_controller.dart';
 Future<void> showSafetySheet({
   required BuildContext context,
   required ChatMessage message,
+  required bool isMine,
+  required bool canPin,
+  required bool isPinned,
   required VoidCallback onReport,
   required VoidCallback onBlock,
   required VoidCallback onMute,
   required VoidCallback onAddFriend,
+  required VoidCallback onPin,
+  required VoidCallback onUnpin,
 }) {
   return showBelongSheet<void>(
     context: context,
     builder: (sheetContext) => _SafetySheet(
       message: message,
+      isMine: isMine,
+      canPin: canPin,
+      isPinned: isPinned,
       onReport: onReport,
       onBlock: onBlock,
       onMute: onMute,
       onAddFriend: onAddFriend,
+      onPin: onPin,
+      onUnpin: onUnpin,
     ),
   );
 }
@@ -49,17 +59,33 @@ Future<void> showChatProtectionSheet({
 class _SafetySheet extends ConsumerWidget {
   const _SafetySheet({
     required this.message,
+    required this.isMine,
+    required this.canPin,
+    required this.isPinned,
     required this.onReport,
     required this.onBlock,
     required this.onMute,
     required this.onAddFriend,
+    required this.onPin,
+    required this.onUnpin,
   });
 
   final ChatMessage message;
+
+  /// Eigene Nachricht — Melden/Blockieren/Stummschalten/Freund-Anfragen
+  /// ergeben dann keinen Sinn und werden ausgeblendet.
+  final bool isMine;
+
+  /// Nur der Host darf pinnen/lösen.
+  final bool canPin;
+  final bool isPinned;
+
   final VoidCallback onReport;
   final VoidCallback onBlock;
   final VoidCallback onMute;
   final VoidCallback onAddFriend;
+  final VoidCallback onPin;
+  final VoidCallback onUnpin;
 
   /// „heute", „gestern" oder Kurz-Wochentag — für die Kontextzeile.
   static String _dayLabel(DateTime sentAt) {
@@ -130,37 +156,53 @@ class _SafetySheet extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: BelongSpacing.md),
-          SafetyRow(
-            glyph: BelongIconGlyph.flag,
-            color: BelongColors.error,
-            title: 'Nachricht melden',
-            subtitle: 'Unser Team schaut innerhalb von 24 h drauf.',
-            onTap: () => close(onReport),
-          ),
-          const SizedBox(height: BelongSpacing.xs),
-          SafetyRow(
-            glyph: BelongIconGlyph.block,
-            color: BelongColors.error,
-            title: 'Person blockieren',
-            subtitle: 'Ihr seht euch gegenseitig nicht mehr — ohne Ankündigung.',
-            onTap: () => close(onBlock),
-          ),
-          const SizedBox(height: BelongSpacing.xs),
-          SafetyRow(
-            glyph: BelongIconGlyph.bell,
-            color: BelongColors.ink,
-            title: 'Nur stummschalten',
-            subtitle: 'Du bleibst dabei, bekommst aber keine Pings mehr.',
-            onTap: () => close(onMute),
-          ),
-          if (!alreadyFriends) ...[
+          if (!isMine) ...[
+            SafetyRow(
+              glyph: BelongIconGlyph.flag,
+              color: BelongColors.error,
+              title: 'Nachricht melden',
+              subtitle: 'Unser Team schaut innerhalb von 24 h drauf.',
+              onTap: () => close(onReport),
+            ),
             const SizedBox(height: BelongSpacing.xs),
             SafetyRow(
-              glyph: BelongIconGlyph.userAdd,
-              color: BelongColors.coralDeep,
-              title: 'Als Freund anfragen',
-              subtitle: 'Nur du siehst später, ob ihr euch kennt.',
-              onTap: () => close(onAddFriend),
+              glyph: BelongIconGlyph.block,
+              color: BelongColors.error,
+              title: 'Person blockieren',
+              subtitle:
+                  'Ihr seht euch gegenseitig nicht mehr — ohne Ankündigung.',
+              onTap: () => close(onBlock),
+            ),
+            const SizedBox(height: BelongSpacing.xs),
+            SafetyRow(
+              glyph: BelongIconGlyph.bell,
+              color: BelongColors.ink,
+              title: 'Nur stummschalten',
+              subtitle: 'Du bleibst dabei, bekommst aber keine Pings mehr.',
+              onTap: () => close(onMute),
+            ),
+            if (!alreadyFriends) ...[
+              const SizedBox(height: BelongSpacing.xs),
+              SafetyRow(
+                glyph: BelongIconGlyph.userAdd,
+                color: BelongColors.coralDeep,
+                title: 'Als Freund anfragen',
+                subtitle: 'Nur du siehst später, ob ihr euch kennt.',
+                onTap: () => close(onAddFriend),
+              ),
+            ],
+          ],
+          if (canPin) ...[
+            if (!isMine) const SizedBox(height: BelongSpacing.xs),
+            SafetyRow(
+              glyph: BelongIconGlyph.pinned,
+              color: BelongColors.amberDeep,
+              title: isPinned ? 'Anheftung lösen' : 'Nachricht anpinnen',
+              subtitle: isPinned
+                  ? 'Sie verschwindet aus dem Banner oben im Chat.'
+                  : 'Erscheint oben im Chat, bis du sie löst oder eine '
+                      'andere anpinnst.',
+              onTap: () => close(isPinned ? onUnpin : onPin),
             ),
           ],
           const SizedBox(height: BelongSpacing.xs),

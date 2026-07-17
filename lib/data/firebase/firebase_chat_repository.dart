@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import '../../domain/models/chat_message.dart';
+import '../../domain/models/poll.dart';
 import '../repositories/chat_repository.dart';
 import 'firebase_auth_client.dart';
 import 'rtdb_client.dart';
@@ -141,5 +142,111 @@ class FirebaseChatRepository implements ChatRepository {
     await _auth.ensureSignedIn();
     final value = await _db.get('moderation/mutes/${_auth.uid}/$activityId');
     return value == true;
+  }
+
+  @override
+  Stream<List<Poll>> watchPolls(String activityId) {
+    late StreamController<List<Poll>> controller;
+    StreamSubscription<dynamic>? sub;
+
+    Future<void> start() async {
+      await _auth.ensureSignedIn();
+      sub = _db.watch('chats/$activityId/polls').listen((json) {
+        final map = (json as Map?)?.cast<String, dynamic>() ?? const {};
+        final polls = [
+          for (final entry in map.entries)
+            Poll.fromJson({
+              'id': entry.key,
+              ...(entry.value as Map).cast<String, dynamic>(),
+            }),
+        ]..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+        controller.add(polls);
+      }, onError: (Object error) {
+        controller.addError(error is RtdbPermissionDeniedException
+            ? const ChatAccessDeniedException()
+            : error);
+      });
+    }
+
+    controller = StreamController(
+      onListen: start,
+      onCancel: () async => sub?.cancel(),
+    );
+    return controller.stream;
+  }
+
+  @override
+  Future<void> createPoll({
+    required String activityId,
+    required String question,
+    required List<String> options,
+    required bool allowMultiple,
+  }) async {
+    await _auth.ensureSignedIn();
+    // Host-only ist UI- und regelseitig durchgesetzt (wie beim Bearbeiten/
+    // Absagen einer Aktivität) — kein zusätzlicher Client-Check hier.
+    await _db.push('chats/$activityId/polls', {
+      'question': question,
+      'options': options,
+      'allowMultiple': allowMultiple,
+      'createdBy': _auth.uid,
+      'createdAt': DateTime.now().toIso8601String(),
+    });
+  }
+
+  @override
+  Future<void> vote({
+    required String activityId,
+    required String pollId,
+    required bool allowMultiple,
+    required List<int> selection,
+  }) async {
+    await _auth.ensureSignedIn();
+    await _db.put(
+      'chats/$activityId/polls/$pollId/votes/${_auth.uid}',
+      Poll.encodeSelection(selection, allowMultiple: allowMultiple),
+    );
+  }
+
+  @override
+  Stream<String?> watchPinnedMessageId(String activityId) {
+    late StreamController<String?> controller;
+    StreamSubscription<dynamic>? sub;
+
+    Future<void> start() async {
+      await _auth.ensureSignedIn();
+      sub = _db.watch('chats/$activityId/meta/pinnedMessageId').listen((json) {
+        controller.add(json as String?);
+      }, onError: (Object error) {
+        controller.addError(error is RtdbPermissionDeniedException
+            ? const ChatAccessDeniedException()
+            : error);
+      });
+    }
+
+    controller = StreamController(
+      onListen: start,
+      onCancel: () async => sub?.cancel(),
+    );
+    return controller.stream;
+  }
+
+  @override
+  Future<void> pinMessage(
+      {required String activityId, required String messageId}) async {
+    await _auth.ensureSignedIn();
+    await _db.patch('chats/$activityId/meta', {
+      'pinnedMessageId': messageId,
+      'pinnedAt': DateTime.now().toIso8601String(),
+    });
+  }
+
+  @override
+  Future<void> unpinMessage(String activityId) async {
+    await _auth.ensureSignedIn();
+    await _db.patch('chats/$activityId/meta', {
+      'pinnedMessageId': null,
+      'pinnedAt': null,
+    });
   }
 }

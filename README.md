@@ -160,7 +160,11 @@ fällt die App automatisch auf die Mocks zurück.
 **Bekannte Prototyp-Grenzen** (bewusst, siehe Ausblick): Blockieren filtert
 aktuell nur die eigene Anzeige, Meldungen werden noch nicht ausgewertet,
 der Feed lädt ungefiltert alle Aktivitäten (skaliert nicht), Stummschalten
-hat ohne Push-Benachrichtigungen keine Wirkung.
+hat ohne Push-Benachrichtigungen keine Wirkung. Umfragen/Pins sind bewusst
+minimal: eine angepinnte Nachricht genügt (kein Verlauf), Umfragen lassen
+sich nach dem Anlegen nicht mehr bearbeiten oder löschen, und die
+Ergebnis-Aggregation läuft rein im Client (kein serverseitiges Nachzählen/
+keine serverseitige Deduplizierung bei Mehrfachauswahl).
 
 ## Ausblick
 
@@ -169,6 +173,10 @@ Feed-Queries + Cloud Functions für Join/Moderation, echtes (serverseitiges)
 Blockieren, App Check, echte Push-Benachrichtigungen (die In-App-Erinnerung
 ersetzt noch keinen Ping bei geschlossener App), eigener Signing-Key sowie
 das Rechtspaket (Datenschutzerklärung, Moderationsprozess, Altersgrenze).
+Naheliegende Erweiterung der Umfragen/Pins: ein Planungs-Assistent im Chat
+(Checkliste/To-dos fürs Treffen, gemeinsame Abstimmung über mehrere
+Fragen hinweg statt einer einzelnen Umfrage) — baut direkt auf den hier
+gelegten `/polls`- und `/meta`-Pfaden auf.
 
 ## Design
 

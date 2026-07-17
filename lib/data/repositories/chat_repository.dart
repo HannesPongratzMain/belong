@@ -1,4 +1,5 @@
 import '../../domain/models/chat_message.dart';
+import '../../domain/models/poll.dart';
 
 /// Gruppenchat einer Aktivität.
 ///
@@ -24,6 +25,38 @@ abstract interface class ChatRepository {
   Future<void> muteChat(String activityId);
 
   Future<bool> isMuted(String activityId);
+
+  /// Umfragen eines Chats inkl. aggregierter Stimmen, nach Erstellzeit
+  /// sortiert — nur für Teilnehmer:innen.
+  Stream<List<Poll>> watchPolls(String activityId);
+
+  /// Neue Umfrage anlegen. Wer das darf, ist an einer Stelle konfiguriert
+  /// (siehe `canCreatePoll` in `chat_controller.dart`) — aktuell nur der
+  /// Host, serverseitig über die Security Rules erzwungen.
+  Future<void> createPoll({
+    required String activityId,
+    required String question,
+    required List<String> options,
+    required bool allowMultiple,
+  });
+
+  /// Eigene Stimme abgeben/ändern (Upsert) — jede Teilnehmer:in nur für
+  /// sich selbst. [selection] sind die gewählten Options-Indizes,
+  /// bei Single genau einer.
+  Future<void> vote({
+    required String activityId,
+    required String pollId,
+    required bool allowMultiple,
+    required List<int> selection,
+  });
+
+  /// Angepinnte Nachricht des Chats (`null` = keine) — nur der Host darf
+  /// pinnen/lösen (siehe [pinMessage]/[unpinMessage]).
+  Stream<String?> watchPinnedMessageId(String activityId);
+
+  Future<void> pinMessage({required String activityId, required String messageId});
+
+  Future<void> unpinMessage(String activityId);
 }
 
 class ChatAccessDeniedException implements Exception {
